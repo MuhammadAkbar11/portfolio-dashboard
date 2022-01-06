@@ -149,18 +149,6 @@ export const getLocalAuthCallback = (req, res) => {
   }
 };
 
-export const getGoogleAuthCallback = (req, res) => {
-  try {
-    res.redirect("/dashboard/");
-  } catch (error) {
-    req.flash("flashdata", {
-      type: "danger",
-      message: "Opps, Login failed please try again",
-    });
-    res.redirect("/auth");
-  }
-};
-
 export const postLogout = (req, res) => {
   req.logout();
   res.redirect("/");
