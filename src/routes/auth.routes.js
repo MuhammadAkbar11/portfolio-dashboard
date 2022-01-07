@@ -1,36 +1,35 @@
 import {
-  getGoogleAuthCallback,
   getLocalAuthCallback,
-  getLogin,
+  getSignIn,
   getSignUp,
-  postLogin,
+  postSignIn,
   postLogout,
   postSignUp,
 } from "../controllers/auth.controller.js";
 import { userValidate } from "../helpers/validation.helper.js";
 import { ensureGuest } from "../middleware/auth.js";
-import { passportAuthLogin } from "../middleware/passportAuth.js";
+import { passportAuthSignIn } from "../middleware/passportAuth.js";
 
 function AuthRoutes(app) {
   app
     .route("/auth")
-    .get(ensureGuest, getLogin)
+    .get(ensureGuest, getSignIn)
     .post(
-      userValidate("login"),
-      postLogin,
-      passportAuthLogin,
+      userValidate("signin"),
+      postSignIn,
+      passportAuthSignIn,
       getLocalAuthCallback
     );
 
-  app
-    .route("/auth/signup")
-    .get(ensureGuest, getSignUp)
-    .post(
-      userValidate("signup"),
-      postSignUp,
-      passportAuthLogin,
-      getLocalAuthCallback
-    );
+  // app
+  //   .route("/auth/signup")
+  //   .get(ensureGuest, getSignUp)
+  //   .post(
+  //     userValidate("signup"),
+  //     postSignUp,
+  //     passportAuthSignIn,
+  //     getLocalAuthCallback
+  //   );
 
   app.post("/auth/logout", postLogout);
 }

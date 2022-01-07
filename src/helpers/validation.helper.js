@@ -2,7 +2,7 @@ import { checkSchema } from "express-validator";
 
 const userValidate = method => {
   switch (method) {
-    case "login":
+    case "signin":
       return checkSchema({
         email: {
           notEmpty: {

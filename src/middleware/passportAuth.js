@@ -1,6 +1,6 @@
 import passport from "passport";
 
-export const passportAuthLogin = passport.authenticate("local", {
+export const passportAuthSignIn = passport.authenticate("local", {
   failureRedirect: "/auth",
   successRedirect: "/dashboard",
   failureFlash: true,

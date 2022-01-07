@@ -6,11 +6,11 @@ import BaseError, {
 import { validationResult } from "express-validator";
 import httpStatusCodes from "../utils/httpStatusCode.js";
 
-export const getLogin = async (req, res, next) => {
+export const getSignIn = async (req, res, next) => {
   try {
     const flashdata = req.flash("flashdata");
-    res.render("auth/login", {
-      title: "Login",
+    res.render("auth/sign-in", {
+      title: "SignIn",
       flashdata: flashdata,
       errors: null,
       values: null,
@@ -22,16 +22,20 @@ export const getLogin = async (req, res, next) => {
   }
 };
 
-export const postLogin = async (req, res, next) => {
+export const postSignIn = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const validate = validationResult(req);
 
     if (!validate.isEmpty()) {
-      const errValidate = new ValidationError(validate.array(), "auth/login", {
-        title: "Login",
-        values: req.body,
-      });
+      const errValidate = new ValidationError(
+        validate.array(),
+        "auth/sign-in",
+        {
+          title: "SignIn",
+          values: req.body,
+        }
+      );
 
       throw errValidate;
     }
@@ -45,8 +49,8 @@ export const postLogin = async (req, res, next) => {
         "User not found",
         true,
         {
-          errorView: "auth/login",
-          renderData: { title: "Login", values: req.body },
+          errorView: "auth/sign-in",
+          renderData: { title: "SignIn", values: req.body },
         }
       );
     }
@@ -60,8 +64,8 @@ export const postLogin = async (req, res, next) => {
         "Wrong password",
         true,
         {
-          errorView: "auth/login",
-          renderData: { title: "Login", values: req.body },
+          errorView: "auth/sign-in",
+          renderData: { title: "SignIn", values: req.body },
         }
       );
     }
@@ -143,7 +147,7 @@ export const getLocalAuthCallback = (req, res) => {
   } catch (error) {
     req.flash("flashdata", {
       type: "danger",
-      message: "Opps, Login failed please try again",
+      message: "Opps, SignIn failed please try again",
     });
     res.redirect("/auth");
   }
