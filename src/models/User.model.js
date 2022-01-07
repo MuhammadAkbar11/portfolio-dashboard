@@ -14,9 +14,6 @@ const userSchema = mongoose.Schema(
     password: {
       type: String,
     },
-    googleId: {
-      type: String,
-    },
     image: {
       type: String,
     },
@@ -30,15 +27,11 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
-
-  if (this.password !== "") {
-    this.password = await bcrypt.hash(this.password, 12);
-  }
-});
+// userSchema.pre("save", async function (next) {
+//   if (!this.isModified("password")) {
+//     return next();
+//   }
+// });
 
 const UserModel = mongoose.model("UserModel", userSchema, "users");
 
