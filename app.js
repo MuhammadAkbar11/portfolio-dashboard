@@ -17,7 +17,7 @@ import {
 
 import consoleLog from "./src/utils/consoleLog.js";
 
-import { STATIC_FOLDER } from "./src/utils/constants.js";
+import { STATIC_FOLDER, UPLOADS_FOLDER } from "./src/utils/constants.js";
 import passportConfig from "./src/config/passport.config.js";
 import MainRoutes from "./src/routes/index.routes.js";
 
@@ -75,6 +75,15 @@ if (envConfigs.MODE == "development") {
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session({}));
+app.use((req, res, next) => {
+  if (req.user) {
+    res.locals.userAuth = req.user;
+  } else {
+    res.locals.userAuth = null;
+  }
+
+  next();
+});
 
 app.use((req, res, next) => {
   if (req.user) {
@@ -87,6 +96,7 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static(STATIC_FOLDER));
+app.use(express.static(UPLOADS_FOLDER));
 
 MainRoutes(app);
 
