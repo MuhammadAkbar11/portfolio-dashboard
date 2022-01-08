@@ -14,3 +14,6 @@ import "./modules/flatpickr.mjs";
 
 // Maps
 import "./modules/vector-maps.mjs";
+
+import "./components/calender.mjs";
+import "./components/logout.mjs";
