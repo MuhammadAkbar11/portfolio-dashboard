@@ -1,16 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const logoutAction = document.getElementById("logout-action");
-  if (logoutAction) {
-    const formLogout = document.createElement("form");
-    formLogout.setAttribute("action", "/auth/logout");
-    formLogout.setAttribute("method", "POST");
-    formLogout.setAttribute("id", "form-logout");
-    document.body.appendChild(formLogout);
+  const LogoutAction = document.getElementById("logout-action");
+  if (LogoutAction) {
+    const FormLogout = document.createElement("form");
+    FormLogout.setAttribute("action", "/auth/logout");
+    FormLogout.setAttribute("method", "POST");
+    FormLogout.setAttribute("id", "form-logout");
+    document.body.appendChild(FormLogout);
 
-    logoutAction.addEventListener("click", event => {
+    LogoutAction.addEventListener("click", event => {
       event.preventDefault();
-      console.log(event.target);
-      formLogout.submit();
+      FormLogout.submit();
     });
   }
 });

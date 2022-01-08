@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const datePickerDashboard = document.getElementById(
+  const DatePickerDashboard = document.getElementById(
     "datetimepicker-dashboard"
   );
 
@@ -7,8 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const defaultDate =
     date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 
-  if (datePickerDashboard) {
-    datePickerDashboard.flatpickr({
+  if (DatePickerDashboard) {
+    DatePickerDashboard.flatpickr({
       inline: true,
       prevArrow: '<span title="Previous month">&laquo;</span>',
       nextArrow: '<span title="Next month">&raquo;</span>',
