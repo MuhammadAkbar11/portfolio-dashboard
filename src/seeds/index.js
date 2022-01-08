@@ -1,18 +1,21 @@
 import path from "path";
 import fs from "fs";
+import * as envConfigs from "../config/env.config.js";
+import bcryptjs from "bcryptjs";
 import connectDB from "../config/db.config.js";
-import { dotenvConfig } from "../config/env.config.js";
 import consoleLog from "../utils/consoleLog.js";
 import UserModel from "../models/User.model.js";
-import bcryptjs from "bcryptjs";
 
-dotenvConfig;
+const __dirname = path.resolve();
+
+envConfigs.dotenvConfig;
 
 connectDB();
 
 async function importData() {
   try {
-    const usersJson = await fs.readFileSync(path.resolve("data/users.json"));
+    const usersJson = fs.readFileSync(path.resolve("src/data/users.json"));
+
     const users = JSON.parse(usersJson).map(user => {
       return {
         ...user,
@@ -22,7 +25,7 @@ async function importData() {
 
     await UserModel.insertMany(users);
 
-    consoleLog.info("Imported");
+    consoleLog.info("Import Success");
     process.exit();
   } catch (error) {
     consoleLog.error("Import data is failed!");
@@ -48,14 +51,10 @@ function unknownSeed() {
 
 const command = process.argv.find(arg => arg.includes("seed=")).split("=")[1];
 
-switch (command) {
-  case "import":
-    importData();
-    break;
-  case "destroy":
-    destroyData();
-    break;
-  default:
-    unknownSeed();
-    break;
+if (command == "import") {
+  importData();
+} else if (command == "destroy") {
+  destroyData();
+} else {
+  unknownSeed();
 }
