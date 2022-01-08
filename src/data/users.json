@@ -1,13 +1,11 @@
 [{
-  "name": "unit1",
-  "email": "unit1@gmail.com",
-  "password": "unit1"
+  "name": "Akbar",
+  "email": "muhammadakbarletlet@gmail.com",
+  "password": "hirai1996",
+  "image": "profile/guest.jpg"
 }, {
-  "name": "unit2",
-  "email": "unit2@gmail.com",
-  "password": "unit2"
-},{
-  "name": "unit3",
-  "email": "unit3@gmail.com",
-  "password": "unit3"
+  "name": "dubu",
+  "email": "theunit954@gmail.com",
+  "password": "dubu__1998",
+  "image": "profile/guest.jpg"
 }]
