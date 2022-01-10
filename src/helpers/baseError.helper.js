@@ -25,6 +25,7 @@ export class TransfromError extends BaseError {
     );
 
     this.responseType = err?.responseType || "page";
+
     Object.keys(this.errors).map(x => {
       this[x] = this.errors[x];
     });

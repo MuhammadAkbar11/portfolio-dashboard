@@ -1,4 +1,4 @@
-const initialize = () => {
+const initializeSidebar = () => {
   initializeSidebarLinkActive();
 };
 
@@ -23,4 +23,4 @@ const initializeSidebarLinkActive = () => {
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => initialize());
+document.addEventListener("DOMContentLoaded", () => initializeSidebar());
