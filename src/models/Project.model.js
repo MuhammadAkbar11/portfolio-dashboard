@@ -15,7 +15,6 @@ const projectSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      required: true,
     },
     progress: {
       type: Number,
@@ -26,7 +25,6 @@ const projectSchema = mongoose.Schema(
     },
     demo: {
       type: String,
-      required: true,
     },
     github: {
       type: String,
