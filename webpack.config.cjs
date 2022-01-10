@@ -101,13 +101,13 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: [".js", ".mjs", ".scss"],
+    extensions: [".js", ".scss"],
     modules: ["node_modules"],
     alias: {
       request$: "xhr",
     },
   },
   watchOptions: {
-    ignored: ["node_modules/", "src/"],
+    ignored: ["node_modules", "src"],
   },
 };

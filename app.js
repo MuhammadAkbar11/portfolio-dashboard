@@ -27,8 +27,8 @@ passportConfig();
 connectDB();
 
 const app = express();
-// Store Session
 
+// Store Session
 const store = MongoStore.create({
   mongoUrl: envConfigs.MONGO_URI,
 });
@@ -107,6 +107,9 @@ app.listen(envConfigs.PORT, () => {
   consoleLog.success(
     `[server] server running in ${envConfigs.MODE} mode on port ${envConfigs.PORT}`
   );
+  if (envConfigs.MODE == "development") {
+    consoleLog.success(`[server] open http://localhost:${envConfigs.PORT}/`);
+  }
 });
 
 process.on("unhandledRejection", error => {
