@@ -119,9 +119,11 @@ class TagsInput {
 
       const values = this.originalInput.value;
 
-      values.split(",").forEach(item => {
-        this.addTag(item);
-      });
+      if (values.trim() !== "") {
+        values.split(",").forEach(item => {
+          this.addTag(item);
+        });
+      }
     }
   }
 
