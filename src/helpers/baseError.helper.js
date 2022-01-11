@@ -25,7 +25,13 @@ export class TransfromError extends BaseError {
     );
 
     this.responseType = err?.responseType || "page";
+    this.renderData = { title: 500 };
 
+    if (err.kind == "ObjectId") {
+      this.statusCode = 404;
+      this.errorView = "errors/404";
+      this.renderData = { title: 404 };
+    }
     Object.keys(this.errors).map(x => {
       this[x] = this.errors[x];
     });
