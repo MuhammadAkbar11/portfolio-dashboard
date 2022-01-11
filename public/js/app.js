@@ -18,3 +18,5 @@ import "./modules/vector-maps.mjs";
 import "./components/sidebar.mjs";
 import "./components/calender.mjs";
 import "./components/logout.mjs";
+
+import "./components/projectForm.mjs";
