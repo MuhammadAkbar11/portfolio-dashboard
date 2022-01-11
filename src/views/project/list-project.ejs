@@ -35,25 +35,37 @@
 
                 <div class="dropdown-menu dropdown-menu-end">
                   <a class="dropdown-item" href="/projects/<%= project._id %>/edit ">Edit</a>
-                  <!-- <a class="dropdown-item" href="#">Another action</a>
-                  <a class="dropdown-item" href="#">Something else here</a> -->
+
+                  <a class="dropdown-item" target="_blank" href="<%= project.github %>">Github</a>
+                  <a class="dropdown-item" target="_blank" href="<%= project.demo %>">Demo</a>
+                  <a class="dropdown-item" id="action-delete-project" href="#" data-title="<%= project.title %>"
+                    data-projectId="<%= project._id %>">Delete</a>
                 </div>
               </div>
             </div>
             <h5 class="card-title mb-0 text-capitalize "> <%= project.title %> </h5>
-            <%
-              const statusBadge = {
-                NEW: `<div class="badge bg-info my-2">New project</div>`,
-                PROGRESS: `<div class="badge bg-warning my-2">Progress</div>`,
-                ON_HOLD: `<div class="badge bg-danger my-2">On Hold</div>`,
-                FINISHED: `<div class="badge bg-success my-2">Finished</div>`,
-              }
-            %>
-            <% if(project.progress >= 100) { %>
-            <%- statusBadge["FINISHED"] %>
-            <% } else { %>
-            <%- statusBadge[project.status] %>
-            <% } %>
+            <div class="d-flex">
+              <%
+                const statusBadge = {
+                  NEW: `<div class="badge bg-info my-2">New project</div>`,
+                  PROGRESS: `<div class="badge bg-warning my-2">Progress</div>`,
+                  ON_HOLD: `<div class="badge bg-danger my-2">On Hold</div>`,
+                  FINISHED: `<div class="badge bg-success my-2">Finished</div>`,
+                }
+              %>
+              <% if(project.progress >= 100) { %>
+              <%- statusBadge["FINISHED"] %>
+              <% } else { %>
+              <%- statusBadge[project.status] %>
+              <% } %>
+
+              <% if(project.isSelected) { %>
+              <span class="badge bg-primary ms-1 my-2"> <i class="my-0 mx-0" style="height: 12px; width: 12px;"
+                  data-feather="check"></i>
+                Selected
+              </span>
+              <% } %>
+            </div>
 
           </div>
           <div class="card-body d-flex flex-column px-4 pt-2">
@@ -83,5 +95,33 @@
 
   </div>
 </main>
+
+<div class="modal fade" id="modalDeleteProject" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="modalDeleteProjectLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalDeleteProjectLabel">Delete project</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <p>Are your sure want to delete this story? <br> you can't undo this action </p>
+      </div>
+
+      <div class="modal-footer border-0 d-flex justify-content-center bg-transparent  pt-0">
+        <form action="/projects" id="modalDeleteProjectForm" method="post">
+          <input type="hidden" name="_method" value="DELETE">
+          <div class="d-flex w-100 justify-content-center gap-2">
+            <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-animation btn-danger">Delete Project</button>
+          </div>
+
+        </form>
+      </div>
+
+
+    </div>
+  </div>
+</div>
 
 <%- include('../layouts/end.ejs') %>

@@ -1,4 +1,5 @@
 import {
+  deleteProject,
   getEditProject,
   getProjects,
   postProjects,
@@ -9,7 +10,10 @@ import { ensureAuth } from "../middleware/auth.js";
 function ProjectRoutes(app) {
   app.route("/projects/:id/edit").get(ensureAuth, getEditProject);
 
-  app.route("/projects/:id").put(ensureAuth, putProject);
+  app
+    .route("/projects/:id")
+    .put(ensureAuth, putProject)
+    .delete(ensureAuth, deleteProject);
   app
     .route("/projects")
     .get(ensureAuth, getProjects)

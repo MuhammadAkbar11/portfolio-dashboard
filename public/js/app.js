@@ -20,3 +20,4 @@ import "./components/calender.mjs";
 import "./components/logout.mjs";
 
 import "./components/projectForm.mjs";
+import "./components/projectModals.mjs";

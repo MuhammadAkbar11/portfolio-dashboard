@@ -46,13 +46,13 @@ export const postProjects = async (req, res, next) => {
 
     req.flash("flashdata", {
       type: "success",
-      message: "Success adding new product",
+      message: "Success adding new project",
     });
     res.redirect("/projects/" + project._id + "/edit");
   } catch (error) {
     req.flash("flashdata", {
       type: "danger",
-      message: "Failed to create product",
+      message: "Failed to create project",
     });
     res.redirect("/projects");
   }
@@ -76,7 +76,7 @@ export const putProject = async (req, res, next) => {
     if (!project) {
       req.flash("flashdata", {
         type: "danger",
-        message: "Failed to update product",
+        message: "Failed to update project",
       });
       res.redirect(`/projects${id}/edit`);
       return;
@@ -101,7 +101,29 @@ export const putProject = async (req, res, next) => {
   } catch (error) {
     req.flash("flashdata", {
       type: "danger",
-      message: "Failed to update product",
+      message: "Failed to update project",
+    });
+    res.redirect(`/projects`);
+  }
+};
+
+export const deleteProject = async (req, res, next) => {
+  const id = req.params.id;
+
+  try {
+    const project = await ProjectModel.findById(id);
+
+    await project.remove();
+
+    req.flash("flashdata", {
+      type: "success",
+      message: "Delete project success!",
+    });
+    res.redirect(`/projects`);
+  } catch (error) {
+    req.flash("flashdata", {
+      type: "danger",
+      message: "Failed to delete project",
     });
     res.redirect(`/projects`);
   }
