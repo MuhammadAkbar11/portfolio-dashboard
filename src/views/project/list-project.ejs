@@ -17,8 +17,8 @@
     <div class="row d-flex  align-items-stretch ">
       <% if(projects.length !== 0) { %>
       <% projects.map(project => { %>
-      <div class="col-12 col-md-6 col-lg-4 ">
-        <div class="card">
+      <div class="col-12 col-md-6 col-lg-4 mb-3 ">
+        <div class="card h-100">
 
           <div class="card-header px-4 pt-4">
             <div class="card-actions float-end">
@@ -56,12 +56,14 @@
             <% } %>
 
           </div>
-          <div class="card-body px-4 pt-2">
+          <div class="card-body d-flex flex-column px-4 pt-2">
             <p><%= project.description %> </p>
 
-            <% project.stacks.map(item => { %>
-            <span class=" badge bg-primary "><%= item %> </span>
-            <% }) %>
+            <div class="my-auto">
+              <% project.stacks.map(item => { %>
+              <span class=" badge bg-primary "><%= item %> </span>
+              <% }) %>
+            </div>
           </div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item px-4 pb-4">
