@@ -1,11 +1,37 @@
-<%- include('../layouts/head.ejs') %>
+<!DOCTYPE html>
+<html lang="en">
 
-<h1>Error</h1>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/app.css">
+  <title><%= title %> | Akbar Portfolio Dashboard </title>
+</head>
 
-<div>
-  <%= JSON.stringify(errors) %>
-</div>
 
-<a href="/auth/">Login Page</a>
+<body>
 
-<%- include('../layouts/end.ejs') %>
+  <div class="wrapper">
+    <div class="main ">
+      <main class="content  d-flex flex-column justify-content-center align-items-center">
+        <div class="container-fluid text-center">
+          <h1 class=" display-2 ">500</h1>
+          <h1> Internal Server Error </h1>
+          <h2 class="mt-3">
+            The server encountered something unexpected <br> that didn't allow it to complete the request.
+          </h2>
+
+          <a href="/" class="btn btn-primary mt-4">Return to Dashboard</a>
+        </div>
+      </main>
+    </div>
+
+  </div>
+
+
+  <script src="/js/app.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+
+</html>
