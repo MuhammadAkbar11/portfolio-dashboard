@@ -1,4 +1,4 @@
-# Nodejs Authentication Boilerplate Support Google OAuth
+# Portfolio Dashboard
 
 ## Requirments
 
@@ -14,6 +14,9 @@
 5. **Mongoose** ODM
 6. **PassportJs** Authentication
 7. **Ejs** Template Engine
+8. **Webpack** Module Bundler
+9. **Boostrap 5** Framework
+10. **Adminkit 3.1.0 Free** Template
 
 ## Get Started
 
