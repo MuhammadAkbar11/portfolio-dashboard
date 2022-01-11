@@ -14,8 +14,10 @@
 
     <%- include('../includes/alert.ejs') %>
 
-    <div class="row">
-      <div class="col-12 col-md-6 col-lg-4">
+    <div class="row d-flex  align-items-stretch ">
+      <% if(projects.length !== 0) { %>
+      <% projects.map(project => { %>
+      <div class="col-12 col-md-6 col-lg-4 ">
         <div class="card">
 
           <div class="card-header px-4 pt-4">
@@ -32,36 +34,49 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
-                  <a class="dropdown-item" href="#">Action</a>
-                  <a class="dropdown-item" href="#">Another action</a>
-                  <a class="dropdown-item" href="#">Something else here</a>
+                  <a class="dropdown-item" href="/projects/<%= project._id %>/edit ">Edit</a>
+                  <!-- <a class="dropdown-item" href="#">Another action</a>
+                  <a class="dropdown-item" href="#">Something else here</a> -->
                 </div>
               </div>
             </div>
-            <h5 class="card-title mb-0">Landing page redesign</h5>
-            <div class="badge bg-success my-2">Finished</div>
+            <h5 class="card-title mb-0 text-capitalize "> <%= project.title %> </h5>
+            <%
+              const statusBadge = {
+                NEW: `<div class="badge bg-info my-2">New project</div>`,
+                PROGRESS: `<div class="badge bg-warning my-2">Progress</div>`,
+                ON_HOLD: `<div class="badge bg-danger my-2">On Hold</div>`,
+                FINISHED: `<div class="badge bg-success my-2">Finished</div>`,
+              }
+            %>
+            <% if(project.progress >= 100) { %>
+            <%- statusBadge["FINISHED"] %>
+            <% } else { %>
+            <%- statusBadge[project.status] %>
+            <% } %>
+
           </div>
           <div class="card-body px-4 pt-2">
-            <p>Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet
-              adipiscing sem neque
-              sed ipsum.</p>
+            <p><%= project.description %> </p>
 
-            <img src="img/avatars/avatar-3.jpg" class="rounded-circle me-1" alt="Avatar" width="28" height="28">
-            <img src="img/avatars/avatar-2.jpg" class="rounded-circle me-1" alt="Avatar" width="28" height="28">
-            <img src="img/avatars/avatar.jpg" class="rounded-circle me-1" alt="Avatar" width="28" height="28">
+            <% project.stacks.map(item => { %>
+            <span class=" badge bg-primary "><%= item %> </span>
+            <% }) %>
           </div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item px-4 pb-4">
-              <p class="mb-2 font-weight-bold">Progress <span class="float-end">100%</span></p>
+              <p class="mb-2 font-weight-bold">Progress <span class="float-end"><%= project.progress %>%</span></p>
               <div class="progress progress-sm">
                 <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
-                  style="width: 100%;">
+                  style="width: <%= project.progress %>%;">
                 </div>
               </div>
             </li>
           </ul>
         </div>
       </div>
+      <% }) %>
+      <% } %>
     </div>
 
   </div>

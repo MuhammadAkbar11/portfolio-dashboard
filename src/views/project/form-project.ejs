@@ -1,0 +1,84 @@
+<%- include('../layouts/head.ejs') %>
+
+<main class="content">
+  <div class="container-fluid p-0">
+
+    <h1 class="h3 mb-3">Edit Project</h1>
+
+    <%- include('../includes/alert.ejs') %>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header pb-1">
+            <h5 class="card-title mb-0">Update</h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <form action="/projects/<%= project._id %>" id="form-project" method="post">
+                  <input type="hidden" name="_method" value="PUT">
+                  <div class="form-group-lg mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" name="title" id="title" placeholder="Project title"
+                      value="<%= project.title %>">
+                  </div>
+                  <div class="form-group-lg mb-3">
+                    <label for="status" class="form-label">Project Status</label>
+                    <select data-defaultValue="<%= project.status %>" name="status" class="form-select" id="status">
+                      <option selected>Select status</option>
+                      <option value="NEW">New Project</option>
+                      <option value="PROGRESS">In Progress</option>
+                      <option value="ON_HOLD">On Hold</option>
+                    </select>
+                  </div>
+                  <div class="form-group-lg mb-3">
+                    <label for="demo" class="form-label">Demo</label>
+                    <input type="text" class="form-control" name="demo" id="demo" placeholder="Project demo"
+                      value="<%= project.demo %>">
+                  </div>
+                  <div class="form-group-lg mb-3">
+                    <label for="github" class="form-label">Github Repository</label>
+                    <input type="text" class="form-control" name="github" id="github" placeholder="Project github"
+                      value="<%= project.github %>">
+                  </div>
+                  <div class="form-group-lg mb-3">
+                    <label for="progress" class="form-label">Progress (%)</label>
+                    <input type="number" min="0" max="100" class="form-control" name="progress" id="progress"
+                      placeholder="Project progress" value="<%= project.progress %>">
+                  </div>
+                  <div class="form-group-lg mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" placeholder="Leave a description here" id="description"
+                      name="description" style="height: 100px"><%= project.description %></textarea>
+                  </div>
+                  <div class="form-check mb-3">
+                    <input class="form-check-input" name="isSelected" type="checkbox" id="isSelected"
+                      <%= project.isSelected && "checked"%>>
+                    <label class="form-check-label" for="isSelected">
+                      Selected project
+                    </label>
+                  </div>
+                  <div class="mb-3">
+                    <label for="stacks">Stacks </label>
+                    <input type="text" id="tag-input" name="stacks" value="<%= project.stacks %>">
+                  </div>
+                  <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+</main>
+
+
+<%- include('../layouts/end.ejs') %>
