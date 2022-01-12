@@ -6,13 +6,14 @@ import {
   putProject,
 } from "../controllers/project.controller.js";
 import { ensureAuth } from "../middleware/auth.js";
+import { uploadProjectImage } from "../middleware/upload.js";
 
 function ProjectRoutes(app) {
   app.route("/projects/:id/edit").get(ensureAuth, getEditProject);
 
   app
     .route("/projects/:id")
-    .put(ensureAuth, putProject)
+    .put(ensureAuth, uploadProjectImage, putProject)
     .delete(ensureAuth, deleteProject);
   app
     .route("/projects")

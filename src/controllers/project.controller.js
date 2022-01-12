@@ -1,5 +1,6 @@
 import BaseError, { TransfromError } from "../helpers/baseError.helper.js";
 import ProjectModel from "../models/Project.model.js";
+import deleteFile from "../utils/index.js";
 
 export const getProjects = async (req, res, next) => {
   try {
@@ -24,15 +25,15 @@ export const getProjects = async (req, res, next) => {
 
 export const postProjects = async (req, res, next) => {
   const newProject = {
-    title: "new project",
+    title: "New project",
     description: "Project description",
     status: "NEW",
     progress: 0,
     github: "https://github.com/MuhammadAkbar11/",
     demo: "",
     isSelected: false,
-    stacks: ["stack1", "stack2"],
-    image: "/img/photos/unsplash-1",
+    stacks: ["stack1", "stack2", "stack3"],
+    image: "/img/photos/unsplash-1.jpg",
   };
   try {
     const project = await ProjectModel.create(newProject);
@@ -46,7 +47,7 @@ export const postProjects = async (req, res, next) => {
 
     req.flash("flashdata", {
       type: "success",
-      message: "Success adding new project",
+      message: "Success generate a project",
     });
     res.redirect("/projects/" + project._id + "/edit");
   } catch (error) {
@@ -69,6 +70,7 @@ export const putProject = async (req, res, next) => {
     isSelected,
     stacks,
   } = req.body;
+
   const id = req.params.id;
   try {
     const project = await ProjectModel.findById(id);
@@ -80,6 +82,16 @@ export const putProject = async (req, res, next) => {
       });
       res.redirect(`/projects${id}/edit`);
       return;
+    }
+
+    const oldProjectImage = project.image;
+
+    if (req.fileimg.data) {
+      const filename = req.fileimg.data?.filename;
+      if ("/img/photos/unsplash-1.jpg" != oldProjectImage) {
+        deleteFile("uploads" + oldProjectImage);
+      }
+      project.image = `/project/${filename}`;
     }
 
     project.title = title;
@@ -99,6 +111,7 @@ export const putProject = async (req, res, next) => {
     });
     res.redirect(`/projects`);
   } catch (error) {
+    console.log(error);
     req.flash("flashdata", {
       type: "danger",
       message: "Failed to update project",
