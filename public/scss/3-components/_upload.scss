@@ -1,0 +1,22 @@
+.preview-project-image {
+  width: 100%;
+  height: 250px;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.upload-preview-wrapper {
+  width: 100%;
+  height: 300px;
+  position: relative;
+  display: flex;
+
+  .upload-preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}

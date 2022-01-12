@@ -14,9 +14,11 @@
             <h5 class="card-title mb-0">Update</h5>
           </div>
           <div class="card-body">
-            <div class="row">
-              <div class="col-md-6">
-                <form action="/projects/<%= project._id %>" id="form-project" method="post">
+            <form action="/projects/<%= project._id %>?_method=PUT" id="form-project" method="post"
+              enctype="multipart/form-data">
+              <div class="row">
+                <div class="col-md-6">
+
                   <input type="hidden" name="_method" value="PUT">
                   <div class="form-group-lg mb-3">
                     <label for="title" class="form-label">Title</label>
@@ -63,13 +65,36 @@
                     <label for="stacks">Stacks </label>
                     <input type="text" id="tag-input" name="stacks" value="<%= project.stacks %>">
                   </div>
-                  <div class="mb-3">
-                    <button type="submit" class="btn btn-primary">Update</button>
+
+
+
+                </div>
+                <div class="col-md-6">
+                  <p class="mb-2">Current Image</p>
+                  <div class=" position-relative w-100 d-flex flex-wrap mb-4 preview-project-image ">
+                    <img src="<%= project.image %>" alt="<%= project.title %>">
                   </div>
-                </form>
+
+                  <!-- <div class="my-3">
+                    <label for="formFile" class="form-label">Upload Image Here</label>
+                    <input class="form-control" name="image" type="file" id="formFile">
+                  </div> -->
+
+                  <div class="my-3">
+                    <input type="file" name="image" class="d-none" id="upload-project-image">
+                    <button id="btn-upload-project-image" class=" btn btn-primary btn-lg py-3 w-100 ">
+                      <i data-feather="upload"></i> Upload
+                      Image
+                    </button>
+                  </div>
+                </div>
+
 
               </div>
-            </div>
+              <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
