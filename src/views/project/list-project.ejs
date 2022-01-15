@@ -32,12 +32,8 @@
                     <circle cx="5" cy="12" r="1"></circle>
                   </svg>
                 </a>
-
                 <div class="dropdown-menu dropdown-menu-end">
                   <a class="dropdown-item" href="/projects/<%= project._id %>/edit ">Edit</a>
-
-                  <a class="dropdown-item" target="_blank" href="<%= project.github %>">Github</a>
-                  <a class="dropdown-item" target="_blank" href="<%= project.demo %>">Demo</a>
                   <a class="dropdown-item" id="action-delete-project" href="#" data-title="<%= project.title %>"
                     data-projectId="<%= project._id %>">Delete</a>
                 </div>
@@ -47,7 +43,7 @@
             <div class="d-flex">
               <%
                 const statusBadge = {
-                  NEW: `<div class="badge bg-info my-2">New project</div>`,
+                  TODO: `<div class="badge bg-info my-2">Todo</div>`,
                   PROGRESS: `<div class="badge bg-warning my-2">Progress</div>`,
                   ON_HOLD: `<div class="badge bg-danger my-2">On Hold</div>`,
                   FINISHED: `<div class="badge bg-success my-2">Finished</div>`,
