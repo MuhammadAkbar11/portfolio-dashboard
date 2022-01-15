@@ -11,3 +11,9 @@ export const PROJECT_STATUS_ENUM = {
   ON_HOLD: "ON_HOLD",
   FINISHED: "FINISHED",
 };
+
+export const TASK_STATUS_ENUM = {
+  TODO: "TODO",
+  PROGRESS: "PROGRESS",
+  DONE: "DONE",
+};
