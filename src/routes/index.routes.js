@@ -3,6 +3,7 @@ import { ensureAuth } from "../middleware/auth.js";
 import APIsRoutes from "./api/apis.routes.js";
 import AuthRoutes from "./auth.routes.js";
 import ProjectRoutes from "./project.routes.js";
+import TaskRoutes from "./task.routes.js";
 import UserRoutes from "./user.routes.js";
 
 function MainRoutes(app) {
@@ -16,6 +17,9 @@ function MainRoutes(app) {
 
   // Project Routes
   ProjectRoutes(app);
+
+  // Task Routes
+  TaskRoutes(app);
 
   // Api main routes
   APIsRoutes(app);
