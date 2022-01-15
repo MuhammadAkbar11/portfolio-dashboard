@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon app.js",
     "start": "cross-env NODE_ENV=production nodemon app.js",
+    "build:dev": "cross-env NODE_ENV=development webpack --config webpack.config.cjs --watch --progress",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs --watch --progress",
     "seed": "cross-env NODE_ENV=development node src/seeds/index.js seed=import",
     "seed:destroy": "cross-env NODE_ENV=development node src/seeds/index.js seed=destroy"
