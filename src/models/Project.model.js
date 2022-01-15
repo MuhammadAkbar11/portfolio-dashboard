@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { PROJECT_STATUS_ENUM } from "../utils/constants.js";
 
 const projectSchema = mongoose.Schema(
   {
@@ -15,6 +16,8 @@ const projectSchema = mongoose.Schema(
     },
     status: {
       type: String,
+      enum: Object.values(PROJECT_STATUS_ENUM),
+      default: PROJECT_STATUS_ENUM.TODO,
     },
     progress: {
       type: Number,

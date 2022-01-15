@@ -27,7 +27,6 @@ export const postProjects = async (req, res, next) => {
   const newProject = {
     title: "New project",
     description: "Project description",
-    status: "NEW",
     progress: 0,
     github: "https://github.com/MuhammadAkbar11/",
     demo: "",
