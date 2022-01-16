@@ -1,6 +1,7 @@
 import {
   deleteProject,
   getEditProject,
+  getProjectDetails,
   getProjects,
   postProjects,
   putProject,
@@ -13,6 +14,7 @@ function ProjectRoutes(app) {
 
   app
     .route("/projects/:id")
+    .get(ensureAuth, getProjectDetails)
     .put(ensureAuth, uploadProjectImage, putProject)
     .delete(ensureAuth, deleteProject);
   app

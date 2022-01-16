@@ -1,10 +1,20 @@
 import BaseError, { TransfromError } from "../helpers/baseError.helper.js";
 import ProjectModel from "../models/Project.model.js";
+
 import deleteFile from "../utils/index.js";
 
 export const getProjects = async (req, res, next) => {
   try {
-    const projects = await ProjectModel.find({});
+    const getProjects = await ProjectModel.find({});
+
+    const listProjects = await Promise.all(
+      getProjects.map(async pro => {
+        const { progress } = await pro.getTasks();
+        pro.progress = progress;
+
+        return pro;
+      })
+    );
 
     const flashdata = req.flash("flashdata");
 
@@ -12,7 +22,7 @@ export const getProjects = async (req, res, next) => {
       title: "Projects",
       path: "/projects",
       flashdata: flashdata,
-      projects,
+      projects: listProjects,
       errors: null,
       values: null,
     });
@@ -27,7 +37,6 @@ export const postProjects = async (req, res, next) => {
   const newProject = {
     title: "New project",
     description: "Project description",
-    progress: 0,
     github: "https://github.com/MuhammadAkbar11/",
     demo: "",
     isSelected: false,
@@ -59,16 +68,8 @@ export const postProjects = async (req, res, next) => {
 };
 
 export const putProject = async (req, res, next) => {
-  const {
-    title,
-    status,
-    demo,
-    github,
-    progress,
-    description,
-    isSelected,
-    stacks,
-  } = req.body;
+  const { title, status, demo, github, description, isSelected, stacks } =
+    req.body;
 
   const id = req.params.id;
   try {
@@ -100,7 +101,6 @@ export const putProject = async (req, res, next) => {
     project.demo = demo;
     project.github = github;
     project.description = description;
-    project.progress = +progress;
 
     await project.save();
 
@@ -147,13 +147,40 @@ export const getEditProject = async (req, res, next) => {
     const flashdata = req.flash("flashdata");
     const project = await ProjectModel.findById(id);
 
-    project.stacks = res.render("project/form-project", {
+    res.render("project/form-project", {
       title: "Edit Project",
       path: "/projects",
       flashdata: flashdata,
       project: {
         ...project._doc,
         stacks: project.stacks.join(","),
+      },
+      errors: null,
+      values: null,
+    });
+  } catch (error) {
+    const trError = new TransfromError(error);
+
+    next(trError);
+  }
+};
+
+export const getProjectDetails = async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    const flashdata = req.flash("flashdata");
+    const project = await ProjectModel.findById(id);
+    // const
+    const projectTasks = await project.getTasks();
+
+    res.render("project/details", {
+      title: project.title,
+      path: "/projects",
+      flashdata: flashdata,
+      project: {
+        ...project._doc,
+        tasks: projectTasks.tasks,
+        progress: projectTasks.progress,
       },
       errors: null,
       values: null,
