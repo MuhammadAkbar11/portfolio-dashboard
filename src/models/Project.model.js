@@ -47,13 +47,23 @@ projectSchema.methods.getTasks = async function () {
       if (status == TASK_STATUS_ENUM.DONE) c.done++;
       if (status == TASK_STATUS_ENUM.PROGRESS) c.inProggress++;
       c.total++;
-      c.percentage = (c.done / c.total) * 100;
+      c.percentage = parseInt((c.done / c.total) * 100);
       return c;
     },
     { todo: 0, inProggress: 0, done: 0, total: 0, percentage: 0 }
   );
 
-  return { tasks, progress };
+  const taskByGroup = tasks.reduce(
+    (c, task) => {
+      if (task.status == TASK_STATUS_ENUM.TODO) c.todo.push(task);
+      if (task.status == TASK_STATUS_ENUM.DONE) c.done.push(task);
+      if (task.status == TASK_STATUS_ENUM.PROGRESS) c.progress.push(task);
+      return c;
+    },
+    { todo: [], done: [], progress: [] }
+  );
+
+  return { tasks: taskByGroup, progress };
 };
 
 const ProjectModel = mongoose.model("ProjectModel", projectSchema, "projects");

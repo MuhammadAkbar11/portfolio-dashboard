@@ -2,6 +2,7 @@ const ProjectDeleteModal = document.getElementById("modalDeleteProject");
 
 const initializeProjectModals = () => {
   initModalDelete();
+  initProjectTaskActionModal();
 };
 
 const initModalDelete = () => {
@@ -14,7 +15,7 @@ const initModalDelete = () => {
   ToggleProjectDeleteModal.forEach(toggle => {
     toggle.addEventListener("click", e => {
       e.preventDefault();
-      console.log(e.target.dataset);
+
       const title = e.target.dataset.title;
       const projectId = e.target.dataset.projectid;
       handleShowDeleteProjectModal({ title, projectId });
@@ -52,6 +53,24 @@ const handleShowDeleteProjectModal = data => {
     ProjectDeleteModal.addEventListener("shown.bs.modal", function (event) {
       console.log("shown");
     });
+  }
+};
+
+const initProjectTaskActionModal = () => {
+  const FormProjectTaskModal = document.getElementById("formTaskModal");
+
+  if (FormProjectTaskModal) {
+    const isErr = FormProjectTaskModal.dataset.error;
+    if (isErr == "true") {
+      FormProjectTaskModal.classList.remove("fade");
+      const modalEl = new bootstrap.Modal(
+        document.getElementById("formTaskModal"),
+        {
+          keyboard: false,
+        }
+      );
+      modalEl.show();
+    }
   }
 };
 

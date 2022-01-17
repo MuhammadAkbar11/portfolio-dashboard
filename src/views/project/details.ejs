@@ -62,7 +62,7 @@
                 class="float-end"><%= project.progress?.percentage %>%</span></p>
             <div class="progress progress-sm">
               <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
-                style="width: <%= project.progress %>%;">
+                style="width: <%= project.progress?.percentage %>%;">
               </div>
             </div>
           </li>
@@ -77,35 +77,30 @@
             Github
           </a>
         </div>
-
       </div>
-
     </div>
-
-
-
-
-
-
-
   </div>
+
 
   <div class="mt-5 mb-5">
     <hr>
   </div>
   <div class="container-fluid ">
-    <a href="#" class="btn btn-primary float-end mt-n1"><i data-feather="plus"></i> New task
-    </a>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary float-end mt-n1" data-bs-toggle="modal"
+      data-bs-target="#formTaskModal">
+      <i data-feather="plus"></i> New task
+    </button>
     <div class="mb-3">
       <h1 class="h3 d-inline align-middle">Project Tasks</h1>
       </a>
     </div>
     <div class="row">
+      <!-- TODO -->
       <div class="col-12 col-lg-6 col-xl-4">
         <div class="card">
           <div class="card-header">
             <div class="card-actions float-end d-flex gap-1">
-              <a href="#" id="add-todo-task"><i data-feather="plus"></i></a>
               <div class="dropdown position-relative">
                 <a href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" class="">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -125,11 +120,11 @@
               </div>
             </div>
             <h5 class="card-title"> Todo </h5>
-
           </div>
           <div class="card-body pt-2">
 
-            <div id="tasks-backlog" style="min-height:50px;">
+            <% project?.tasks?.todo?.map(tsk => { %>
+            <div id="tasks-backlog" style="min-height:40px;">
               <div class="card mb-3 bg-light cursor-grab border">
                 <div class="card-body p-3">
                   <div class="float-end me-n2">
@@ -145,13 +140,12 @@
                       </a>
 
                       <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
+                        <a class="dropdown-item" href="#">Edit</a>
+                        <a class="dropdown-item" href="#">Delete</a>
                       </div>
                     </div>
                   </div>
-                  <p> <i data-feather="file-text"></i> Curabitur ligula sapien</p>
+                  <p> <i data-feather="file-text"></i> <%= tsk.note %> </p>
                   <!-- <div class="float-end mt-n1">
                     <img src="/img/avatars/avatar.jpg" width="32" height="32" class="rounded-circle" alt="Avatar">
                   </div> -->
@@ -161,19 +155,20 @@
 
 
             </div>
-
-            <div class="d-grid">
+            <% }) %>
+            <!-- <div class="d-grid">
               <a href="#" class="btn btn-primary">Add new task</a>
-            </div>
+            </div> -->
 
           </div>
         </div>
       </div>
+      <!-- End OF TODO -->
+      <!-- PROGRESS -->
       <div class="col-12 col-lg-6 col-xl-4">
         <div class="card">
           <div class="card-header">
             <div class="card-actions float-end d-flex gap-1">
-              <a href="#" id="add-todo-task"><i data-feather="plus"></i></a>
               <div class="dropdown position-relative">
                 <a href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" class="">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -186,9 +181,8 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
-                  <a class="dropdown-item" href="#">Action</a>
-                  <a class="dropdown-item" href="#">Another action</a>
-                  <a class="dropdown-item" href="#">Something else here</a>
+                  <a class="dropdown-item" href="#">Edit</a>
+                  <a class="dropdown-item" href="#">Delete</a>
                 </div>
               </div>
             </div>
@@ -197,7 +191,8 @@
           </div>
           <div class="card-body pt-2">
 
-            <div id="tasks-backlog" style="min-height:50px;">
+            <% project?.tasks?.progress?.map(tsk => { %>
+            <div id="tasks-backlog" style="min-height:40px;">
               <div class="card mb-3 bg-light cursor-grab border">
                 <div class="card-body p-3">
                   <div class="float-end me-n2">
@@ -213,35 +208,34 @@
                       </a>
 
                       <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
+                        <a class="dropdown-item" href="#">Edit</a>
+                        <a class="dropdown-item" href="#">Delete</a>
                       </div>
                     </div>
                   </div>
-                  <p> <i data-feather="file-text"></i> Curabitur ligula sapien</p>
+                  <p> <i data-feather="file-text"></i> <%= tsk.note %> </p>
                   <!-- <div class="float-end mt-n1">
-                    <img src="/img/avatars/avatar.jpg" width="32" height="32" class="rounded-circle" alt="Avatar">
-                  </div> -->
+                      <img src="/img/avatars/avatar.jpg" width="32" height="32" class="rounded-circle" alt="Avatar">
+                    </div> -->
                   <!-- <a class="btn btn-primary btn-sm" href="#">View</a> -->
                 </div>
               </div>
 
 
             </div>
+            <% }) %>
 
-            <div class="d-grid">
-              <a href="#" class="btn btn-primary">Add new task</a>
-            </div>
 
           </div>
         </div>
       </div>
+
+      <!-- End of PROGRESS -->
+      <!-- DONE  -->
       <div class="col-12 col-lg-6 col-xl-4">
         <div class="card">
           <div class="card-header">
             <div class="card-actions float-end d-flex gap-1">
-              <a href="#" id="add-todo-task"><i data-feather="plus"></i></a>
               <div class="dropdown position-relative">
                 <a href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" class="">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -265,7 +259,8 @@
           </div>
           <div class="card-body pt-2">
 
-            <div id="tasks-backlog" style="min-height:50px;">
+            <% project?.tasks?.done?.map(tsk => { %>
+            <div id="tasks-backlog" style="min-height:40px;">
               <div class="card mb-3 bg-light cursor-grab border">
                 <div class="card-body p-3">
                   <div class="float-end me-n2">
@@ -281,26 +276,21 @@
                       </a>
 
                       <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
+                        <a class="dropdown-item" href="#">Edit</a>
+                        <a class="dropdown-item" href="#">Delete</a>
                       </div>
                     </div>
                   </div>
-                  <p> <i data-feather="file-text"></i> Curabitur ligula sapien</p>
-                  <!-- <div class="float-end mt-n1">
-                    <img src="/img/avatars/avatar.jpg" width="32" height="32" class="rounded-circle" alt="Avatar">
-                  </div> -->
-                  <!-- <a class="btn btn-primary btn-sm" href="#">View</a> -->
+                  <p> <i data-feather="file-text"></i> <%= tsk.note %> </p>
+
                 </div>
               </div>
 
 
             </div>
+            <% }) %>
 
-            <div class="d-grid">
-              <a href="#" class="btn btn-primary">Add new task</a>
-            </div>
+
 
           </div>
         </div>
@@ -308,5 +298,53 @@
     </div>
   </div>
 </main>
+
+
+
+<!-- Modal -->
+<div class="modal fade" data-error="<%= taskActionError %>" id="formTaskModal" tabindex="-1"
+  aria-labelledby="formTaskModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="formTaskModalLabel">Create Modal</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <% const validationErr = flashError.find(x => x.name == "Validation")  %>
+
+        <form action="/tasks" method="post">
+          <input type="hidden" name="projectId" value="<%= project._id %>">
+          <input type="hidden" name="_method" value="POST">
+          <input type="hidden" name="_render" value="project/details">
+          <div class="mb-3">
+            <label for="note" class="form-label">Note</label>
+            <textarea class="form-control" id="note" name="note" rows="3"></textarea>
+            <% if(validationErr && validationErr?.validation?.note) {  %>
+            <small class="text-danger"> <%= validationErr?.validation?.note?.message[0] %></small>
+            <% } %>
+          </div>
+          <div class="mb-3">
+            <select class="form-select" name="status" aria-label="status">
+              <option selected value="">Select Status</option>
+              <option value="TODO">Todo</option>
+              <option value="PROGRESS">In Proggress</option>
+              <option value="DONE">Done</option>
+            </select>
+            <% if(validationErr && validationErr?.validation?.status) {  %>
+            <small class="text-danger"> <%= validationErr?.validation?.status?.message[0] %></small>
+            <% } %>
+          </div>
+          <div class="mb-3">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <%- include('../layouts/end.ejs') %>
