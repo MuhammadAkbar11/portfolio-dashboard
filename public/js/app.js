@@ -2,7 +2,6 @@ import "../scss/app.scss";
 
 // AdminKit (required)
 import "./modules/bootstrap.mjs";
-import "./modules/sidebar.mjs";
 import "./modules/theme.mjs";
 import "./modules/feather.mjs";
 
@@ -15,9 +14,9 @@ import "./modules/flatpickr.mjs";
 // Maps
 import "./modules/vector-maps.mjs";
 
-import "./components/sidebar.mjs";
+import "./components/layouts/sidebar.mjs";
 import "./components/calender.mjs";
 import "./components/logout.mjs";
 
-import "./components/projectForm.mjs";
-import "./components/projectModals.mjs";
+import "./components/project/projectForm.mjs";
+import "./components/project/projectModals.mjs";

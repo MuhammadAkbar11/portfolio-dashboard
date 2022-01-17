@@ -1,4 +1,4 @@
-import TagsInput from "./tagsInput.mjs";
+import TagsInput from "../tagsInput.mjs";
 
 const ProjectForm = () => {
   const projectForm = document.getElementById("form-project");
