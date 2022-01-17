@@ -68,4 +68,26 @@ const userValidate = method => {
   }
 };
 
-export { userValidate };
+const taskValidate = method => {
+  const validationSchema = {
+    // create Task
+    create: checkSchema({
+      note: {
+        trim: true,
+        notEmpty: {
+          errorMessage: "Note is required",
+        },
+      },
+      status: {
+        trim: true,
+        notEmpty: {
+          errorMessage: "Please select status",
+        },
+      },
+    }),
+  };
+
+  return validationSchema[method];
+};
+
+export { userValidate, taskValidate };

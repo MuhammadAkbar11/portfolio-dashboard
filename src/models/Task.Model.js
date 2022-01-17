@@ -3,7 +3,7 @@ import { TASK_STATUS_ENUM } from "../utils/constants.js";
 
 const taskSchema = mongoose.Schema(
   {
-    name: {
+    note: {
       type: String,
       required: true,
     },

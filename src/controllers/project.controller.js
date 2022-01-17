@@ -167,12 +167,13 @@ export const getEditProject = async (req, res, next) => {
 
 export const getProjectDetails = async (req, res, next) => {
   const id = req.params.id;
+
   try {
     const flashdata = req.flash("flashdata");
+    const flashError = req.flash("errors");
     const project = await ProjectModel.findById(id);
     // const
     const projectTasks = await project.getTasks();
-
     res.render("project/details", {
       title: project.title,
       path: "/projects",
@@ -182,6 +183,8 @@ export const getProjectDetails = async (req, res, next) => {
         tasks: projectTasks.tasks,
         progress: projectTasks.progress,
       },
+      taskActionError: Boolean(req.query.task_action_error),
+      flashError: flashError,
       errors: null,
       values: null,
     });
