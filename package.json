@@ -58,6 +58,7 @@
   "dependencies": {
     "@babel/polyfill": "7.12.1",
     "@popperjs/core": "2.10.1",
+    "axios": "^0.24.0",
     "bcryptjs": "^2.4.3",
     "bootstrap": "5.1.1",
     "chalk": "^5.0.0",
@@ -84,6 +85,8 @@
     "passport": "^0.5.2",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
-    "simplebar": "5.3.6"
+    "simplebar": "5.3.6",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1"
   }
 }

@@ -1,4 +1,5 @@
 import express from "express";
+import http from "http";
 import morgan from "morgan";
 import cors from "cors";
 import connectDB from "./src/config/db.config.js";
@@ -20,6 +21,7 @@ import consoleLog from "./src/utils/consoleLog.js";
 import { STATIC_FOLDER, UPLOADS_FOLDER } from "./src/utils/constants.js";
 import passportConfig from "./src/config/passport.config.js";
 import MainRoutes from "./src/routes/index.routes.js";
+import SockerApp from "./src/socker/index.js";
 
 envConfigs.dotenvConfig;
 
@@ -27,6 +29,9 @@ passportConfig();
 connectDB();
 
 const app = express();
+const server = http.createServer(app);
+
+SockerApp(server);
 
 // Store Session
 const store = MongoStore.create({
@@ -103,7 +108,7 @@ MainRoutes(app);
 app.use(logErrorMiddleware);
 app.use(returnError);
 
-app.listen(envConfigs.PORT, () => {
+server.listen(envConfigs.PORT, () => {
   consoleLog.success(
     `[server] server running in ${envConfigs.MODE} mode on port ${envConfigs.PORT}`
   );
