@@ -3,8 +3,7 @@ import { taskCardUI } from "./taskCard.mjs";
 export const boardsHandleIU = {
   todo: (el, tasks) => {
     const { BoardTitle, BoardBody } = getBoardElements(el);
-    BoardTitle.innerHTML = `<span class="badge bg-primary h-auto me-1 rounded-circle">${tasks?.length}
-  </span> Todo`;
+    BoardTitle.innerHTML = `<span class="badge board-badge bg-primary text-center me-1 rounded-circle">${tasks?.length}</span> Todo`;
     tasks.map(task => {
       const taskCard = taskCardUI(task);
       BoardBody.appendChild(taskCard);
@@ -12,8 +11,8 @@ export const boardsHandleIU = {
   },
   progress: (el, tasks) => {
     const { BoardTitle, BoardBody } = getBoardElements(el);
-    BoardTitle.innerHTML = `<span class="badge bg-warning h-auto me-1 rounded-circle">${tasks?.length}
-  </span> In Progress`;
+    BoardTitle.innerHTML = `
+    <span class="badge board-badge bg-warning h-auto me-1 rounded-circle">${tasks?.length}</span> In Progress`;
     tasks.map(task => {
       const taskCard = taskCardUI(task);
       BoardBody.appendChild(taskCard);
@@ -21,12 +20,19 @@ export const boardsHandleIU = {
   },
   done: (el, tasks) => {
     const { BoardTitle, BoardBody } = getBoardElements(el);
-    BoardTitle.innerHTML = `<span class="badge bg-success h-auto me-1 rounded-circle">${tasks?.length}
-  </span> Finished`;
+    BoardTitle.innerHTML = `<span class="badge board-badge bg-success h-auto me-1 rounded-circle">${tasks?.length}</span> Finished`;
     tasks.map(task => {
       const taskCard = taskCardUI(task);
       BoardBody.appendChild(taskCard);
     });
+  },
+  add: (el, task) => {
+    const { BoardTitle, BoardBody } = getBoardElements(el);
+    const BoardTitleBadge = BoardTitle.querySelector(".board-badge");
+    BoardTitleBadge.textContent = task.total;
+    const taskCard = taskCardUI(task);
+    BoardBody.appendChild(taskCard);
+    taskBoardAutoScrollBottom(BoardBody);
   },
 };
 
@@ -36,6 +42,13 @@ function getBoardElements(board) {
   const BoardBody = Board.querySelector("#board-body");
 
   return { Board, BoardTitle, BoardBody };
+}
+
+export function taskBoardAutoScrollBottom(el) {
+  const scrollHeight = el.scrollHeight;
+  el.scrollTo({
+    top: scrollHeight,
+  });
 }
 
 export const taskBoardScroll = el => {

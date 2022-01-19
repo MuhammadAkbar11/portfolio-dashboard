@@ -9,6 +9,8 @@ export const taskCardUI = data => {
     DONE: feather.icons["check-circle"].toSvg({ class: "me-1 mt-n1" }),
   };
 
+  const stringifyData = JSON.stringify(data);
+
   taskCardBacklog.innerHTML = `
   <div class="card mb-3 bg-light cursor-grab border">
     <div class="card-body p-3">
@@ -29,10 +31,9 @@ export const taskCardUI = data => {
           <div class="dropdown-menu dropdown-menu-end" aria-labelledby="${
             data._id
           }Label">
-            <a class="dropdown-item" href="#" id="task-edit"
-            data-task=${JSON.stringify(data)}>Edit</a>
-            <a class="dropdown-item" href="#" id="task-delete"
-            data-task=${JSON.stringify(data)}>Delete</a>
+            <a class="dropdown-item" href="#" id="task-edit" data-task='${stringifyData}
+            '>Edit</a>
+            <a class="dropdown-item" href="#" id="task-delete" data-task='${stringifyData}'>Delete</a>
           </div>
         </div>
       </div>
