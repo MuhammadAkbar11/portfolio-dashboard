@@ -24,6 +24,7 @@ module.exports = {
     filename: "js/[name].js",
     chunkFilename: "js/[name].js",
   },
+
   performance: { hints: false },
   optimization: {
     minimizer: [
@@ -64,7 +65,7 @@ module.exports = {
       // Babel-loader
       {
         test: /\.js$/,
-        exclude: /(node_modules)/,
+        exclude: /node_modules/,
         use: {
           loader: "babel-loader",
           options: {
@@ -105,6 +106,9 @@ module.exports = {
     modules: ["node_modules"],
     alias: {
       request$: "xhr",
+      "@components": Path.resolve(__dirname, "public/js/components"),
+      "@modules": Path.resolve(__dirname, "public/js/modules"),
+      "@socket": Path.resolve(__dirname, "public/js/socket"),
     },
   },
   watchOptions: {
