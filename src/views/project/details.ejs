@@ -169,24 +169,17 @@
         <form action="/tasks" id="project-task-form" method="post">
           <input type="hidden" name="projectId" value="<%= project._id %>">
           <input type="hidden" name="_method" value="POST">
-          <input type="hidden" name="_render" value="project/details">
+          <input type="hidden" name="taskId" value="">
           <div class="mb-3">
             <label for="note" class="form-label">Note</label>
             <textarea class="form-control" id="note" name="note" rows="3"></textarea>
-            <% if(validationErr && validationErr?.validation?.note) {  %>
-            <small class="text-danger"> <%= validationErr?.validation?.note?.message[0] %></small>
-            <% } %>
           </div>
           <div class="mb-3">
             <select class="form-select" name="status" aria-label="status">
-              <option selected value="">Select Status</option>
               <option value="TODO">Todo</option>
               <option value="PROGRESS">In Proggress</option>
               <option value="DONE">Done</option>
             </select>
-            <% if(validationErr && validationErr?.validation?.status) {  %>
-            <small class="text-danger"> <%= validationErr?.validation?.status?.message[0] %></small>
-            <% } %>
           </div>
           <div class="mb-3">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
