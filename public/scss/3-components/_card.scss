@@ -42,6 +42,11 @@
 }
 
 .card-project-task {
+  & .board-badge {
+    height: auto;
+    width: 22px;
+    padding: 0.3rem;
+  }
   & .card-project-task-body.card-project-task-body-scroll {
     max-height: 300px;
     overflow-y: scroll;
