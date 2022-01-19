@@ -40,7 +40,9 @@ const projectSchema = mongoose.Schema(
 );
 
 projectSchema.methods.getTasks = async function () {
-  const tasks = await TaskModel.find({ project: this._id });
+  const tasks = await TaskModel.find({ project: this._id })
+    .sort([["createdAt", 1]])
+    .exec();
   const progress = tasks.reduce(
     (c, { status }) => {
       if (status == TASK_STATUS_ENUM.TODO) c.todo++;
