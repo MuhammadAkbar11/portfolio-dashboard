@@ -1,4 +1,4 @@
-import { taskCardUI } from "./taskCard.mjs";
+import { getTaskCard, taskCardUI } from "./taskCard.mjs";
 
 export const boardsHandleIU = {
   todo: (el, tasks) => {
@@ -28,11 +28,17 @@ export const boardsHandleIU = {
   },
   add: (el, task) => {
     const { BoardTitle, BoardBody } = getBoardElements(el);
-    const BoardTitleBadge = BoardTitle.querySelector(".board-badge");
-    BoardTitleBadge.textContent = task.total;
+
     const taskCard = taskCardUI(task);
     BoardBody.appendChild(taskCard);
     taskBoardAutoScrollBottom(BoardBody);
+    taskBoardScroll();
+  },
+
+  updateBadge: (el, count) => {
+    const { BoardTitle } = getBoardElements(el);
+    const BoardTitleBadge = BoardTitle.querySelector(".board-badge");
+    BoardTitleBadge.textContent = count;
   },
 };
 
@@ -42,6 +48,14 @@ function getBoardElements(board) {
   const BoardBody = Board.querySelector("#board-body");
 
   return { Board, BoardTitle, BoardBody };
+}
+
+export function getBoard(arg) {
+  const ProjectTaskBoards = [].slice.call(
+    document.querySelectorAll(".card-project-task")
+  );
+
+  return ProjectTaskBoards.filter(board => board.id == arg)[0];
 }
 
 export function taskBoardAutoScrollBottom(el) {
@@ -61,13 +75,28 @@ export const taskBoardScroll = el => {
     const cardBody = card.querySelector(".card-project-task-body");
     const cardBodyHeight = cardBody.clientHeight;
     const scrollHeight = cardBody.scrollHeight;
-    if (cardBodyHeight > 310) {
+    // console.log(object)
+    if (scrollHeight > 450) {
       cardBody.classList.add("card-project-task-body-scroll");
       cardBody.scrollTo({
         top: scrollHeight,
       });
+    } else {
+      cardBody.classList.remove("card-project-task-body-scroll");
     }
   });
+};
+
+export const moveBoardItem = (fromBoard, toBoard, task, afterTask) => {
+  const element = getTaskCard(task._id);
+  const afterEl = getTaskCard(afterTask._id);
+  taskBoardRemoveItem(element);
+
+  const { BoardBody } = getBoardElements(toBoard);
+  afterEl.parentNode.insertBefore(element, afterEl.nextSibling);
+
+  taskBoardScroll();
+  taskBoardAutoScrollBottom(BoardBody);
 };
 
 export const taskBoardRemoveItem = el => {

@@ -1,20 +1,19 @@
-import { showModalDelete } from "@components/modals.mjs";
 import { io } from "socket.io-client";
 import {
   boardsHandleIU,
   taskBoardScroll,
+  getBoard,
 } from "@components/tasks/taskBoards.mjs";
 import {
+  projectTaskDeleteModalShowHandler,
+  showProjectTaskDeleteModal,
   createProjectTaskEditModal,
   projectTaskModalAction,
   resetProjectTaskActionModal,
 } from "@components/tasks/taskModalAction.mjs";
 import { socketLoadProjectTasks } from "@socket/tasks.mjs";
-import { socketRoom } from "@socket/index.mjs";
-import {
-  projectTaskDeleteModalShowHandler,
-  showProjectTaskDeleteModal,
-} from "../tasks/taskModalAction.mjs";
+import { moveBoardItem } from "../tasks/taskBoards.mjs";
+import { updateTaskCardUI } from "../tasks/taskCard.mjs";
 
 const socket = io();
 
@@ -67,12 +66,7 @@ function projectTaskActions() {
 
   ProjectEditTaskActions.forEach(x => {
     x.setAttribute("href", "javascript:void(0)");
-    x.addEventListener("click", e => {
-      e.preventDefault();
-      const target = e.target;
-      const { task } = target.dataset;
-      createProjectTaskEditModal(JSON.parse(task));
-    });
+    x.addEventListener("click", createProjectTaskEditModal);
   });
 }
 
@@ -93,7 +87,6 @@ function boardsUI(tasks) {
 document.addEventListener("DOMContentLoaded", () => projectDetails());
 
 socket.on("new-project-task", data => {
-  console.log(data);
   const status = data?.task.status.toLocaleLowerCase();
   const ProjectTaskBoards = [].slice.call(
     document.querySelectorAll(".card-project-task")
@@ -102,5 +95,26 @@ socket.on("new-project-task", data => {
   const selectedBoard = ProjectTaskBoards.filter(board => board.id == status);
   boardsHandleIU.add(selectedBoard[0], data.task);
 
+  projectTaskActions();
+});
+
+socket.on("update-project-task-count", data => {
+  const status = data?.status.toLocaleLowerCase();
+  const selectedBoard = getBoard(status);
+  boardsHandleIU.updateBadge(selectedBoard, data.count);
+});
+
+socket.on("updated-project-task", data => {
+  updateTaskCardUI(data.task);
+  projectTaskActions();
+});
+
+socket.on("moved-project-task", data => {
+  const toBoard = data.to.toLocaleLowerCase();
+  const fromBoard = data.from.toLocaleLowerCase();
+  const selectedToBoard = getBoard(toBoard);
+  const selectedFromBoard = getBoard(fromBoard);
+
+  moveBoardItem(selectedFromBoard, selectedToBoard, data.task, data.afterTask);
   projectTaskActions();
 });

@@ -4,20 +4,21 @@ import {
 } from "../alert.js";
 import { socketCreateProjectTasks } from "@socket/tasks.mjs";
 import { showModalDelete } from "@components/modals.mjs";
-import { socketDeleteProjectTasks } from "../../socket/tasks.mjs";
-import { taskBoardRemoveItem } from "./taskBoards.mjs";
+import {
+  socketDeleteProjectTasks,
+  socketUpdateProjectTasks,
+} from "../../socket/tasks.mjs";
+import { taskBoardRemoveItem, taskBoardScroll } from "./taskBoards.mjs";
 
 export function projectTaskModalAction(El) {
-  const BootstrapModal = new bootstrap.Modal(El, {
-    keyboard: false,
-  });
   const ProjectTaskForm = El.querySelector("#project-task-form");
 
   const projectId = ProjectTaskForm.querySelector("[name=projectId]");
+  const taskId = ProjectTaskForm.querySelector("[name=taskId]");
   const status = ProjectTaskForm.querySelector("[name=status]");
   const note = ProjectTaskForm.querySelector("[name=note]");
   const method = ProjectTaskForm.querySelector("[name=_method]");
-  // const submit = ProjectTaskForm.querySelector("[type=_method]");
+
   removeInputInvalidFeedback(note);
 
   ProjectTaskForm.addEventListener("submit", function (event) {
@@ -27,6 +28,24 @@ export function projectTaskModalAction(El) {
       createInputInvalidFeedback(note, "Note is required");
     } else {
       if (method.value == "PUT") {
+        console.log(note.value, taskId.value);
+        socketUpdateProjectTasks(
+          {
+            taskId: taskId.value,
+            note: note.value,
+            status: status.value,
+            projectId: projectId.value,
+            room: `project:${projectId.value}`.trim(),
+          },
+          (err, data) => {
+            console.log(err, data, "update");
+            if (err) {
+              console.log(err);
+              return;
+            }
+            El.querySelector("[data-bs-dismiss=modal]").click();
+          }
+        );
       } else {
         socketCreateProjectTasks(
           {
@@ -40,7 +59,7 @@ export function projectTaskModalAction(El) {
               console.log(err);
               return;
             }
-            BootstrapModal.hide();
+            El.querySelector("[data-bs-dismiss=modal]").click();
           }
         );
       }
@@ -48,7 +67,10 @@ export function projectTaskModalAction(El) {
   });
 }
 
-export function createProjectTaskEditModal(task) {
+export function createProjectTaskEditModal(event) {
+  event.preventDefault();
+  const target = event.target;
+  const task = JSON.parse(target.dataset.task);
   const FormProjectTaskModal = document.getElementById("formTaskModal");
   const ModalTitle = FormProjectTaskModal.querySelector(".modal-title");
   const ModalBody = FormProjectTaskModal.querySelector(".modal-body");
@@ -62,7 +84,9 @@ export function createProjectTaskEditModal(task) {
 
   [].slice.call(TaskStatusInput.querySelectorAll("option")).map(op => {
     op.removeAttribute("selected");
-    if (op.value == task.status) op.setAttribute("selected", true);
+    console.log(op.value, task.status.trim());
+    if (op.value.trim() == task.status.trim())
+      op.setAttribute("selected", true);
   });
 
   ModalTitle.innerText = "Edit Task";
@@ -85,6 +109,8 @@ export function resetProjectTaskActionModal(modalEl) {
   FormModal.setAttribute("action", "/tasks/");
   FormModal.querySelector("[name=_method]").value = "POST";
   FormModal.querySelector("[name=note]").value = "";
+  FormModal.querySelector("[name=taskId]").value = "";
+
   const TaskStatusInput = FormModal.querySelector("[name=status]");
 
   [].slice.call(TaskStatusInput.querySelectorAll("option")).map((op, i) => {
@@ -135,6 +161,7 @@ export function projectTaskDeleteModalShowHandler(El) {
         }
 
         taskBoardRemoveItem(selectedTask[0]);
+        taskBoardScroll();
         DismisModal.click();
       }
     );

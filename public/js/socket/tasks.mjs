@@ -30,3 +30,13 @@ export function socketDeleteProjectTasks(data, cb) {
     cb && cb(null, data);
   });
 }
+
+export function socketUpdateProjectTasks(data, cb) {
+  socket.emit("edit-project-task", data, (err, data) => {
+    if (err) {
+      return cb && cb(err, null);
+    }
+
+    cb && cb(null, data);
+  });
+}
