@@ -37,6 +37,11 @@ function RegisterTaskHandlers(io, socket) {
           total: totalTaskByStatus,
         },
       });
+      io.to(data.room).emit("update-project-task-count", {
+        messgae: "Update count",
+        status: data.status,
+        count: totalTaskByStatus,
+      });
     } catch (error) {
       console.log(error);
       cb && cb(error, null);
@@ -60,9 +65,80 @@ function RegisterTaskHandlers(io, socket) {
         status: taskStatus,
       }).countDocuments();
 
-      console.log(totalTaskByStatus);
+      io.to(`project:${projectId}`.trim()).emit("update-project-task-count", {
+        messgae: "Update count",
+        status: taskStatus,
+        count: totalTaskByStatus,
+      });
 
       cb(null, { message: "Delete Task" });
+    } catch (error) {
+      console.log(error);
+      cb && cb(error);
+    }
+  });
+
+  socket.on("edit-project-task", async (request, cb) => {
+    const { note, status, projectId, room, taskId } = request;
+    try {
+      const task = await TaskModel.findById(taskId);
+      const oldStatus = task.status;
+
+      if (!task) {
+        throw new BaseError("Not Found", 400, "Task Not Found", true, {
+          responseType: "json",
+        });
+      }
+
+      task.note = note;
+      task.status = status;
+
+      const updateTask = await task.save();
+
+      io.to(room).emit("updated-project-task", {
+        messgae: "Updated Project Task",
+        task: updateTask,
+      });
+
+      if (updateTask.status != oldStatus) {
+        const tasksByTaskOldStatus = await TaskModel.find({
+          project: projectId,
+          status: oldStatus,
+        });
+
+        const tasksByTaskNewStatus = await TaskModel.find({
+          project: projectId,
+          status: updateTask.status,
+        });
+
+        const updatedTaskIndex = tasksByTaskNewStatus.findIndex(
+          x => x.id == updateTask._id
+        );
+
+        const beforeTask = tasksByTaskNewStatus.find(
+          (item, index) => index === updatedTaskIndex - 1
+        );
+
+        io.to(room).emit("update-project-task-count", {
+          messgae: "Update count",
+          status: oldStatus,
+          count: tasksByTaskOldStatus.length,
+        });
+        io.to(room).emit("update-project-task-count", {
+          messgae: "Update count",
+          status: updateTask.status,
+          count: tasksByTaskNewStatus.length,
+        });
+        io.to(room).emit("moved-project-task", {
+          messgae: "Moved Project Task",
+          from: oldStatus,
+          to: updateTask.status,
+          afterTask: beforeTask,
+          task: updateTask,
+        });
+      }
+
+      cb(null, { message: "Update Task", isMoved: false });
     } catch (error) {
       console.log(error);
       cb && cb(error);
