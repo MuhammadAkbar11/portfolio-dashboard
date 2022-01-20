@@ -3,14 +3,21 @@ import {
   removeInputInvalidFeedback,
 } from "../alert.js";
 import { socketCreateProjectTasks } from "@socket/tasks.mjs";
+import { showModalDelete } from "@components/modals.mjs";
+import { socketDeleteProjectTasks } from "../../socket/tasks.mjs";
+import { taskBoardRemoveItem } from "./taskBoards.mjs";
 
-export function projectTaskModalAction(eventModal) {
-  const Modal = bootstrap.Modal.getInstance(eventModal.target);
-  const ProjectTaskForm = eventModal.target.querySelector("#project-task-form");
+export function projectTaskModalAction(El) {
+  const BootstrapModal = new bootstrap.Modal(El, {
+    keyboard: false,
+  });
+  const ProjectTaskForm = El.querySelector("#project-task-form");
 
-  const { note, status, projectId, method, taskId } =
-    taskFormInputs(ProjectTaskForm);
-
+  const projectId = ProjectTaskForm.querySelector("[name=projectId]");
+  const status = ProjectTaskForm.querySelector("[name=status]");
+  const note = ProjectTaskForm.querySelector("[name=note]");
+  const method = ProjectTaskForm.querySelector("[name=_method]");
+  // const submit = ProjectTaskForm.querySelector("[type=_method]");
   removeInputInvalidFeedback(note);
 
   ProjectTaskForm.addEventListener("submit", function (event) {
@@ -20,7 +27,6 @@ export function projectTaskModalAction(eventModal) {
       createInputInvalidFeedback(note, "Note is required");
     } else {
       if (method.value == "PUT") {
-        console.log("Edit Here");
       } else {
         socketCreateProjectTasks(
           {
@@ -34,23 +40,12 @@ export function projectTaskModalAction(eventModal) {
               console.log(err);
               return;
             }
-            Modal.hide();
+            BootstrapModal.hide();
           }
         );
       }
     }
   });
-}
-
-export function taskFormInputs(form) {
-  const projectId = form.querySelector("[name=projectId]");
-  const status = form.querySelector("[name=status]");
-  const note = form.querySelector("[name=note]");
-  const method = form.querySelector("[name=_method]");
-  const taskId = form.querySelector("[name=taskId]");
-  const submit = form.querySelector("[type=submit]");
-
-  return { projectId, taskId, note, status, method, submit };
 }
 
 export function createProjectTaskEditModal(task) {
@@ -99,4 +94,49 @@ export function resetProjectTaskActionModal(modalEl) {
 
   ModalTitle.innerText = "Create Task";
   modalEl.classList.add("fade");
+}
+
+export function showProjectTaskDeleteModal(e) {
+  e.preventDefault();
+  const ModalDelete = document.getElementById("modalDeleteTask");
+  const FormDelete = ModalDelete.querySelector("#modalDeleteTaskForm");
+  const target = e.target;
+  const dataTask = JSON.parse(target.dataset.task);
+
+  FormDelete.querySelector("[name=taskId]").value = dataTask._id;
+
+  const modalBody = `<p>Are your sure want to delete <span class="text-danger fw-bold" >${dataTask.note}</span> note? <br> you can't undo this action </p>`;
+
+  showModalDelete(
+    document.getElementById("modalDeleteTask"),
+    `/tasks/${dataTask._id}`,
+    "Delete Task",
+    modalBody
+  );
+}
+
+export function projectTaskDeleteModalShowHandler(El) {
+  const FormDelete = El.querySelector("#modalDeleteTaskForm");
+  const DismisModal = El.querySelector("[data-bs-dismiss=modal]");
+  FormDelete.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const projectId = event.target.querySelector("[name=projectId]");
+    const taskId = event.target.querySelector("[name=taskId]");
+    const selectedTask = [].slice
+      .call(document.querySelectorAll("#tasks-backlog"))
+      .filter(x => x.dataset.key == taskId.value);
+
+    socketDeleteProjectTasks(
+      { projectId: projectId.value, taskId: taskId.value },
+      (err, data) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+
+        taskBoardRemoveItem(selectedTask[0]);
+        DismisModal.click();
+      }
+    );
+  });
 }

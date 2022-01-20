@@ -1,5 +1,3 @@
-import { createProjectTaskEditModal } from "../tasks/taskModalAction.mjs";
-
 const ProjectDeleteModal = document.getElementById("modalDeleteProject");
 
 const initializeProjectModals = () => {

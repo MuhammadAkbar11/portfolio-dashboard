@@ -69,3 +69,8 @@ export const taskBoardScroll = el => {
     }
   });
 };
+
+export const taskBoardRemoveItem = el => {
+  const ElParent = el.parentNode;
+  ElParent?.removeChild(el);
+};

@@ -11,6 +11,10 @@ import {
 } from "@components/tasks/taskModalAction.mjs";
 import { socketLoadProjectTasks } from "@socket/tasks.mjs";
 import { socketRoom } from "@socket/index.mjs";
+import {
+  projectTaskDeleteModalShowHandler,
+  showProjectTaskDeleteModal,
+} from "../tasks/taskModalAction.mjs";
 
 const socket = io();
 
@@ -25,24 +29,25 @@ function projectDetails() {
 const projectTask = () => {
   const ProjectTaskContainer = document.getElementById("tasks-container");
   const ProjectTaskFormModal = document.getElementById("formTaskModal");
+  const ProjectTaskDeleteModal = document.getElementById("modalDeleteTask");
 
   if (ProjectTaskContainer) {
     const projectID = ProjectTaskContainer.dataset.projectid;
-    socketRoom(`project:${projectID}`.trim());
+    socket.emit("join", `project:${projectID}`.trim());
     socketLoadProjectTasks(projectID, (err, data) => {
       boardsUI(data);
     });
   }
 
   if (ProjectTaskFormModal) {
-    ProjectTaskFormModal.addEventListener(
-      "show.bs.modal",
-      projectTaskModalAction
-    );
-
     ProjectTaskFormModal.addEventListener("hidden.bs.modal", function (event) {
       resetProjectTaskActionModal(event.target);
     });
+    projectTaskModalAction(ProjectTaskFormModal);
+  }
+
+  if (ProjectTaskDeleteModal) {
+    projectTaskDeleteModalShowHandler(ProjectTaskDeleteModal);
   }
 };
 
@@ -57,7 +62,7 @@ function projectTaskActions() {
 
   ProjectDeleteTaskActions.forEach(x => {
     x.setAttribute("href", "javascript:void(0)");
-    x.addEventListener("click", deleteProjectTask);
+    x.addEventListener("click", showProjectTaskDeleteModal);
   });
 
   ProjectEditTaskActions.forEach(x => {
@@ -85,24 +90,10 @@ function boardsUI(tasks) {
   projectTaskActions();
 }
 
-const deleteProjectTask = e => {
-  e.preventDefault();
-  const target = e.target;
-  const dataTask = JSON.parse(target.dataset.task);
-
-  const modalBody = `<p>Are your sure want to delete this <span class="text-danger fw-bold" >${dataTask.note}</span> note? <br> you can't undo this action </p>`;
-
-  showModalDelete(
-    document.getElementById("modalDeleteTask"),
-    `/tasks/${dataTask._id}`,
-    "Delete Task",
-    modalBody
-  );
-};
-
 document.addEventListener("DOMContentLoaded", () => projectDetails());
 
 socket.on("new-project-task", data => {
+  console.log(data);
   const status = data?.task.status.toLocaleLowerCase();
   const ProjectTaskBoards = [].slice.call(
     document.querySelectorAll(".card-project-task")

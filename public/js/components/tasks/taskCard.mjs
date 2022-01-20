@@ -1,6 +1,7 @@
 export const taskCardUI = data => {
   const taskCardBacklog = document.createElement("div");
   taskCardBacklog.setAttribute("id", "tasks-backlog");
+  taskCardBacklog.setAttribute("data-key", data._id);
   taskCardBacklog.style.minHeight = "40px";
 
   const taskIcon = {

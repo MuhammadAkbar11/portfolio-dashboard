@@ -12,8 +12,6 @@ const showModalDelete = (
   ModalBody.innerHTML = body;
   ModalTitle.innerHTML = title;
 
-  console.log(modalEl);
-
   const blModal = new bootstrap.Modal(modalEl, {
     keyboard: false,
   });
