@@ -209,6 +209,8 @@
         <form action="/projects" id="modalDeleteTaskForm" method="post">
           <input type="hidden" name="projectId" value="<%= project._id %>">
           <input type="hidden" name="_method" value="DELETE">
+          <input type="hidden" name="taskId" value="">
+
           <div class="d-flex w-100 justify-content-center gap-2">
             <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-animation btn-danger">Yes, Delete it</button>
