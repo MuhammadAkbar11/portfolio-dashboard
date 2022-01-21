@@ -2,6 +2,26 @@ const taskIcon = {
   TODO: feather.icons["file-text"].toSvg({ class: "me-1 mt-n1" }),
   PROGRESS: feather.icons["activity"].toSvg({ class: "me-1 mt-n1" }),
   DONE: feather.icons["check-circle"].toSvg({ class: "me-1 mt-n1" }),
+  ARROW_RIGHT: feather.icons["arrow-right"].toSvg({ class: "mx-1" }),
+  ARROW_LEFT: feather.icons["arrow-left"].toSvg({ class: "mx-1" }),
+};
+
+const taskSwitch = data => {
+  const stringifyData = JSON.stringify(data);
+  const schema = {
+    TODO: `
+    <a href="javascript:void(0)" class="p-0 text-gray "  id="task-move" data-destination="PROGRESS" data-task='${stringifyData}' > ${taskIcon["ARROW_RIGHT"]}</a>
+    `,
+    PROGRESS: `
+    <a href="javascript:void(0)" class="p-0 text-gray"  id="task-move" data-destination="TODO" data-task='${stringifyData}'  >${taskIcon["ARROW_LEFT"]}</a>
+    <a href="javascript:void(0)" class="p-0 text-gray"  id="task-move" data-destination="DONE" data-task='${stringifyData}'   class="ms-n1">${taskIcon["ARROW_RIGHT"]}</a>
+    `,
+    DONE: `
+    <a href="javascript:void(0)" class="p-0 text-gray"  id="task-move" data-destination="PROGRESS" data-task='${stringifyData}' >${taskIcon["ARROW_LEFT"]}</a>
+    `,
+  };
+
+  return schema[data.status];
 };
 
 export const taskCardUI = data => {
@@ -14,8 +34,8 @@ export const taskCardUI = data => {
 
   taskCardBacklog.innerHTML = `
   <div class="card mb-3 bg-light cursor-grab border">
-    <div class="card-body p-3">
-      <div class="float-end me-n2">
+    <div class="card-body px-3 pb-2">
+      <div class="float-end ms-1 me-n2">
         <div class="dropdown position-relative">
           <a href="#" data-bs-toggle="dropdown" id=${
             data._id
@@ -38,8 +58,12 @@ export const taskCardUI = data => {
           </div>
         </div>
       </div>
-      <p> ${taskIcon[data.status]} ${data.note}</p>
-
+      <div class="d-flex gap-1"><span>${taskIcon[data.status]}</span><p>${
+    data.note
+  }</p></div>
+      <div class="float-end me-n2">
+        ${taskSwitch(data)}
+      </div>
     </div>
   </div>
 `;
@@ -51,8 +75,8 @@ export const updateTaskCardUI = data => {
   const stringifyData = JSON.stringify(data);
   taskCardBacklog.innerHTML = `
   <div class="card mb-3 bg-light cursor-grab border">
-    <div class="card-body p-3">
-      <div class="float-end me-n2">
+    <div class="card-body px-3 pb-2">
+      <div class="float-end ms-1 me-n2">
         <div class="dropdown position-relative">
           <a href="#" data-bs-toggle="dropdown" id=${
             data._id
@@ -75,8 +99,12 @@ export const updateTaskCardUI = data => {
           </div>
         </div>
       </div>
-      <p> ${taskIcon[data.status]} ${data.note}</p>
-
+      <div class="d-flex gap-1"><span>${taskIcon[data.status]}</span><p>${
+    data.note
+  }</p></div>
+      <div class="float-end me-n2">
+        ${taskSwitch(data)}
+      </div>
     </div>
   </div>
 `;

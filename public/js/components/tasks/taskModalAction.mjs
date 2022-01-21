@@ -28,7 +28,6 @@ export function projectTaskModalAction(El) {
       createInputInvalidFeedback(note, "Note is required");
     } else {
       if (method.value == "PUT") {
-        console.log(note.value, taskId.value);
         socketUpdateProjectTasks(
           {
             taskId: taskId.value,
