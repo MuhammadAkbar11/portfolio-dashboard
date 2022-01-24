@@ -18,10 +18,6 @@ import { socketUpdateProjectTasks } from "../../socket/tasks.mjs";
 
 const socket = io();
 
-socket.on("connect", () => {
-  console.log("connect");
-});
-
 function initProjectTasks() {
   const ProjectTaskContainer = document.getElementById("tasks-container");
   if (ProjectTaskContainer) {
@@ -125,7 +121,6 @@ function movingTask(event) {
         room: `project:${parseTask.project}`.trim(),
       },
       (err, data) => {
-        console.log(err, data, "Moved task");
         if (err) {
           console.log(err);
           return;
@@ -160,11 +155,9 @@ socket.on("updated-project-task", data => {
 
 socket.on("moved-project-task", data => {
   const toBoard = data.to.toLocaleLowerCase();
-  const fromBoard = data.from.toLocaleLowerCase();
   const selectedToBoard = getBoard(toBoard);
-  const selectedFromBoard = getBoard(fromBoard);
 
-  moveBoardItem(selectedFromBoard, selectedToBoard, data.task, data.afterTask);
+  moveBoardItem(selectedToBoard, data.task, data.beforeTask, data.nextTask);
   projectTaskActions();
 });
 

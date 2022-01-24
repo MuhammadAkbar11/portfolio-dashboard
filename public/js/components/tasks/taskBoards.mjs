@@ -50,12 +50,21 @@ function getBoardElements(board) {
   return { Board, BoardTitle, BoardBody };
 }
 
-export function getBoard(arg) {
+export function getBoard(taskId) {
   const ProjectTaskBoards = [].slice.call(
     document.querySelectorAll(".card-project-task")
   );
 
-  return ProjectTaskBoards.filter(board => board.id == arg)[0];
+  return ProjectTaskBoards.filter(board => board.id == taskId)[0];
+}
+
+export function taskBoardAutoScrollToElement(element, board) {
+  const elementScrollTo = element.offsetTop;
+  const scrollTo = elementScrollTo - element.clientHeight;
+
+  board.scrollTo({
+    top: scrollTo,
+  });
 }
 
 export function taskBoardAutoScrollBottom(el) {
@@ -73,7 +82,6 @@ export const taskBoardScroll = el => {
   ProjectTaskCard.forEach(card => {
     card.classList.add("border");
     const cardBody = card.querySelector(".card-project-task-body");
-    const cardBodyHeight = cardBody.clientHeight;
     const scrollHeight = cardBody.scrollHeight;
     // console.log(object)
     if (scrollHeight > 450) {
@@ -87,16 +95,25 @@ export const taskBoardScroll = el => {
   });
 };
 
-export const moveBoardItem = (fromBoard, toBoard, task, afterTask) => {
-  const element = getTaskCard(task._id);
-  const afterEl = getTaskCard(afterTask._id);
-  taskBoardRemoveItem(element);
-
+export const moveBoardItem = (toBoard, task, beforeTask, nextTask) => {
+  const movedTask = getTaskCard(task._id);
   const { BoardBody } = getBoardElements(toBoard);
-  afterEl.parentNode.insertBefore(element, afterEl.nextSibling);
+
+  taskBoardRemoveItem(movedTask);
+  if (nextTask) {
+    const nextTaskEl = getTaskCard(nextTask._id);
+    nextTaskEl.parentNode.insertBefore(movedTask, nextTaskEl);
+  } else if (beforeTask) {
+    const beforeTaskEl = getTaskCard(beforeTask._id);
+    beforeTaskEl.parentNode.insertBefore(movedTask, beforeTaskEl.nextSibling);
+  } else {
+    BoardBody.appendChild(movedTask);
+  }
 
   taskBoardScroll();
-  taskBoardAutoScrollBottom(BoardBody);
+  taskBoardAutoScrollToElement(movedTask, BoardBody);
+
+  // taskBoardAutoScrollBottom(BoardBody);
 };
 
 export const taskBoardRemoveItem = el => {

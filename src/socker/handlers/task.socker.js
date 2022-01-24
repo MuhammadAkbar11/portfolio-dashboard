@@ -118,6 +118,9 @@ function RegisterTaskHandlers(io, socket) {
         const beforeTask = tasksByTaskNewStatus.find(
           (item, index) => index === updatedTaskIndex - 1
         );
+        const nextTask = tasksByTaskNewStatus.find(
+          (item, index) => index === updatedTaskIndex + 1
+        );
 
         io.to(room).emit("update-project-task-count", {
           messgae: "Update count",
@@ -133,7 +136,8 @@ function RegisterTaskHandlers(io, socket) {
           messgae: "Moved Project Task",
           from: oldStatus,
           to: updateTask.status,
-          afterTask: beforeTask,
+          beforeTask,
+          nextTask,
           task: updateTask,
         });
       }
