@@ -4,7 +4,7 @@ import morgan from "morgan";
 import cors from "cors";
 import connectDB from "./src/config/db.config.js";
 import MongoStore from "connect-mongo";
-import session from "express-session";
+import expsession from "express-session";
 import passport from "passport";
 import methodOverride from "method-override";
 import connectFlash from "connect-flash";
@@ -15,13 +15,13 @@ import {
   logErrorMiddleware,
   returnError,
 } from "./src/middleware/errorHandler.js";
-
-import consoleLog from "./src/utils/consoleLog.js";
-
-import { STATIC_FOLDER, UPLOADS_FOLDER } from "./src/utils/constants.js";
 import passportConfig from "./src/config/passport.config.js";
 import MainRoutes from "./src/routes/index.routes.js";
-import SockerApp from "./src/socker/index.js";
+import SockerApp from "./src/socker/index.socker.js";
+import socketServer from "./src/config/socket.config.js";
+
+import consoleLog from "./src/utils/consoleLog.js";
+import { STATIC_FOLDER, UPLOADS_FOLDER } from "./src/utils/constants.js";
 
 envConfigs.dotenvConfig;
 
@@ -31,11 +31,21 @@ connectDB();
 const app = express();
 const server = http.createServer(app);
 
-SockerApp(server);
+// socket server
+const io = socketServer(server);
+global.io = io;
 
 // Store Session
 const store = MongoStore.create({
   mongoUrl: envConfigs.MONGO_URI,
+});
+
+// express session config
+const session = expsession({
+  secret: envConfigs.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: store,
 });
 
 app.set("view engine", "ejs");
@@ -60,18 +70,13 @@ app.use(
   })
 );
 
+// Session
+app.use(session);
+
+SockerApp(io);
+
 // Flash
 app.use(connectFlash());
-
-// Session
-app.use(
-  session({
-    secret: envConfigs.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    store: store,
-  })
-);
 
 if (envConfigs.MODE == "development") {
   app.use(morgan("dev"));

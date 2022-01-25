@@ -1,13 +1,8 @@
-import { Server as SocketServer } from "socket.io";
 import RegisterTaskHandlers from "./handlers/task.socker.js";
 
-function SockerApp(server) {
-  const io = new SocketServer(server, {
-    cors: true,
-    origins: [],
-  });
-
+function SockerApp(io) {
   const onConnection = socket => {
+    console.log(`socket.io connected: ${socket.id}`);
     socket.on("join", room => {
       socket.join(room.trim());
     });
