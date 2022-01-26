@@ -1,17 +1,32 @@
 import mongoose from "mongoose";
-import { TASK_STATUS_ENUM } from "../utils/constants.js";
 
 const notificationSchema = mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "UserModel",
+    title: {
+      type: String,
+      required: true,
+    },
+    icon: {
+      type: String,
+      required: true,
+    },
+    url: {
+      type: String,
+      required: true,
+    },
+    type: {
+      type: String,
     },
     isRead: {
       type: Boolean,
     },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "UserModel",
+    },
     content: {
-      type: Object,
+      type: String,
+      required: true,
     },
   },
   {
