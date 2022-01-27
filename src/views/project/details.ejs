@@ -5,21 +5,16 @@
     <div class="mb-4 d-flex justify-content-between ">
       <!-- <h1 class="h3 my-0"><%= project.title %> </h1> -->
       <a href="/projects" class="btn light">Back To Projects</a>
-
     </div>
 
-
-
-    <div class="row d-flex  align-items-stretch  ">
-
+    <div class="row d-flex  align-items-stretch">
       <div class="col-md-6 pr-md-4 mb-3">
         <img src="<%= project.image %>" class=" w-100 h-auto" alt="">
       </div>
       <div class="col-md-6 ms-auto ps-md-5 ">
-
         <h1 class=" text-uppercase  mb-0"><%= project.title %> <a class="btn mt-0 mb-3 btn-link p-0 shadow-none "
-            href="/projects/<%= project._id %>/edit "><i data-feather="edit"></i></a></h1>
-
+            href="/projects/<%= project._id %>/edit "><i data-feather="edit"></i></a>
+        </h1>
         <div class="d-flex mb-3 align-items-center" style="font-size: 16px;">
           <%
             const statusBadge = {
@@ -101,7 +96,7 @@
     </div>
     <div class="row">
       <!-- TODO -->
-      <div class="col-12 col-lg-6 col-xl-4">
+      <div class="col-12 col-md-6 col-lg-6 col-xl-4">
         <div class="card card-project-task" id="todo">
           <div class="card-header pb-2">
 
@@ -118,7 +113,7 @@
       </div>
       <!-- End OF TODO -->
       <!-- PROGRESS -->
-      <div class="col-12 col-lg-6 col-xl-4">
+      <div class="col-12 col-md-6 col-lg-6 col-xl-4">
         <div class="card card-project-task" id="progress">
           <div class="card-header pb-2">
             <h5 class="card-title" id="board-title">
@@ -134,7 +129,7 @@
       </div>
       <!-- End of PROGRESS -->
       <!-- DONE  -->
-      <div class="col-12 col-lg-6 col-xl-4">
+      <div class="col-12 col-md-6 col-lg-6 col-xl-4">
         <div class="card card-project-task" id="done">
           <div class="card-header pb-2">
 
