@@ -1,25 +1,24 @@
 import NotificationModel from "../models/Notification.model.js";
 import { TransfromError } from "./baseError.helper.js";
 
-const notifDataSchema = {
-  user: null,
-  isRead: false,
-  icon: "bell",
-  title: "Created new data",
-  url: "/",
-  type: "PUBLIC",
-  content: "Successfully created new data",
-};
-
 class Notification {
-  constructor(data = notifDataSchema) {
-    this.user = data.user;
-    this.isRead = data.isRead;
-    this.icon = data.icon;
-    this.title = data.title;
-    this.url = data.url;
-    this.type = data.type;
-    this.content = data.content;
+  constructor({
+    user = null,
+    isRead = false,
+    icon = "bell",
+    color = "success",
+    title = "Created new data",
+    url = "/",
+    type = "PUBLIC",
+    content = "Successfully created new data",
+  }) {
+    this.user = user;
+    this.isRead = isRead;
+    this.theme = { icon, color };
+    this.title = title;
+    this.url = url;
+    this.type = type;
+    this.content = content;
 
     this.save();
   }
