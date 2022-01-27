@@ -1,6 +1,4 @@
-import { io } from "socket.io-client";
-
-const socket = io();
+import socket from "./index.mjs";
 
 export function socketLoadProjectTasks(projectId, cb) {
   socket.emit("project-tasks", { projectId }, (err, data) => {

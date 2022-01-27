@@ -1,4 +1,3 @@
-import { io } from "socket.io-client";
 import {
   boardsHandleIU,
   taskBoardScroll,
@@ -15,8 +14,7 @@ import { socketLoadProjectTasks } from "@socket/tasks.mjs";
 import { moveBoardItem } from "../tasks/taskBoards.mjs";
 import { updateTaskCardUI } from "../tasks/taskCard.mjs";
 import { socketUpdateProjectTasks } from "../../socket/tasks.mjs";
-
-const socket = io();
+import socket from "@socket/index.mjs";
 
 function initProjectTasks() {
   const ProjectTaskContainer = document.getElementById("tasks-container");
