@@ -1,4 +1,5 @@
 import BaseError, { TransfromError } from "../helpers/baseError.helper.js";
+import Notification from "../helpers/notification.helper.js";
 import ProjectModel from "../models/Project.model.js";
 
 import deleteFile from "../utils/index.js";
@@ -52,10 +53,16 @@ export const postProjects = async (req, res, next) => {
         renderData: { title: 404 },
       });
     }
-
     req.flash("flashdata", {
       type: "success",
       message: "Success generate a project",
+    });
+    await new Notification({
+      title: "Created Project",
+      icon: "plus-circle",
+      color: "success",
+      content: `Successfully create a new project`,
+      url: "/projects/" + project._id,
     });
     res.redirect("/projects/" + project._id + "/edit");
   } catch (error) {
@@ -104,6 +111,14 @@ export const putProject = async (req, res, next) => {
 
     await project.save();
 
+    await new Notification({
+      title: "Updated Project",
+      icon: "edit",
+      color: "primary",
+      content: `Successfully update <b>${project.title}</b> project`,
+      url: "/projects",
+    });
+
     req.flash("flashdata", {
       type: "success",
       message: "Update project success!",
@@ -132,6 +147,14 @@ export const deleteProject = async (req, res, next) => {
       message: "Delete project success!",
     });
     res.redirect(`/projects`);
+
+    await new Notification({
+      title: "Deleted A Project",
+      icon: "trash-2",
+      color: "danger",
+      content: `Successfully delete <b>${project.title}</b> project`,
+      url: "/projects",
+    });
   } catch (error) {
     req.flash("flashdata", {
       type: "danger",
@@ -172,7 +195,15 @@ export const getProjectDetails = async (req, res, next) => {
     const flashdata = req.flash("flashdata");
     const flashError = req.flash("errors");
     const project = await ProjectModel.findById(id);
+
+    if (!project) {
+      throw new BaseError("Not Found", 404, "Project not found", true, {
+        errorView: "errors/404",
+      });
+    }
+
     const { progress } = await project.getTasks();
+
     res.render("project/details", {
       title: project.title,
       path: "/projects",
