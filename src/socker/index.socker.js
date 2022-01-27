@@ -1,3 +1,4 @@
+import RegisterNotificationHandlers from "./handlers/notif.socker.js";
 import RegisterTaskHandlers from "./handlers/task.socker.js";
 
 function SockerApp(io) {
@@ -8,6 +9,7 @@ function SockerApp(io) {
     });
 
     RegisterTaskHandlers(io, socket);
+    RegisterNotificationHandlers(io, socket);
   };
 
   io.on("connection", onConnection);
