@@ -2,10 +2,21 @@ import { validationResult } from "express-validator";
 import BaseError, { ValidationError } from "../helpers/baseError.helper.js";
 import TaskModel from "../models/Task.Model.js";
 
+export const getTasks = async (req, res) => {
+  try {
+    res.json({
+      user: req.user,
+      message: "Task List",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const postProjectTask = async (req, res) => {
   const { note, projectId, status, _render } = req.body;
-  const successRedirect = req.query.successRedirect || "/projects/" + projectId;
-  const errorRedirect = req.query.errorRedirect || "/projects/" + projectId;
+  const redirect =
+    req.query.redirect || `/projects/${projectId}#tasks-container`;
 
   try {
     const validate = validationResult(req);
@@ -18,30 +29,30 @@ export const postProjectTask = async (req, res) => {
       });
 
       req.flash("errors", errValidate);
-      res.redirect(`${errorRedirect}?task_action_error=true`);
+      res.redirect(`${redirect}?task_action_error=true`);
       return;
     }
 
     await TaskModel.create({ note, project: projectId, status });
     req.flash("flashdata", {
       type: "success",
-      message: "Success add a task",
+      message: " successfully create a task",
     });
-    res.redirect(successRedirect);
+    res.redirect(`${redirect}`);
   } catch (error) {
     req.flash("flashdata", {
       type: "danger",
       message: "Failed to create task",
     });
-    res.redirect(`${errorRedirect}?task_action_error=true`);
+    res.redirect(`${redirect}?task_action_error=true`);
   }
 };
 
 export const putProjectTask = async (req, res) => {
   const id = req.params.id;
   const { note, projectId, status, _render } = req.body;
-  const successRedirect = req.query.successRedirect || "/projects/" + projectId;
-  const errorRedirect = req.query.errorRedirect || "/projects/" + projectId;
+  const redirect =
+    req.query.redirect || `/projects/${projectId}#tasks-container`;
 
   try {
     const validate = validationResult(req);
@@ -53,7 +64,7 @@ export const putProjectTask = async (req, res) => {
       });
 
       req.flash("errors", errValidate);
-      res.redirect(`${errorRedirect}?task_action_error=true`);
+      res.redirect(`${redirect}?task_action_error=true`);
       return;
     }
 
@@ -62,7 +73,6 @@ export const putProjectTask = async (req, res) => {
     if (!task) {
       throw new BaseError("Not Found", 400, "Task Not Found", true, {});
     }
-
     task.note = note;
     task.status = status;
 
@@ -70,14 +80,42 @@ export const putProjectTask = async (req, res) => {
 
     req.flash("flashdata", {
       type: "success",
-      message: "Success edit task",
+      message: "Task successfully updated",
     });
-    res.redirect(successRedirect);
+    res.redirect(`${redirect}`);
   } catch (error) {
     req.flash("flashdata", {
       type: "danger",
-      message: "Failed to create project",
+      message: "Failed to update task",
     });
-    res.redirect(`${errorRedirect}?task_action_error=true`);
+    res.redirect(`${redirect}?task_action_error=true`);
+  }
+};
+
+export const deleteProjectTask = async (req, res) => {
+  const id = req.params.id;
+  const projectId = req.body.projectId;
+  const redirect =
+    req.query.redirect || `/projects/${projectId}#tasks-container`;
+  try {
+    const task = await TaskModel.findById(id);
+
+    if (!task) {
+      throw new BaseError("Not Found", 400, "Task Not Found", true, {});
+    }
+
+    await task.remove();
+
+    req.flash("flashdata", {
+      type: "success",
+      message: "Successfully delete task",
+    });
+    res.redirect(redirect);
+  } catch (error) {
+    req.flash("flashdata", {
+      type: "danger",
+      message: "Failed to delete task",
+    });
+    res.redirect(redirect);
   }
 };
