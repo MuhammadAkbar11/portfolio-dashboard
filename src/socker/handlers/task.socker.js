@@ -1,4 +1,5 @@
 import BaseError from "../../helpers/baseError.helper.js";
+import Notification from "../../helpers/notification.helper.js";
 import ProjectModel from "../../models/Project.model.js";
 import TaskModel from "../../models/Task.Model.js";
 
@@ -6,9 +7,13 @@ function RegisterTaskHandlers(io, socket) {
   socket.on("project-tasks", async ({ projectId }, cb) => {
     try {
       const project = await ProjectModel.findById(projectId);
-      const projectTasks = await project.getTasks();
 
-      cb(null, projectTasks.tasks);
+      if (project) {
+        const projectTasks = await project.getTasks();
+        cb(null, projectTasks.tasks);
+      } else {
+        throw new BaseError("Not Found", 404, "Project not found");
+      }
     } catch (error) {
       cb && cb(error);
     }
@@ -23,6 +28,7 @@ function RegisterTaskHandlers(io, socket) {
       };
 
       const createdTask = await TaskModel.create(newTask);
+      const project = await ProjectModel.findById(data.projectId);
 
       const totalTaskByStatus = await TaskModel.find({
         project: data.projectId,
@@ -42,6 +48,16 @@ function RegisterTaskHandlers(io, socket) {
         status: data.status,
         count: totalTaskByStatus,
       });
+
+      await new Notification({
+        title: "Add new Task",
+        icon: "file-plus",
+        color: "success",
+        content: `Add new task on <b>${project.title}</b> project`,
+        url: `/projects/${project._id}#tasks-container`,
+      });
+
+      io.emit("new-notif");
     } catch (error) {
       console.log(error);
       cb && cb(error, null);
@@ -50,6 +66,8 @@ function RegisterTaskHandlers(io, socket) {
 
   socket.on("delete-project-task", async ({ projectId, taskId }, cb) => {
     try {
+      const project = await ProjectModel.findById(projectId);
+
       const task = await TaskModel.findById(taskId);
       const taskStatus = task.status;
 
@@ -71,6 +89,14 @@ function RegisterTaskHandlers(io, socket) {
         count: totalTaskByStatus,
       });
 
+      await new Notification({
+        title: "Delete a Task",
+        icon: "file-minus",
+        color: "danger",
+        content: `Deleted ${task.note} on <b>${project.title}</b> project`,
+        url: `/projects/${project._id}#tasks-container`,
+      });
+      io.emit("new-notif");
       cb(null, { message: "Delete Task" });
     } catch (error) {
       console.log(error);
@@ -81,6 +107,7 @@ function RegisterTaskHandlers(io, socket) {
   socket.on("edit-project-task", async (request, cb) => {
     const { note, status, projectId, room, taskId } = request;
     try {
+      const project = await ProjectModel.findById(projectId);
       const task = await TaskModel.findById(taskId);
       const oldStatus = task.status;
 
@@ -140,6 +167,19 @@ function RegisterTaskHandlers(io, socket) {
           nextTask,
           task: updateTask,
         });
+
+        await new Notification({
+          title: "Update Project progress",
+          icon: "activity",
+          color: "primary",
+          content: `Moving <b>${
+            task.note
+          }</b> task from <b class="text-capitalize">${oldStatus.toLocaleLowerCase()} Board</b> to <b class="text-capitalize">${updateTask.status.toLocaleLowerCase()} Board</b> on <b>${
+            project.title
+          }</b> project`,
+          url: `/projects/${project._id}#tasks-container`,
+        });
+        io.emit("new-notif");
       }
 
       cb(null, { message: "Update Task", isMoved: false });
