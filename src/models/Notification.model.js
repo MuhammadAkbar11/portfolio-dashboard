@@ -6,9 +6,13 @@ const notificationSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    icon: {
-      type: String,
-      required: true,
+    theme: {
+      icon: {
+        type: String,
+      },
+      color: {
+        type: String,
+      },
     },
     url: {
       type: String,
@@ -19,6 +23,7 @@ const notificationSchema = mongoose.Schema(
     },
     isRead: {
       type: Boolean,
+      default: false,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
