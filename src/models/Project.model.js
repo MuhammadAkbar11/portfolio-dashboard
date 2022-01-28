@@ -20,10 +20,6 @@ const projectSchema = mongoose.Schema(
       enum: Object.values(PROJECT_STATUS_ENUM),
       default: PROJECT_STATUS_ENUM.TODO,
     },
-    isSelected: {
-      type: Boolean,
-      default: false,
-    },
     demo: {
       type: String,
     },
@@ -32,6 +28,14 @@ const projectSchema = mongoose.Schema(
     },
     image: {
       type: String,
+    },
+    isSelected: {
+      type: Boolean,
+      default: false,
+    },
+    isHidden: {
+      type: Boolean,
+      default: false,
     },
   },
   {

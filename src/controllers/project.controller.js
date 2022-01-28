@@ -41,6 +41,7 @@ export const postProjects = async (req, res, next) => {
     github: "https://github.com/MuhammadAkbar11/",
     demo: "",
     isSelected: false,
+    isHidden: false,
     stacks: ["stack1", "stack2", "stack3"],
     image: "/img/photos/unsplash-1.jpg",
   };
@@ -75,8 +76,16 @@ export const postProjects = async (req, res, next) => {
 };
 
 export const putProject = async (req, res, next) => {
-  const { title, status, demo, github, description, isSelected, stacks } =
-    req.body;
+  const {
+    title,
+    status,
+    demo,
+    github,
+    description,
+    isSelected,
+    isHidden,
+    stacks,
+  } = req.body;
 
   const id = req.params.id;
   try {
@@ -100,10 +109,11 @@ export const putProject = async (req, res, next) => {
       }
       project.image = `/project/${filename}`;
     }
-
+    console.log(isHidden);
     project.title = title;
     project.status = status;
     project.isSelected = isSelected == "on" ? true : false;
+    project.isHidden = isHidden == "off" ? true : false;
     project.stacks = stacks.split(",");
     project.demo = demo;
     project.github = github;

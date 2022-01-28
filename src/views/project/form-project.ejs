@@ -56,6 +56,13 @@
                       Selected project
                     </label>
                   </div>
+                  <div class="form-check mb-3">
+                    <input class="form-check-input " name="isHidden" type="checkbox" id="isHidden"
+                      <%= project.isHidden === true && "checked"%>>
+                    <label class="form-check-label" for="isHidden">
+                      On Portfolio
+                    </label>
+                  </div>
                   <div class="mb-3">
                     <label for="stacks">Stacks </label>
                     <input type="text" id="tag-input" name="stacks" value="<%= project.stacks %>">
