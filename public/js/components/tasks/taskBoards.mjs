@@ -20,7 +20,7 @@ export const boardsHandleIU = {
   },
   done: (el, tasks) => {
     const { BoardTitle, BoardBody } = getBoardElements(el);
-    BoardTitle.innerHTML = `<span class="badge board-badge bg-success h-auto me-1 rounded-circle">${tasks?.length}</span> Finished`;
+    BoardTitle.innerHTML = `<span class="badge board-badge bg-success h-auto me-1 rounded-circle">${tasks?.length}</span> Done`;
     tasks.map(task => {
       const taskCard = taskCardUI(task);
       BoardBody.appendChild(taskCard);
