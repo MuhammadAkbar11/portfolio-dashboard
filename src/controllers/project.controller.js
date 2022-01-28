@@ -61,7 +61,7 @@ export const postProjects = async (req, res, next) => {
       title: "Created Project",
       icon: "plus-circle",
       color: "success",
-      content: `Successfully create a new project`,
+      content: `Created a new project`,
       url: "/projects/" + project._id,
     });
     res.redirect("/projects/" + project._id + "/edit");
@@ -115,7 +115,7 @@ export const putProject = async (req, res, next) => {
       title: "Updated Project",
       icon: "edit",
       color: "primary",
-      content: `Successfully update <b>${project.title}</b> project`,
+      content: `Updated <b>${project.title}</b> project`,
       url: "/projects",
     });
 
@@ -152,7 +152,7 @@ export const deleteProject = async (req, res, next) => {
       title: "Deleted A Project",
       icon: "trash-2",
       color: "danger",
-      content: `Successfully delete <b>${project.title}</b> project`,
+      content: `Deleted <b>${project.title}</b> project`,
       url: "/projects",
     });
   } catch (error) {
