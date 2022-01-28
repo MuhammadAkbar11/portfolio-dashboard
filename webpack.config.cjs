@@ -9,6 +9,44 @@ const FileManagerPlugin = require("filemanager-webpack-plugin");
 const opts = {
   rootDir: process.cwd(),
   devBuild: process.env.NODE_ENV !== "production",
+  plugins:
+    process.env.NODE_ENV !== "production"
+      ? [
+          // Extract css files to seperate bundle
+          new MiniCssExtractPlugin({
+            filename: "css/app.css",
+            chunkFilename: "css/app.css",
+          }),
+          // Copy fonts and images to dist
+          new CopyWebpackPlugin({
+            patterns: [
+              { from: "public/fonts", to: "fonts" },
+              { from: "public/img", to: "img" },
+            ],
+          }),
+        ]
+      : [
+          // Extract css files to seperate bundle
+          new MiniCssExtractPlugin({
+            filename: "css/app.css",
+            chunkFilename: "css/app.css",
+          }),
+          // Copy fonts and images to dist
+          new CopyWebpackPlugin({
+            patterns: [
+              { from: "public/fonts", to: "fonts" },
+              { from: "public/img", to: "img" },
+            ],
+          }),
+          // Copy dist folder to static
+          new FileManagerPlugin({
+            events: {
+              onEnd: {
+                copy: [{ source: "./dist/", destination: "./src/static" }],
+              },
+            },
+          }),
+        ],
 };
 
 module.exports = {
@@ -38,28 +76,7 @@ module.exports = {
     ],
     runtimeChunk: false,
   },
-  plugins: [
-    // Extract css files to seperate bundle
-    new MiniCssExtractPlugin({
-      filename: "css/app.css",
-      chunkFilename: "css/app.css",
-    }),
-    // Copy fonts and images to dist
-    new CopyWebpackPlugin({
-      patterns: [
-        { from: "public/fonts", to: "fonts" },
-        { from: "public/img", to: "img" },
-      ],
-    }),
-    // Copy dist folder to static
-    new FileManagerPlugin({
-      events: {
-        onEnd: {
-          copy: [{ source: "./dist/", destination: "./src/static" }],
-        },
-      },
-    }),
-  ],
+  plugins: opts.plugins,
   module: {
     rules: [
       // Babel-loader

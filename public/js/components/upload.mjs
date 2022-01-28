@@ -1,6 +1,4 @@
-console.log("hello main.js here");
-
-const mainInit = () => {
+const imageUploaderInit = () => {
   // ProjectForm();
 
   const InputFileImage = document.getElementById("upload-project-image");
@@ -80,11 +78,4 @@ const convertImageFileToObjectURL = (el, files) => {
   });
 };
 
-// const ProjectForm = () => {};
-
-document.addEventListener("DOMContentLoaded", () => mainInit());
-
-// new TagsInput({
-//   selector: "tag-input",
-//   tagClass: "me-1 badge bg-primary text-current ",
-// });
+document.addEventListener("DOMContentLoaded", () => imageUploaderInit());
