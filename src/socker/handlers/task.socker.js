@@ -53,7 +53,7 @@ function RegisterTaskHandlers(io, socket) {
         title: "Add new Task",
         icon: "file-plus",
         color: "success",
-        content: `Add new task on <b>${project.title}</b> project`,
+        content: `Add <b>${createdTask.note}</b> task in <b>${project.title}</b> project tasks`,
         url: `/projects/${project._id}#tasks-container`,
       });
 
@@ -93,7 +93,7 @@ function RegisterTaskHandlers(io, socket) {
         title: "Delete a Task",
         icon: "file-minus",
         color: "danger",
-        content: `Deleted ${task.note} on <b>${project.title}</b> project`,
+        content: `Deleted ${task.note} task on <b>${project.title}</b> project tasks`,
         url: `/projects/${project._id}#tasks-container`,
       });
       io.emit("new-notif");
@@ -176,7 +176,7 @@ function RegisterTaskHandlers(io, socket) {
             task.note
           }</b> task from <b class="text-capitalize">${oldStatus.toLocaleLowerCase()} Board</b> to <b class="text-capitalize">${updateTask.status.toLocaleLowerCase()} Board</b> on <b>${
             project.title
-          }</b> project`,
+          }</b> project tasks`,
           url: `/projects/${project._id}#tasks-container`,
         });
         io.emit("new-notif");
