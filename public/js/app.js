@@ -18,6 +18,7 @@ import "./components/layouts/sidebar.mjs";
 import "./components/calender.mjs";
 import "./components/logout.mjs";
 import "./components/layouts/header.mjs";
+import "./components/profile/index.mjs";
 import "./components/project/projectForm.mjs";
 import "./components/project/projectModals.mjs";
 import "./components/project/projectDetails.mjs";
