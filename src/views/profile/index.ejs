@@ -1,0 +1,150 @@
+<%- include('../layouts/head.ejs') %>
+<main class="content">
+  <div class="container-fluid p-0">
+
+    <div class="mb-3">
+      <h1 class="h3 d-inline align-middle">Profile</h1>
+
+    </div>
+    <div class="row">
+      <div class="col-md-4 col-xl-3">
+        <div class="card mb-3">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Profile Details</h5>
+          </div>
+          <div class="card-body text-center">
+            <img src="/<%= userAuth.image %>" alt="<%= userAuth.name %> " class="img-fluid rounded-circle mb-2"
+              width="128" height="128" />
+            <h5 class="card-title mb-0"><%= userAuth.name %> </h5>
+            <div class="text-muted mb-2">Web Developer</div>
+
+
+          </div>
+          <hr class="my-0" />
+          <div class="card-body">
+            <h5 class="h6 card-title">Skills</h5>
+            <% userAuth.skills.map(skill => {  %>
+            <span class="badge cursor-pointer bg-primary me-1 my-1"><%= skill.name %> </span>
+            <% })  %>
+          </div>
+          <!-- <hr class="my-0" />
+          <div class="card-body">
+            <h5 class="h6 card-title">About</h5>
+            <ul class="list-unstyled mb-0">
+              <li class="mb-1"><span data-feather="home" class="feather-sm me-1"></span> Lives in <a href="#">San
+                  Francisco, SA</a></li>
+
+              <li class="mb-1"><span data-feather="briefcase" class="feather-sm me-1"></span> Works at <a
+                  href="#">GitHub</a></li>
+              <li class="mb-1"><span data-feather="map-pin" class="feather-sm me-1"></span> From <a href="#">Boston</a>
+              </li>
+            </ul>
+          </div> -->
+          <hr class="my-0" />
+          <div class="card-body">
+            <h5 class="h6 card-title">Elsewhere</h5>
+            <ul class="list-unstyled mb-0">
+              <li class="mb-1"><a href="#">staciehall.co</a></li>
+              <li class="mb-1"><a href="#">Twitter</a></li>
+              <li class="mb-1"><a href="#">Facebook</a></li>
+              <li class="mb-1"><a href="#">Instagram</a></li>
+              <li class="mb-1"><a href="#">LinkedIn</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-8 col-xl-9">
+        <%- include('../includes/alert.ejs') %>
+        <div class="card">
+          <div class="card-body h-100">
+            <nav>
+              <div class="nav nav-pills" id="profile-tab" role="tablist">
+                <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
+                  type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Profile</button>
+                <button class="nav-link " id="nav-skill-tab" data-bs-toggle="tab" data-bs-target="#nav-skill"
+                  type="button" role="tab" aria-controls="nav-skill" aria-selected="true">My Skills</button>
+                <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
+                  type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</button>
+              </div>
+            </nav>
+          </div>
+        </div>
+        <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Public info</h5>
+              </div>
+              <div class="card-body">
+                <form>
+                  <div class="row">
+                    <div class="col-md-8">
+                      <div class="mb-3">
+                        <label class="form-label" for="name">Username</label>
+                        <input type="text" class="form-control" id="name" placeholder="Username"
+                          value="<%= userAuth.name %>">
+                      </div>
+                      <!-- <div class="mb-3">
+                        <label class="form-label" for="inputUsername">Biography</label>
+                        <textarea rows="2" class="form-control" id="inputBio"
+                          placeholder="Tell something about yourself"></textarea>
+                      </div> -->
+                      <div class=" text-center mb-3">
+                        <img alt="Charles Hall" src="/<%= userAuth.image %>" class="rounded-circle img-responsive mt-2"
+                          width="128" height="128">
+                        <div class="mt-2">
+                          <span class="btn btn-primary "><i class="fas fa-upload"></i> Upload</span>
+                        </div>
+                        <small>For best results, use an image at least 128px by 128px in .jpg format</small>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Password</h5>
+
+                <form>
+                  <div class="mb-3">
+                    <label class="form-label" for="inputPasswordCurrent">Current password</label>
+                    <input type="password" class="form-control" id="inputPasswordCurrent">
+                    <small><a href="#">Forgot your password?</a></small>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="inputPasswordNew">New password</label>
+                    <input type="password" class="form-control" id="inputPasswordNew">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="inputPasswordNew2">Verify password</label>
+                    <input type="password" class="form-control" id="inputPasswordNew2">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade " id="nav-skill" role="tabpanel" aria-labelledby="nav-skill-tab">
+            <%- include("./tabs/skill.ejs")  %>
+          </div>
+
+          <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<%- include('../layouts/end.ejs') %>
