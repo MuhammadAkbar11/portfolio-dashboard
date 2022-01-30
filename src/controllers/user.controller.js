@@ -1,16 +1,26 @@
-import { TransfromError } from "../helpers/baseError.helper.js";
+import BaseError, {
+  TransfromError,
+  ValidationError,
+} from "../helpers/baseError.helper.js";
 import UserModel from "../models/User.model.js";
 import mongoose from "mongoose";
+import { validationResult } from "express-validator";
+import httpStatusCodes from "../utils/httpStatusCode.js";
 
 export const getProfile = (req, res) => {
   try {
     const flashdata = req.flash("flashdata");
+    const errors = req.flash("errors");
+    console.log(errors);
     res.render("profile", {
       title: "Profile",
       path: "/profile",
       flashdata,
+      errors: errors,
+      values: null,
     });
   } catch (error) {
+    error.responseType = "page";
     const transError = new TransfromError(error);
     next(transError);
   }
@@ -92,5 +102,52 @@ export const putSkill = async (req, res, next) => {
       message: "Failed to update skill",
     });
     res.redirect("/profile?tab=skill");
+  }
+};
+
+export const postChangePassword = async (req, res, next) => {
+  try {
+    const validate = validationResult(req);
+
+    if (!validate.isEmpty()) {
+      const errValidate = new ValidationError(validate.array(), "profile", {
+        title: "Profile",
+        path: "/profile",
+      });
+
+      throw errValidate;
+    }
+
+    const user = await UserModel.findById(req.user._id);
+
+    const passwordMatch = await user.matchPassword(req.body.oldPassword);
+
+    if (!passwordMatch) {
+      throw new BaseError(
+        "BadRequest",
+        httpStatusCodes.BAD_REQUEST,
+        "Current Password is wrong",
+        true
+      );
+    }
+
+    user.password = req.body.newPassword;
+
+    await user.save();
+
+    req.flash("flashdata", {
+      type: "success",
+      message: "Successfully change password",
+    });
+    res.redirect("/profile");
+    // user.pas
+  } catch (error) {
+    req.flash("errors", {
+      section: "password",
+      message: error.message,
+      errors: error,
+      values: req.body,
+    });
+    res.redirect("/profile?#user-card-password");
   }
 };

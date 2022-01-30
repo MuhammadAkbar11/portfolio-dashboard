@@ -63,6 +63,40 @@ const userValidate = method => {
           },
         },
       });
+    case "change-pw":
+      return checkSchema({
+        oldPassword: {
+          notEmpty: {
+            errorMessage: "Enter your current password",
+          },
+        },
+        newPassword: {
+          trim: true,
+          notEmpty: {
+            errorMessage: "Enter your new password",
+          },
+          isLength: {
+            errorMessage: "Password should be at least 5 chars long",
+            options: {
+              min: 5,
+            },
+          },
+        },
+        newPassword2: {
+          trim: true,
+          notEmpty: {
+            errorMessage: "Enter verify password",
+          },
+          custom: {
+            options: (value, { req, location, path }) => {
+              if (value !== req.body.newPassword) {
+                throw new Error("Verify password have to match!");
+              }
+              return true;
+            },
+          },
+        },
+      });
     default:
       return [];
   }
