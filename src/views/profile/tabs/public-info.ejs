@@ -1,0 +1,85 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-title mb-0">Public info</h5>
+  </div>
+  <div class="card-body">
+    <form>
+      <div class="row">
+        <div class="col-md-8">
+          <div class="mb-3">
+            <label class="form-label" for="name">Username</label>
+            <input type="text" class="form-control" id="name" placeholder="Username" value="<%= userAuth.name %>">
+          </div>
+          <div class=" text-center mb-3">
+            <img alt="Charles Hall" src="/<%= userAuth.image %>" class="rounded-circle img-responsive mt-2" width="128"
+              height="128">
+            <div class="mt-2">
+              <span class="btn btn-primary "><i class="fas fa-upload"></i> Upload</span>
+            </div>
+            <small>For best results, use an image at least 128px by 128px in .jpg format</small>
+          </div>
+        </div>
+
+      </div>
+
+      <button type="submit" class="btn btn-primary">Save changes</button>
+    </form>
+
+  </div>
+</div>
+<% const changePwError = errors?.filter(err => err.section == "password")[0]
+const errorData = changePwError?.errors
+%>
+<% if(changePwError) {  %>
+<% if(errorData && errorData?.name !== "Validation") {  %>
+<div class="my-3">
+  <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
+    <i class="align-middle me-2" data-feather="alert-triangle"></i>
+    <div class="my-auto">
+      <%= changePwError.message %>
+    </div>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+</div>
+<% } %>
+<% }  %>
+<div class="card" id="user-card-password">
+  <div class="card-body">
+    <h5 class="card-title">Password</h5>
+
+    <form action="/profile/change-password" method="post">
+      <input type="hidden" name="_method" value="POST">
+      <div class="mb-3">
+        <label class="form-label" for="inputPasswordCurrent">Current password</label>
+        <input type="password" name="oldPassword" class="form-control change-pw-input" id="inputPasswordCurrent">
+        <% if(errorData && errorData?.validation?.oldPassword) {  %>
+        <small class="text-danger"> <%= errorData?.validation?.oldPassword?.message[0] %></small>
+        <br>
+        <% } %>
+        <small><a href="#">Forgot your password?</a></small>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="inputPasswordNew">New password</label>
+        <input type="password" name="newPassword" class="form-control change-pw-input" id="inputPasswordNew">
+        <% if(errorData && errorData?.validation?.newPassword) {  %>
+        <small class="text-danger"> <%= errorData?.validation?.newPassword?.message[0] %></small>
+        <% } %>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="inputPasswordNew2">Verify password</label>
+        <input type="password" name="newPassword2" class="form-control change-pw-input " id="inputPasswordNew2">
+        <% if(errorData && errorData?.validation?.newPassword2) {  %>
+        <small class="text-danger"> <%= errorData?.validation?.newPassword2?.message[0] %></small>
+        <% } %>
+      </div>
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" value="" id="showChangePassword">
+        <label class="form-check-label" for="showChangePassword">
+          Show password
+        </label>
+      </div>
+      <button type="submit" class="btn btn-primary">Save changes</button>
+    </form>
+
+  </div>
+</div>
