@@ -21,6 +21,11 @@ function initProfileTabs() {
       if (searchParams.has("tab") && searchParams.get("tab") == tabBsTarget) {
         const bsTab = new bootstrap.Tab(tab);
         bsTab.show();
+      } else {
+        if (!searchParams.has("tab")) {
+          const bsTab = new bootstrap.Tab(TabNavLinks[0]);
+          bsTab.show();
+        }
       }
 
       tab.addEventListener("click", ev => {
