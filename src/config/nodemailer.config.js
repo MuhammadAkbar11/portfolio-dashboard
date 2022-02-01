@@ -8,7 +8,6 @@ import {
   OAUTH_REFRESH_TOKEN,
 } from "./env.config.js";
 import BaseError from "../helpers/baseError.helper.js";
-import ApiError from "../helpers/apiError.helper.js";
 
 const OAuth2 = googleApis.google.auth.OAuth2;
 
@@ -20,6 +19,8 @@ const createTransporter = async () => {
       OAUTH_PLAYGROUND
     );
 
+    console.log(oauth2Client);
+    // console.log(oauth2Client.refreshTokenPromises);
     oauth2Client.setCredentials({
       refresh_token: OAUTH_REFRESH_TOKEN,
     });

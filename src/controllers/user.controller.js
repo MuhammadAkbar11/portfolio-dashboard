@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 import BaseError, {
   TransfromError,
   ValidationError,
@@ -6,6 +7,10 @@ import UserModel from "../models/User.model.js";
 import mongoose from "mongoose";
 import { validationResult } from "express-validator";
 import httpStatusCodes from "../utils/httpStatusCode.js";
+import { sendEmail } from "../helpers/email.helper.js";
+import { EMAIL } from "../config/env.config.js";
+
+const generateApiKey = uuidv4;
 
 export const getProfile = (req, res) => {
   try {
@@ -149,5 +154,45 @@ export const postChangePassword = async (req, res, next) => {
       values: req.body,
     });
     res.redirect("/profile?#user-card-password");
+  }
+};
+
+export const postRequestApiKey = async (req, res, next) => {
+  try {
+    const user = await UserModel.findById(req.user._id);
+
+    if (user.apiKey) {
+      req.flash("flashdata", {
+        type: "warning",
+        message: "You already have ApiKey",
+      });
+      res.redirect("/profile?tab=apikey");
+      return;
+    }
+
+    const apiKey = generateApiKey();
+    const hashedApiKey = await user.hashApiKey(apiKey);
+    user.apiKey = hashedApiKey;
+    await user.save();
+
+    await sendEmail({
+      from: EMAIL,
+      to: req.user.email,
+      subject: "Akbar Portfolio Dashboard - Request ApiKey",
+      text: `Hello ${req.user.name} <br> Here is your ApiKey : ${hashedApiKey}`,
+    });
+    req.flash("flashdata", {
+      type: "success",
+      message: "Successfully generate Api Key",
+    });
+    res.redirect("/profile?tab=apikey");
+    // const savedUser = await user.save();
+  } catch (error) {
+    console.log(error);
+    req.flash("flashdata", {
+      type: "danger",
+      message: "Failed to generate Api Key",
+    });
+    res.redirect("/profile?tab=apikey");
   }
 };
