@@ -15,7 +15,7 @@ export const getProjectsApi = async (req, res, next) => {
       })
     );
 
-    res.json({ projects: listProjects });
+    res.json({ projects: listProjects, total: listProjects.length });
   } catch (error) {
     error.responseType = "json";
     const trError = new TransfromError(error);
