@@ -25,3 +25,5 @@ export const OAUTH_CLIENT_SECRET = process.env.OAUTH_CLIENT_SECRET;
 export const OAUTH_REFRESH_TOKEN = process.env.OAUTH_REFRESH_TOKEN;
 export const OAUTH_PLAYGROUND = process.env.OAUTH_PLAYGROUND;
 export const EMAIL = process.env.EMAIL;
+
+export const MAIN_KEY = process.env.MAIN_KEY || "baevze";

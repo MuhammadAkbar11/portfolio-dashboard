@@ -33,9 +33,13 @@ function returnError(err, req, res, next) {
   const status = err.statusCode || httpStatusCodes.INTERNAL_SERVER;
   const type = err.responseType;
   const stack = MODE == "development" ? err.stack : null;
-
   if (type == "json") {
-    return res.status(status).json({ ...err, stack });
+    const errData = {
+      message: message,
+      ...err,
+    };
+    delete errData.renderData;
+    return res.status(status).json({ ...errData, stack });
   } else if (type == "page") {
     const view = err?.errorView || "errors/500";
     const errData = {
