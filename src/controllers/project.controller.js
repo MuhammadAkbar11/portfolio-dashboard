@@ -86,7 +86,6 @@ export const putProject = async (req, res, next) => {
     isHidden,
     stacks,
   } = req.body;
-
   const id = req.params.id;
   try {
     const project = await ProjectModel.findById(id);
@@ -109,11 +108,10 @@ export const putProject = async (req, res, next) => {
       }
       project.image = `/project/${filename}`;
     }
-    console.log(isHidden);
     project.title = title;
     project.status = status;
-    project.isSelected = isSelected == "on" ? true : false;
-    project.isHidden = isHidden == "off" ? true : false;
+    project.isSelected = isSelected === "true" ? true : false;
+    project.isHidden = isHidden !== "true" ? true : false;
     project.stacks = stacks.split(",");
     project.demo = demo;
     project.github = github;
