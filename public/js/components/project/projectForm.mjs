@@ -27,6 +27,27 @@ const ProjectForm = () => {
     tagClass: "me-1 badge bg-primary text-current ",
     wrapperClass: "form-control bg-transparent",
   });
+
+  projectForm &&
+    projectForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      const checkBox = this.querySelectorAll(".check-input");
+
+      checkBox.forEach(c => {
+        const id = c.id;
+        const hidden = c.parentElement.querySelector(
+          "#" + id + "[type=hidden]"
+        );
+
+        if (c.checked) {
+          hidden.value = "true";
+        } else {
+          hidden.value = "false";
+        }
+      });
+
+      event.target.submit();
+    });
 };
 
 document.addEventListener("DOMContentLoaded", () => ProjectForm());

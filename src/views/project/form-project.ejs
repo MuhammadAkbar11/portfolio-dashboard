@@ -19,7 +19,7 @@
               <div class="row">
                 <div class="col-md-6">
 
-                  <input type="hidden" name="_method" value="PUT">
+                  <!-- <input type="hidden" name="_method" value="PUT"> -->
                   <div class="form-group-lg mb-3">
                     <label for="title" class="form-label">Title</label>
                     <input type="text" class="form-control" name="title" id="title" placeholder="Project title"
@@ -50,15 +50,19 @@
                       name="description" style="height: 100px"><%= project.description %></textarea>
                   </div>
                   <div class="form-check mb-3">
-                    <input class="form-check-input" name="isSelected" type="checkbox" id="isSelected"
+                    <input class="form-check-input check-input" type="checkbox" id="isSelected"
                       <%= project.isSelected && "checked"%>>
+                    <input class="form-check-input check-input-default" name="isSelected" type="hidden" id="isSelected"
+                      value="0">
                     <label class="form-check-label" for="isSelected">
                       Selected project
                     </label>
                   </div>
                   <div class="form-check mb-3">
-                    <input class="form-check-input " name="isHidden" type="checkbox" id="isHidden"
+                    <input class="form-check-input check-input" type="checkbox" id="isHidden"
                       <%= project.isHidden !== true && "checked"%>>
+                    <input class="form-check-input check-input-default" name="isHidden" type="hidden" id="isHidden"
+                      value="false">
                     <label class="form-check-label" for="isHidden">
                       On Portfolio
                     </label>
