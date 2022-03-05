@@ -1,5 +1,5 @@
 import { MODE } from "../config/env.config.js";
-import BaseError from "../helpers/apiError.helper.js";
+import BaseError, { TransfromError } from "../helpers/baseError.helper.js";
 import consoleLog from "../utils/consoleLog.js";
 import httpStatusCodes from "../utils/httpStatusCode.js";
 
@@ -13,6 +13,19 @@ function logError(err) {
 function logErrorMiddleware(err, req, res, next) {
   logError(err);
   next(err);
+}
+
+function return404(req, res, next) {
+  const error = new TransfromError(
+    new BaseError("BadRequest", 404, "Page Not Found", false, {
+      errorView: "errors/404",
+      renderData: {
+        title: "Page Not Found",
+      },
+      responseType: "page",
+    })
+  );
+  return next(error);
 }
 
 function returnError(err, req, res, next) {
@@ -50,4 +63,10 @@ function isOperationalError(error) {
   return false;
 }
 
-export { logError, logErrorMiddleware, returnError, isOperationalError };
+export {
+  logError,
+  logErrorMiddleware,
+  returnError,
+  return404,
+  isOperationalError,
+};

@@ -13,6 +13,7 @@ import {
   isOperationalError,
   logError,
   logErrorMiddleware,
+  return404,
   returnError,
 } from "./src/middleware/errorHandler.js";
 import passportConfig from "./src/config/passport.config.js";
@@ -111,6 +112,7 @@ app.use(express.static(UPLOADS_FOLDER));
 MainRoutes(app);
 
 app.use(logErrorMiddleware);
+app.use(return404);
 app.use(returnError);
 
 server.listen(envConfigs.PORT, () => {
