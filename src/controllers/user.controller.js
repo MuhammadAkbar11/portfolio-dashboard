@@ -9,7 +9,6 @@ import { validationResult } from "express-validator";
 import httpStatusCodes from "../utils/httpStatusCode.js";
 import { sendEmail } from "../helpers/email.helper.js";
 import { EMAIL } from "../config/env.config.js";
-import SkillModel from "../models/Skill.model.js";
 
 const generateApiKey = uuidv4;
 
@@ -17,14 +16,12 @@ export const getProfile = async (req, res) => {
   try {
     const flashdata = req.flash("flashdata");
     const errors = req.flash("errors");
-    const skills = await SkillModel.find({}).sort([["order", 1]]);
 
     res.render("profile", {
       title: "Profile",
       path: "/profile",
       flashdata,
       errors: errors,
-      skills,
       values: null,
     });
   } catch (error) {
@@ -184,6 +181,7 @@ export const postRequestApiKey = async (req, res, next) => {
       subject: "Akbar Portfolio Dashboard - Request ApiKey",
       text: `Hello ${req.user.name} <br> Here is your ApiKey : ${hashedApiKey}`,
     });
+
     req.flash("flashdata", {
       type: "success",
       message: "Successfully generate Api Key",
