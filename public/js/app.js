@@ -22,3 +22,4 @@ import "./components/profile/index.mjs";
 import "./components/project/projectForm.mjs";
 import "./components/project/projectModals.mjs";
 import "./components/project/projectDetails.mjs";
+import "./components/skill/index.mjs";

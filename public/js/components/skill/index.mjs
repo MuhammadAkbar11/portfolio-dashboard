@@ -1,4 +1,4 @@
-function profileSkillTab() {
+function initSkill() {
   const SkillFormModal = document.getElementById("skillFormModal");
   const btnEditSkill = [].slice.call(document.querySelectorAll("#edit-skill"));
 
@@ -105,4 +105,4 @@ function orderSelectUI(selected, skills) {
   `;
 }
 
-profileSkillTab();
+initSkill();
