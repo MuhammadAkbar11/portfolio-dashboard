@@ -9,16 +9,16 @@
     </button>
 
     <div class="row mt-3">
-      <% userAuth.skills.map((skill) => { %>
+      <% skills.map((skill) => { %>
       <div class="col-md-4 px-1">
         <div class="card  mb-2 shadow-none border bg-light">
           <div class="card-body py-2 d-flex align-items-center justify-content-between ">
             <div class="card-text mb-0"><%= skill.name %> </div>
             <div class=" my-auto d-flex ">
               <a href="#" id="edit-skill" class="me-2 p-0 btn btn-link shadow-none text-primary me-1 "
-                data-skill="<%= JSON.stringify(skill) %>">
+                data-skill="<%= JSON.stringify(skill) %>" data-skills="<%= JSON.stringify(skills) %>">
                 <i data-feather="edit"></i></a>
-              <form action="/profile/skills" method="post" class="p-0 m-0">
+              <form action="/skills" method="post" class="p-0 m-0">
                 <input type="hidden" name="_method" value="DELETE">
                 <input type="hidden" name="skillId" value="<%= skill._id %>">
                 <button type="submit" class=" m-0 p-0 btn btn-link text-danger shadow-none">
@@ -46,7 +46,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="/profile/skills" method="post" id="form-skill">
+        <form action="/skills" method="post" id="form-skill">
           <div class="mb-3">
             <label for="skillName" class="form-label">Skill</label>
             <input type="text" class="form-control" name="skillName" id="skillName" placeholder="Skill name">

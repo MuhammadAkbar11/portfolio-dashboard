@@ -23,7 +23,7 @@
           <hr class="my-0" />
           <div class="card-body">
             <h5 class="h6 card-title">Skills</h5>
-            <% userAuth.skills.map(skill => {  %>
+            <% skills.length !== 0 && skills.map(skill => {  %>
             <span class="badge cursor-pointer bg-primary me-1 my-1"><%= skill.name %> </span>
             <% })  %>
           </div>
