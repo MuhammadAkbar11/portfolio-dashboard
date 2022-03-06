@@ -1,6 +1,7 @@
 import { getDummy, postDummy } from "../../controllers/api/dumb.controller.js";
+import { getProjectsApi } from "../../controllers/api/project.api.controller.js";
 import { PREFIX_VERSION } from "../../helpers/version.helper.js";
-import ProjectApiRoutes from "./projectApi.routes.js";
+import validateApiKey from "../../middleware/validateApiKey.js";
 
 function APIsRoutes(app) {
   app.route(`${PREFIX_VERSION}`).get((req, res) => {
@@ -9,7 +10,7 @@ function APIsRoutes(app) {
 
   app.route(`${PREFIX_VERSION}/dummies`).get(getDummy).post(postDummy);
 
-  ProjectApiRoutes(app, PREFIX_VERSION);
+  app.route(`${PREFIX_VERSION}/projects`).get(validateApiKey, getProjectsApi);
 }
 
 export default APIsRoutes;
