@@ -9,19 +9,22 @@ import { validationResult } from "express-validator";
 import httpStatusCodes from "../utils/httpStatusCode.js";
 import { sendEmail } from "../helpers/email.helper.js";
 import { EMAIL } from "../config/env.config.js";
+import SkillModel from "../models/Skill.model.js";
 
 const generateApiKey = uuidv4;
 
-export const getProfile = (req, res) => {
+export const getProfile = async (req, res) => {
   try {
     const flashdata = req.flash("flashdata");
     const errors = req.flash("errors");
-    console.log(errors);
+    const skills = await SkillModel.find({}).sort([["order", 1]]);
+
     res.render("profile", {
       title: "Profile",
       path: "/profile",
       flashdata,
       errors: errors,
+      skills,
       values: null,
     });
   } catch (error) {
@@ -31,84 +34,84 @@ export const getProfile = (req, res) => {
   }
 };
 
-export const postSkill = async (req, res, next) => {
-  const { skillName } = req.body;
-  const userSkills = req.user.skills;
-  try {
-    const tes = await UserModel.updateOne(
-      { _id: req.user._id },
-      {
-        $push: {
-          skills: { name: skillName, order: userSkills.length + 1 },
-        },
-      }
-    );
-    req.flash("flashdata", {
-      type: "success",
-      message: "Successfully add a new skill",
-    });
-    res.redirect("/profile?tab=skill");
-  } catch (error) {
-    req.flash("flashdata", {
-      type: "danger",
-      message: "Failed to create skill",
-    });
-    res.redirect("/profile?tab=skill");
-  }
-};
+// export const postSkill = async (req, res, next) => {
+//   const { skillName } = req.body;
+//   const userSkills = req.user.skills;
+//   try {
+//     const tes = await UserModel.updateOne(
+//       { _id: req.user._id },
+//       {
+//         $push: {
+//           skills: { name: skillName, order: userSkills.length + 1 },
+//         },
+//       }
+//     );
+//     req.flash("flashdata", {
+//       type: "success",
+//       message: "Successfully add a new skill",
+//     });
+//     res.redirect("/profile?tab=skill");
+//   } catch (error) {
+//     req.flash("flashdata", {
+//       type: "danger",
+//       message: "Failed to create skill",
+//     });
+//     res.redirect("/profile?tab=skill");
+//   }
+// };
 
-export const deleteSkill = async (req, res, next) => {
-  const { skillId } = req.body;
-  try {
-    await UserModel.updateOne(
-      { _id: req.user._id },
-      {
-        $pull: {
-          skills: { _id: skillId },
-        },
-      }
-    );
-    req.flash("flashdata", {
-      type: "success",
-      message: "Successfully delete skill",
-    });
-    res.redirect("/profile?tab=skill");
-  } catch (error) {
-    req.flash("flashdata", {
-      type: "danger",
-      message: "Failed to delete skill",
-    });
-    res.redirect("/profile?tab=skill");
-  }
-};
+// export const deleteSkill = async (req, res, next) => {
+//   const { skillId } = req.body;
+//   try {
+//     await UserModel.updateOne(
+//       { _id: req.user._id },
+//       {
+//         $pull: {
+//           skills: { _id: skillId },
+//         },
+//       }
+//     );
+//     req.flash("flashdata", {
+//       type: "success",
+//       message: "Successfully delete skill",
+//     });
+//     res.redirect("/profile?tab=skill");
+//   } catch (error) {
+//     req.flash("flashdata", {
+//       type: "danger",
+//       message: "Failed to delete skill",
+//     });
+//     res.redirect("/profile?tab=skill");
+//   }
+// };
 
-export const putSkill = async (req, res, next) => {
-  const { skillName, skillId } = req.body;
-  try {
-    const query = {
-      _id: req.user._id,
-      "skills._id": mongoose.Types.ObjectId(skillId),
-    };
-    const updateDocument = {
-      $set: {
-        "skills.$.name": skillName,
-      },
-    };
-    await UserModel.updateOne(query, updateDocument);
+// export const putSkill = async (req, res, next) => {
+//   const { skillName, skillId } = req.body;
+//   try {
+//     const query = {
+//       _id: req.user._id,
+//       "skills._id": mongoose.Types.ObjectId(skillId),
+//     };
+//     const updateDocument = {
+//       $set: {
+//         "skills.$.name": skillName,
+//       },
+//     };
+//     await UserModel.updateOne(query, updateDocument);
 
-    req.flash("flashdata", {
-      type: "success",
-      message: "Successfully update skill",
-    });
-    res.redirect("/profile?tab=skill");
-  } catch (error) {
-    req.flash("flashdata", {
-      type: "danger",
-      message: "Failed to update skill",
-    });
-    res.redirect("/profile?tab=skill");
-  }
-};
+//     req.flash("flashdata", {
+//       type: "success",
+//       message: "Successfully update skill",
+//     });
+//     res.redirect("/profile?tab=skill");
+//   } catch (error) {
+//     req.flash("flashdata", {
+//       type: "danger",
+//       message: "Failed to update skill",
+//     });
+//     res.redirect("/profile?tab=skill");
+//   }
+// };
 
 export const postChangePassword = async (req, res, next) => {
   try {

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { PROJECT_STATUS_ENUM, TASK_STATUS_ENUM } from "../utils/constants.js";
-import TaskModel from "./Task.Model.js";
+import TaskModel from "./Task.model.js";
 
 const projectSchema = mongoose.Schema(
   {

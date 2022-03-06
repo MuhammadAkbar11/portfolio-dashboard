@@ -17,16 +17,6 @@ const userSchema = mongoose.Schema(
     image: {
       type: String,
     },
-    skills: [
-      {
-        name: {
-          type: String,
-        },
-        order: {
-          type: String,
-        },
-      },
-    ],
     apiKey: {
       type: String,
     },

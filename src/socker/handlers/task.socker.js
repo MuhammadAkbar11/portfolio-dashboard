@@ -1,7 +1,7 @@
 import BaseError from "../../helpers/baseError.helper.js";
 import Notification from "../../helpers/notification.helper.js";
 import ProjectModel from "../../models/Project.model.js";
-import TaskModel from "../../models/Task.Model.js";
+import TaskModel from "../../models/Task.model.js";
 
 function RegisterTaskHandlers(io, socket) {
   socket.on("project-tasks", async ({ projectId }, cb) => {

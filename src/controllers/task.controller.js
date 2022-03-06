@@ -1,6 +1,6 @@
 import { validationResult } from "express-validator";
 import BaseError, { ValidationError } from "../helpers/baseError.helper.js";
-import TaskModel from "../models/Task.Model.js";
+import TaskModel from "../models/Task.model.js";
 
 export const getTasks = async (req, res) => {
   try {
