@@ -7,6 +7,10 @@ export const getSkills = async (req, res, next) => {
     const errors = req.flash("errors");
     const skills = await SkillModel.find({}).sort([["order", 1]]);
 
+    skills.map(x => {
+      console.log(x.name, x.order);
+    });
+
     res.render("skill", {
       title: "Skills ",
       path: "/skills",
@@ -49,13 +53,35 @@ export const postSkill = async (req, res) => {
 export const deleteSkill = async (req, res, next) => {
   const { skillId } = req.body;
   try {
-    await SkillModel.findByIdAndDelete(skillId);
+    const skill = await SkillModel.findById(skillId);
+
+    if (!skill) {
+      throw new BaseError(
+        "NotFound",
+        400,
+        "Failed to delete, skill not found",
+        true,
+        {}
+      );
+    }
+
+    await SkillModel.updateMany(
+      {
+        order: {
+          $gt: skill.order,
+        },
+      },
+      { $inc: { order: -1 } }
+    );
+
+    await skill.remove();
     req.flash("flashdata", {
       type: "success",
       message: "Successfully delete skill",
     });
     res.redirect("/skills");
   } catch (error) {
+    console.log(error);
     req.flash("flashdata", {
       type: "danger",
       message: "Failed to delete skill",

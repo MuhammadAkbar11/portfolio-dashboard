@@ -88,12 +88,10 @@ function createOrderSelect(data) {
 }
 
 function orderSelectUI(selected, skills) {
-  console.log(skills, "UI", selected);
-
   const options = skills.map((x, idx) => {
-    return `<option selected=${
-      selected._id === x._id ? "true" : "false"
-    } value="${x.order}">${idx + 1} - ${x.name}</option>`;
+    return `<option ${selected._id === x._id && "selected"} value="${
+      x.order
+    }">${idx + 1} - ${x.name}</option>`;
   });
 
   return `
