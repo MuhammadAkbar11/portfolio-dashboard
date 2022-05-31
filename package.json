@@ -11,7 +11,7 @@
     "dev": "cross-env NODE_ENV=development nodemon app.js",
     "start": "node app.js",
     "build:dev": "cross-env NODE_ENV=development webpack --config webpack.config.cjs --watch --progress",
-    "build": "webpack --config webpack.config.cjs --watch --progress",
+    "build": "webpack --config webpack.config.cjs --progress",
     "seed": "cross-env NODE_ENV=development node src/seeds/index.js seed=import",
     "seed:destroy": "cross-env NODE_ENV=development node src/seeds/index.js seed=destroy",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build"
