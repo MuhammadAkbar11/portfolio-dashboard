@@ -7,10 +7,6 @@ export const getSkills = async (req, res, next) => {
     const errors = req.flash("errors");
     const skills = await SkillModel.find({}).sort([["order", 1]]);
 
-    skills.map(x => {
-      console.log(x.name, x.order);
-    });
-
     res.render("skill", {
       title: "Skills ",
       path: "/skills",

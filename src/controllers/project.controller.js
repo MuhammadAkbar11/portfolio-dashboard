@@ -1,7 +1,6 @@
 import BaseError, { TransfromError } from "../helpers/baseError.helper.js";
 import Notification from "../helpers/notification.helper.js";
 import ProjectModel from "../models/Project.model.js";
-
 import deleteFile from "../utils/index.js";
 
 export const getProjects = async (req, res, next) => {
