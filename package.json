@@ -1,5 +1,5 @@
 {
-  "name": "nodejs-auth-boilerplate",
+  "name": "portfolio-dashboard",
   "version": "1.0.0",
   "description": "Nodejs authetication boilerplate support google oauth",
   "main": "app.js",
