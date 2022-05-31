@@ -11,6 +11,7 @@ export const getProjectsApi = async (req, res, next) => {
       getProjects.map(async pro => {
         const { progress } = await pro.getTasks();
         pro.progress = progress;
+        pro.image = `${req.protocol}://${req.headers.host}${pro.image}`;
         return pro;
       })
     );

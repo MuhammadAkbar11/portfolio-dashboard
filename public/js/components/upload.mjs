@@ -3,7 +3,6 @@ const imageUploaderInit = () => {
 
   const InputFileImage = document.getElementById("upload-project-image");
   const BtnUploadImage = document.getElementById("btn-upload-project-image");
-
   if (BtnUploadImage) {
     BtnUploadImage.addEventListener("click", e => {
       e.preventDefault();
