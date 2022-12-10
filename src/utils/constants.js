@@ -6,7 +6,7 @@ const __dirname = path.resolve();
 export const STATIC_FOLDER =
   MODE != "development"
     ? path.join(__dirname, "src", "static")
-    : path.join(__dirname, "dist");
+    : path.join(__dirname, "build");
 export const UPLOADS_FOLDER = path.join(__dirname, "uploads");
 
 export const PROJECT_STATUS_ENUM = {

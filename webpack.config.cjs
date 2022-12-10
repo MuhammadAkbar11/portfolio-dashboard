@@ -17,7 +17,7 @@ const opts = {
             filename: "css/app.css",
             chunkFilename: "css/app.css",
           }),
-          // Copy fonts and images to dist
+          // Copy fonts and images to build
           new CopyWebpackPlugin({
             patterns: [
               { from: "public/fonts", to: "fonts" },
@@ -31,18 +31,18 @@ const opts = {
             filename: "css/app.css",
             chunkFilename: "css/app.css",
           }),
-          // Copy fonts and images to dist
+          // Copy fonts and images to build
           new CopyWebpackPlugin({
             patterns: [
               { from: "public/fonts", to: "fonts" },
               { from: "public/img", to: "img" },
             ],
           }),
-          // Copy dist folder to static
+          // Copy build folder to static
           new FileManagerPlugin({
             events: {
               onEnd: {
-                copy: [{ source: "./dist/", destination: "./src/static" }],
+                copy: [{ source: "./build/", destination: "./src/static" }],
               },
             },
           }),
@@ -57,7 +57,7 @@ module.exports = {
   devtool:
     process.env.NODE_ENV === "production" ? "source-map" : "inline-source-map",
   output: {
-    path: Path.join(opts.rootDir, "dist"),
+    path: Path.join(opts.rootDir, "build"),
     pathinfo: opts.devBuild,
     filename: "js/[name].js",
     chunkFilename: "js/[name].js",
