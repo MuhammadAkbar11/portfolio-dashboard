@@ -6,23 +6,24 @@ import { MONGO_URI } from "./env.config.js";
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(MONGO_URI, {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-      // useCreateIndex: true,
+      useNewUrlParser: true, // useCreateIndex: true,
     });
-
     consoleLog.info(
-      `[mongoose] mongo connected on 'mongodb://*****:*****@${chalk.bold(
-        conn.connection.host
-      )}:${chalk.bold(conn.connection.port)}' `
+      `[mongoose] mongo connected on mongodb://*****:*****@${chalk.bold(
+        conn?.connection?.host,
+      )}:${chalk?.bold(conn.connection.port)} `,
     );
     consoleLog.info(
-      `[mongoose] mongo database : ${chalk.bold(conn.connection.name)}`
+      `[mongoose] mongo database : ${chalk.bold(conn.connection.name)}`,
     );
   } catch (error) {
-    consoleLog.error(
-      `[mongoose] failed to connected mongo on ${error.message} `.underline
-    );
+    console.log(error);
+    if (error.message) {
+      consoleLog.error(
+        `[mongoose] failed to connected mongo on ${error?.message}`,
+      );
+    }
+
     process.exit(1);
   }
 };

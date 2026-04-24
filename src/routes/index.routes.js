@@ -10,7 +10,7 @@ import UserRoutes from "./user.routes.js";
 function MainRoutes(app) {
   app.get("/", ensureAuth, getIndex);
 
-  app.get("/send-email", sendDummyEmail);
+  // app.get("/send-email", sendDummyEmail);
 
   // auth Routes
   AuthRoutes(app);

@@ -18,8 +18,8 @@ export const PORT = process.env.PORT;
 
 export const MONGO_URI = process.env.MONGO_URI;
 export const SESSION_SECRET = process.env.SESSION_SECRET;
-export const MAIL_USER = process.env.MAIL_USERNAME;
-export const MAIL_PASSWORD = process.env.MAIL_PASSWORD;
+// export const MAIL_USER = process.env.MAIL_USERNAME;
+// export const MAIL_PASSWORD = process.env.MAIL_PASSWORD;
 export const OAUTH_CLIENTID = process.env.OAUTH_CLIENTID;
 export const OAUTH_CLIENT_SECRET = process.env.OAUTH_CLIENT_SECRET;
 export const OAUTH_REFRESH_TOKEN = process.env.OAUTH_REFRESH_TOKEN;
@@ -27,3 +27,9 @@ export const OAUTH_PLAYGROUND = process.env.OAUTH_PLAYGROUND;
 export const EMAIL = process.env.EMAIL;
 
 export const MAIN_KEY = process.env.MAIN_KEY || "baevze";
+
+// Google OAuth (Passport)
+export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+export const GOOGLE_CALLBACK_URL =
+  process.env.GOOGLE_CALLBACK_URL || "/auth/google/callback";

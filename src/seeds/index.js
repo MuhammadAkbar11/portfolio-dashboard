@@ -17,10 +17,29 @@ async function importData() {
     const usersJson = fs.readFileSync(path.resolve("src/data/users.json"));
 
     const users = JSON.parse(usersJson).map(user => {
-      return {
+      const email = user?.email ? String(user.email).toLowerCase().trim() : user.email;
+      const password =
+        user?.password && String(user.password).length > 0
+          ? bcryptjs.hashSync(String(user.password), 12)
+          : null;
+
+      const doc = {
         ...user,
-        password: bcryptjs.hashSync(user.password, 12),
+        email,
+        password,
+        authProviders:
+          Array.isArray(user?.authProviders) && user.authProviders.length > 0
+            ? user.authProviders
+            : ["local"],
       };
+
+      // Important: do NOT persist googleId=null for local users.
+      // With a sparse+unique index, "missing field" is OK; "null" is treated as a value.
+      if (user?.googleId) {
+        doc.googleId = String(user.googleId);
+      }
+
+      return doc;
     });
 
     await UserModel.insertMany(users);
@@ -28,6 +47,7 @@ async function importData() {
     consoleLog.info("Import Success");
     process.exit();
   } catch (error) {
+    console.log(error);
     consoleLog.error("Import data is failed!");
     process.exit();
   }

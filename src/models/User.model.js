@@ -9,10 +9,25 @@ const userSchema = mongoose.Schema(
     },
     email: {
       type: String,
+      required: true,
       unique: true,
+      lowercase: true,
+      trim: true,
     },
     password: {
       type: String,
+      default: null,
+    },
+    googleId: {
+      type: String,
+      default: undefined,
+      unique: true,
+      sparse: true,
+    },
+    authProviders: {
+      type: [String],
+      enum: ["local", "google"],
+      default: ["local"],
     },
     image: {
       type: String,
@@ -23,10 +38,11 @@ const userSchema = mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
+  if (!this.password) return false;
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
@@ -36,6 +52,10 @@ userSchema.methods.hashApiKey = async function (apikey) {
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
+    return next();
+  }
+
+  if (!this.password) {
     return next();
   }
 

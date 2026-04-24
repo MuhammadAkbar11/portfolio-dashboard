@@ -5,3 +5,12 @@ export const passportAuthSignIn = passport.authenticate("local", {
   successRedirect: "/",
   failureFlash: true,
 });
+
+export const passportAuthGoogle = passport.authenticate("google", {
+  scope: ["profile", "email"],
+});
+
+export const passportAuthGoogleCallback = passport.authenticate("google", {
+  failureRedirect: "/auth",
+  failureFlash: true,
+});

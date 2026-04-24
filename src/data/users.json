@@ -1,0 +1,16 @@
+[
+  {
+    "name": "john_doe",
+    "email": "john@example.com",
+    "password": "johndoe123",
+    "image": "profile/guest.png",
+    "authProviders": ["local"]
+  },
+  {
+    "name": "admin_user",
+    "email": "admin@example.com",
+    "password": "admin123",
+    "image": "profile/guest.png",
+    "authProviders": ["local"]
+  }
+]
