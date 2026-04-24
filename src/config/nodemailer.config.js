@@ -19,7 +19,6 @@ const createTransporter = async () => {
       OAUTH_PLAYGROUND
     );
 
-    console.log(oauth2Client);
     // console.log(oauth2Client.refreshTokenPromises);
     oauth2Client.setCredentials({
       refresh_token: OAUTH_REFRESH_TOKEN,

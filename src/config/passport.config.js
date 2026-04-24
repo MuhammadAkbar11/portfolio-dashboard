@@ -20,7 +20,7 @@ export default function () {
         err?.message || "Failed to Login",
         err?.status || 400,
         true,
-        { ...err }
+        { ...err },
       );
       done(error, user);
     }

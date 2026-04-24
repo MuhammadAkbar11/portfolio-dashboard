@@ -68,7 +68,7 @@ app.use(
       delete req.body._method;
       return method;
     }
-  })
+  }),
 );
 
 // Session
@@ -117,7 +117,7 @@ app.use(returnError);
 
 server.listen(envConfigs.PORT, () => {
   consoleLog.success(
-    `[server] server running in ${envConfigs.MODE} mode on port ${envConfigs.PORT}`
+    `[server] server running in ${envConfigs.MODE} mode on port ${envConfigs.PORT}`,
   );
   if (envConfigs.MODE == "development") {
     consoleLog.success(`[server] open http://localhost:${envConfigs.PORT}/`);
@@ -125,6 +125,7 @@ server.listen(envConfigs.PORT, () => {
 });
 
 process.on("unhandledRejection", error => {
+  consoleLog.error("Unhandled Rejection at:", error);
   throw error;
 });
 
