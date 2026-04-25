@@ -2,6 +2,7 @@ import BaseError, { TransfromError } from "../helpers/baseError.helper.js";
 import Notification from "../helpers/notification.helper.js";
 import ProjectModel from "../models/Project.model.js";
 import deleteFile from "../utils/index.js";
+import { UPLOADS_NAME } from "../utils/constants.js";
 
 export const getProjects = async (req, res, next) => {
   try {
@@ -13,7 +14,7 @@ export const getProjects = async (req, res, next) => {
         pro.progress = progress;
 
         return pro;
-      })
+      }),
     );
 
     const flashdata = req.flash("flashdata");
@@ -103,7 +104,7 @@ export const putProject = async (req, res, next) => {
     if (req.fileimg.data) {
       const filename = req.fileimg.data?.filename;
       if ("/img/photos/unsplash-1.jpg" != oldProjectImage) {
-        deleteFile("uploads" + oldProjectImage);
+        deleteFile(UPLOADS_NAME + oldProjectImage);
       }
       project.image = `/project/${filename}`;
     }

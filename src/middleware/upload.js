@@ -1,14 +1,20 @@
 import multer from "multer";
 
 import Upload from "../helpers/upload.helper.js";
+import { UPLOADS_NAME } from "../utils/constants.js";
 
-const uploadSingle = new Upload({
+const uploadSingleProject = new Upload({
   fieldName: "image",
-  folderName: "uploads/project/",
+  folderName: `${UPLOADS_NAME}/project/`,
 }).single();
 
-export const uploadProjectImage = (req, res, next) => {
-  uploadSingle(req, res, function (err) {
+const uploadSingleProfile = new Upload({
+  fieldName: "image",
+  folderName: `${UPLOADS_NAME}/profile/`,
+}).single();
+
+const handleUpload = (uploadFn) => (req, res, next) => {
+  uploadFn(req, res, function (err) {
     let file = {
       type: "success",
       message: "Upload file success",
@@ -45,4 +51,5 @@ export const uploadProjectImage = (req, res, next) => {
   });
 };
 
-// export default uploadFilesMiddleware ;
+export const uploadProjectImage = handleUpload(uploadSingleProject);
+export const uploadProfileImage = handleUpload(uploadSingleProfile);

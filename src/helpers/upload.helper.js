@@ -1,3 +1,4 @@
+import fs from "fs";
 import path from "path";
 import multer from "multer";
 import dayjs from "dayjs";
@@ -12,6 +13,10 @@ class Upload {
     this.fieldName = fieldName;
     this.folderName = folderName;
     this.fileTypes = fileTypes;
+
+    if (!fs.existsSync(this.folderName)) {
+      fs.mkdirSync(this.folderName, { recursive: true });
+    }
   }
 
   diskStorage() {

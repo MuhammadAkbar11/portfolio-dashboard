@@ -108,3 +108,6 @@ client-test/
 test/
 *.ignore.*
 .agent
+
+# Uploads
+.dev/
