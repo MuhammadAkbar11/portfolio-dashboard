@@ -3,30 +3,49 @@
     <h5 class="card-title mb-0">Public info</h5>
   </div>
   <div class="card-body">
-    <form>
+    <form action="/profile/update" method="post">
       <div class="row">
         <div class="col-md-8">
           <div class="mb-3">
             <label class="form-label" for="name">Username</label>
-            <input type="text" class="form-control" id="name" placeholder="Username" value="<%= userAuth.name %>">
+            <input type="text" class="form-control" name="name" id="name" placeholder="Username" value="<%= userAuth.name %>">
           </div>
-          <div class=" text-center mb-3">
-            <img alt="Charles Hall" src="/<%= userAuth.image %>" class="rounded-circle img-responsive mt-2" width="128"
-              height="128">
-            <div class="mt-2">
-              <span class="btn btn-primary "><i class="fas fa-upload"></i> Upload</span>
-            </div>
-            <small>For best results, use an image at least 128px by 128px in .jpg format</small>
+          <div class="mb-3">
+            <label class="form-label" for="email">Email</label>
+            <input type="email" class="form-control" id="email" placeholder="Email" value="<%= userAuth.email %>" disabled>
+            <small class="text-muted">Email cannot be changed.</small>
           </div>
         </div>
-
       </div>
-
       <button type="submit" class="btn btn-primary">Save changes</button>
     </form>
-
   </div>
 </div>
+
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-title mb-0">Profile Image</h5>
+  </div>
+  <div class="card-body">
+    <form action="/profile/update-image" method="post" enctype="multipart/form-data">
+      <div class="row">
+        <div class="col-md-8 text-center">
+          <div class="mb-3">
+            <img alt="<%= userAuth.name %>" src="<%= getProfileImage(userAuth) %>" class="rounded-circle img-responsive mt-2" width="128"
+              height="128" id="profile-image-preview">
+            <div class="mt-2">
+              <input type="file" name="image" id="profile-image-input" class="d-none" accept="image/*">
+              <label for="profile-image-input" class="btn btn-primary"><i class="fas fa-upload"></i> Choose Image</label>
+            </div>
+            <small class="d-block mt-2">For best results, use an image at least 128px by 128px in .jpg format</small>
+          </div>
+          <button type="submit" class="btn btn-primary" id="save-image-btn" disabled>Upload new image</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
 <% const changePwError = errors?.filter(err => err.section == "password")[0]
 const errorData = changePwError?.errors
 %>

@@ -1,3 +1,6 @@
+import path from "path";
+import fs from "fs";
+import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid";
 import BaseError, {
   TransfromError,
@@ -195,5 +198,83 @@ export const postRequestApiKey = async (req, res, next) => {
       message: "Failed to generate Api Key",
     });
     res.redirect("/profile?tab=apikey");
+  }
+};
+export const postUpdateProfile = async (req, res, next) => {
+  try {
+    const { name } = req.body;
+    const user = await UserModel.findById(req.user._id);
+
+    if (!user) {
+      throw new BaseError("Not Found", 404, "User not found", true);
+    }
+
+    user.name = name;
+    await user.save();
+
+    req.flash("flashdata", {
+      type: "success",
+      message: "Profile updated successfully",
+    });
+    res.redirect("/profile");
+  } catch (error) {
+    const baseError = new TransfromError(error);
+    next(baseError);
+  }
+};
+
+import deleteFile from "../utils/index.js";
+import { UPLOADS_NAME } from "../utils/constants.js";
+
+export const postUpdateProfileImage = async (req, res, next) => {
+  try {
+    const user = await UserModel.findById(req.user._id);
+
+    if (!user) {
+      throw new BaseError("Not Found", 404, "User not found", true);
+    }
+
+    if (req.fileimg && req.fileimg.type === "success") {
+      const oldImage = user.image;
+
+      // Resize the uploaded image to 128x128
+      const filePath = req.fileimg.data.path;
+      const buffer = await sharp(filePath)
+        .resize(128, 128, {
+          fit: "cover",
+          position: "center",
+        })
+        .toBuffer();
+
+      fs.writeFileSync(filePath, buffer);
+
+      // Delete old local image if it exists and is not the default
+      if (
+        oldImage &&
+        !oldImage.startsWith("http") &&
+        oldImage !== "uploads/profile/default.png" &&
+        oldImage !== "profile/guest.png"
+      ) {
+        deleteFile(path.join(UPLOADS_NAME, oldImage));
+      }
+
+      user.image = `profile/${req.fileimg.data.filename}`;
+      await user.save();
+
+      req.flash("flashdata", {
+        type: "success",
+        message: "Profile image updated successfully",
+      });
+    } else {
+      req.flash("flashdata", {
+        type: "danger",
+        message: req.fileimg?.message || "Failed to upload image",
+      });
+    }
+
+    res.redirect("/profile");
+  } catch (error) {
+    const baseError = new TransfromError(error);
+    next(baseError);
   }
 };

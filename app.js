@@ -89,6 +89,11 @@ app.use(passport.session({}));
 app.use((req, res, next) => {
   res.locals.userAuth = req.user || null;
   res.locals.flashdata = req.flash("flashdata") || [];
+  res.locals.getProfileImage = user => {
+    if (!user || !user.image) return "/uploads/profile/default.png";
+    if (user.image.startsWith("http")) return user.image;
+    return `/${user.image}`;
+  };
   next();
 });
 

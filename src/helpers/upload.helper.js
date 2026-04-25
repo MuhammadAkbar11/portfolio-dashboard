@@ -25,23 +25,28 @@ class Upload {
         cb(null, this.folderName);
       },
       filename: (req, file, cb) => {
-        let filename = req.body.filename;
+        const ext = path.extname(file.originalname);
+        const timestamp = dayjs().valueOf();
 
-        if (!filename) {
-          filename = file.fieldname;
+        // Try to get a meaningful name from request
+        let baseName = "upload";
+        if (req.body && req.body.title) {
+          baseName = req.body.title;
+        } else if (req.user && req.user.name) {
+          baseName = req.user.name;
+        } else if (req.body && req.body.name) {
+          baseName = req.body.name;
         }
 
-        const filenameToArr = file.originalname.split(" ").join("").split(".");
-        const fileName = req.body.title.split(" ").join("-");
-        const ext = filenameToArr[filenameToArr.length - 1];
-        cb(null, `${fileName}_${dayjs().valueOf()}.${ext}`);
+        const safeBaseName = baseName.split(" ").join("-").toLowerCase();
+        cb(null, `${safeBaseName}_${timestamp}${ext}`);
       },
     });
   }
 
   checkFileType(file, cb) {
     const extname = this.fileTypes.test(
-      path.extname(file.originalname).toLowerCase()
+      path.extname(file.originalname).toLowerCase(),
     );
     const mimeType = this.fileTypes.test(file.mimetype);
 

@@ -93,8 +93,8 @@
           </a>
 
           <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-            <img src="/<%= userAuth?.image || "/uploads/profile/default.png" %>" class="avatar img-fluid rounded me-1" alt="<%= userAuth.name %> " /> <span
-              class="text-dark"><%= userAuth.name %> </span>
+            <img src="<%= getProfileImage(userAuth) %>" class="avatar img-fluid rounded-circle me-1" alt="<%= userAuth?.name %>" /> <span
+              class="text-dark"><%= userAuth?.name %> </span>
           </a>
           <div class="dropdown-menu dropdown-menu-end">
             <a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i>

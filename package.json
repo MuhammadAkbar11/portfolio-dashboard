@@ -7,6 +7,9 @@
   "author": "MuhammadAkbar11",
   "license": "MIT",
   "type": "module",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon app.js",
     "start": "node app.js",
@@ -87,6 +90,7 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
+    "sharp": "0.32.6",
     "simplebar": "5.3.6",
     "socket.io": "^4.4.1",
     "socket.io-client": "^4.4.1",
