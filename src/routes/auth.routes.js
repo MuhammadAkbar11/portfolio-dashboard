@@ -36,7 +36,9 @@ function AuthRoutes(app) {
           type: "warning",
           message: "Google login is not configured",
         });
-        return res.redirect("/auth");
+        const back = req.get("Referer") || "";
+        const dest = back.includes("/auth/signup") ? "/auth/signup" : "/auth";
+        return res.redirect(dest);
       }
       return next();
     },
@@ -49,15 +51,15 @@ function AuthRoutes(app) {
     getLocalAuthCallback,
   );
 
-  // app
-  //   .route("/auth/signup")
-  //   .get(ensureGuest, getSignUp)
-  //   .post(
-  //     userValidate("signup"),
-  //     postSignUp,
-  //     passportAuthSignIn,
-  //     getLocalAuthCallback
-  //   );
+  app
+    .route("/auth/signup")
+    .get(ensureGuest, getSignUp)
+    .post(
+      userValidate("signup"),
+      postSignUp,
+      passportAuthSignIn,
+      getLocalAuthCallback,
+    );
 
   app.post("/auth/logout", postLogout);
 }

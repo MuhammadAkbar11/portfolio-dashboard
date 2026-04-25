@@ -87,22 +87,8 @@ if (envConfigs.MODE == "development") {
 app.use(passport.initialize());
 app.use(passport.session({}));
 app.use((req, res, next) => {
-  if (req.user) {
-    res.locals.userAuth = req.user;
-  } else {
-    res.locals.userAuth = null;
-  }
-
-  next();
-});
-
-app.use((req, res, next) => {
-  if (req.user) {
-    res.locals.userAuth = req.user;
-  } else {
-    res.locals.userAuth = null;
-  }
-
+  res.locals.userAuth = req.user || null;
+  res.locals.flashdata = req.flash("flashdata") || [];
   next();
 });
 

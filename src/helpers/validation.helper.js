@@ -20,16 +20,10 @@ const userValidate = method => {
       });
     case "signup":
       return checkSchema({
-        name: {
-          trim: true,
-          notEmpty: {
-            errorMessage: "Enter your name",
-          },
-        },
         email: {
           trim: true,
           notEmpty: {
-            errorMessage: "Enter youe email address",
+            errorMessage: "Enter your email address",
           },
           normalizeEmail: true,
           isEmail: {
@@ -42,21 +36,21 @@ const userValidate = method => {
             errorMessage: "Enter your password",
           },
           isLength: {
-            errorMessage: "Password should be at least 5 chars long",
+            errorMessage: "Password should be at least 5 characters",
             options: {
               min: 5,
             },
           },
         },
-        password2: {
+        confirmPassword: {
           trim: true,
           notEmpty: {
-            errorMessage: "Enter confirm password",
+            errorMessage: "Confirm your password",
           },
           custom: {
-            options: (value, { req, location, path }) => {
+            options: (value, { req }) => {
               if (value !== req.body.password) {
-                throw new Error("Password have to match!");
+                throw new Error("Passwords do not match");
               }
               return true;
             },

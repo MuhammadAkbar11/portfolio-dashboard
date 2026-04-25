@@ -1,49 +1,73 @@
 <%- include('../layouts/auth/head.ejs') %>
 
-<main class="wrapper auth-wrapper">
-  <h1>Sign up Page</h1>
-  <% if(errors && errors?.name !== "Validation") {  %>
-  <div style="margin-top: 1rem; margin-bottom: 1rem;">
-    <%= errors?.message %>
+<main class="d-flex w-100 bg-light">
+  <div class="container d-flex flex-column py-4 py-md-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4">
+        <div class="text-center mb-4">
+          <h1 class="h3 auth-title mb-2">Create account</h1>
+          <p class="auth-subtitle mb-0">Sign up with Google or email and password</p>
+        </div>
+
+        <div class="card auth-card">
+          <div class="card-body p-4 p-sm-5">
+            <% if (flashdata && flashdata.length) { %>
+              <% flashdata.forEach(function (item) { %>
+                <div class="alert alert-<%= item.type || 'info' %> alert-dismissible fade show mb-3" role="alert">
+                  <%= item.message %>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              <% }); %>
+            <% } %>
+
+            <% if (errors && errors?.name !== "Validation") { %>
+              <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+                <i class="align-middle me-2" data-feather="alert-triangle"></i>
+                <%= errors?.message %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            <% } %>
+
+            <%- include('./partials/google-oauth-button.ejs', { googleLabel: 'Sign up with Google' }) %>
+
+            <div class="auth-divider"><span>or with email</span></div>
+
+            <form action="/auth/signup" method="post" novalidate>
+              <div class="mb-3">
+                <label class="form-label fw-semibold" for="signup-email">Email</label>
+                <input id="signup-email" class="form-control form-control-lg" type="email" name="email" autocomplete="email"
+                  placeholder="you@example.com" value="<%= values && values?.email || '' %>" />
+                <% if (errors && errors?.validation?.email) { %>
+                  <small class="text-danger d-block mt-1"><%= errors?.validation?.email?.message[0] %></small>
+                <% } %>
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold" for="signup-password">Password</label>
+                <input id="signup-password" class="form-control form-control-lg" type="password" name="password" autocomplete="new-password"
+                  placeholder="At least 5 characters" value="<%= values && values?.password || '' %>" />
+                <% if (errors && errors?.validation?.password) { %>
+                  <small class="text-danger d-block mt-1"><%= errors?.validation?.password?.message[0] %></small>
+                <% } %>
+              </div>
+              <div class="mb-4">
+                <label class="form-label fw-semibold" for="signup-confirm-password">Confirm Password</label>
+                <input id="signup-confirm-password" class="form-control form-control-lg" type="password" name="confirmPassword" autocomplete="new-password"
+                  placeholder="Repeat your password" value="<%= values && values?.confirmPassword || '' %>" />
+                <% if (errors && errors?.validation?.confirmPassword) { %>
+                  <small class="text-danger d-block mt-1"><%= errors?.validation?.confirmPassword?.message[0] %></small>
+                <% } %>
+              </div>
+              <button type="submit" class="btn btn-lg btn-primary w-100">Create account</button>
+            </form>
+
+            <p class="text-center auth-footer-link text-muted mt-4 mb-0">
+              Already have an account? <a href="/auth" class="fw-semibold text-decoration-none">Sign in</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <% } %>
-  <form action="/auth/signup" method="post">
-
-    <div>
-      <label for="">Username</label>
-      <input type="text" name="name" placeholder="Username" value="<%= values && values?.name || "" %>">
-      <% if(errors && errors?.validation?.name) {  %>
-      <small> <%= errors && errors?.validation?.name?.message?.[0] %></small>
-      <% } %>
-    </div>
-
-    <div>
-      <label for="">Email</label>
-      <input type="text" name="email" placeholder="email" value="<%= values && values?.email || ""%>">
-      <% if(errors && errors?.validation?.email) {  %>
-      <small> <%= errors && errors?.validation?.email?.message[0] %></small>
-      <% } %>
-    </div>
-
-    <div>
-      <label for="">Password</label>
-      <input type="password" name="password" placeholder="Password" value="<%= values && values?.password || "" %>">
-      <% if(errors && errors?.validation?.password) {  %>
-      <small> <%= errors && errors?.validation?.password?.message[0] %></small>
-      <% } %>
-    </div>
-    <div>
-      <label for="">Password Confirm</label>
-      <input type="password" name="password2" placeholder="Password Confirm"
-        value="<%= values && values?.password2 || "" %>">
-      <% if(errors && errors?.validation?.password2) {  %>
-      <small> <%= errors && errors?.validation?.password2?.message[0] %></small>
-      <% } %>
-    </div>
-    <button type="submit">Signup</button>
-  </form>
 </main>
-
-
 
 <%- include('../layouts/auth/footer.ejs') %>

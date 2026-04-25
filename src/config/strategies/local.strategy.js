@@ -9,23 +9,22 @@ const LocalStrategy = new Strategy(
   },
   async function (email, password, done) {
     try {
-      const user = await UserModel.findOne({ email: email });
-      if (user) {
-        return done(null, user);
-      }
-      throw new BaseError("Authentication", "Failed to Login", 400, true, {
-        errorView: "auth/login",
+      const user = await UserModel.findOne({
+        email: String(email).toLowerCase().trim(),
       });
-    } catch (err) {
-      const error = new BaseError(
-        "Authentication",
-        err?.message || "Failed to Login",
-        err?.status || 400,
-        true,
-        { ...err }
-      );
 
-      done(new TransfromError(error));
+      if (!user) {
+        return done(null, false, { message: "User not found" });
+      }
+
+      const isMatch = await user.matchPassword(password);
+      if (!isMatch) {
+        return done(null, false, { message: "Wrong password" });
+      }
+
+      return done(null, user);
+    } catch (err) {
+      done(new TransfromError(err));
     }
   }
 );

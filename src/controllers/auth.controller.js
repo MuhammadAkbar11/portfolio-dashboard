@@ -8,10 +8,8 @@ import httpStatusCodes from "../utils/httpStatusCode.js";
 
 export const getSignIn = async (req, res, next) => {
   try {
-    const flashdata = req.flash("flashdata");
     res.render("auth/sign-in", {
       title: "SignIn",
-      flashdata: flashdata,
       errors: null,
       values: null,
     });
@@ -24,6 +22,7 @@ export const getSignIn = async (req, res, next) => {
 
 export const postSignIn = async (req, res, next) => {
   const { email, password } = req.body;
+
   try {
     const validate = validationResult(req);
 
@@ -34,13 +33,15 @@ export const postSignIn = async (req, res, next) => {
         {
           title: "SignIn",
           values: req.body,
-        }
+        },
       );
 
       throw errValidate;
     }
 
-    const user = await UserModel.findOne({ email: email });
+    const user = await UserModel.findOne({
+      email: String(email).toLowerCase().trim(),
+    });
 
     if (!user) {
       throw new BaseError(
@@ -50,8 +51,11 @@ export const postSignIn = async (req, res, next) => {
         true,
         {
           errorView: "auth/sign-in",
-          renderData: { title: "SignIn", values: req.body },
-        }
+          renderData: {
+            title: "SignIn",
+            values: req.body,
+          },
+        },
       );
     }
 
@@ -65,8 +69,11 @@ export const postSignIn = async (req, res, next) => {
         true,
         {
           errorView: "auth/sign-in",
-          renderData: { title: "SignIn", values: req.body },
-        }
+          renderData: {
+            title: "SignIn",
+            values: req.body,
+          },
+        },
       );
     }
 
@@ -79,10 +86,8 @@ export const postSignIn = async (req, res, next) => {
 
 export const getSignUp = async (req, res, next) => {
   try {
-    const flashdata = req.flash("flashdata");
     res.render("auth/signup", {
       title: "Sign Up",
-      flashdata: flashdata,
       errors: null,
       values: null,
     });
@@ -93,7 +98,7 @@ export const getSignUp = async (req, res, next) => {
 };
 
 export const postSignUp = async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { email, password } = req.body;
   try {
     const validate = validationResult(req);
 
@@ -104,35 +109,35 @@ export const postSignUp = async (req, res, next) => {
       });
     }
 
-    const newUser = {
-      name,
-      email,
-      password,
-    };
+    const normalizedEmail = String(email).toLowerCase().trim();
+    const nameFromEmail = normalizedEmail.includes("@")
+      ? normalizedEmail.split("@")[0]
+      : "User";
 
-    const user = await UserModel.findOne({ email: email });
+    const existing = await UserModel.findOne({ email: normalizedEmail });
 
-    if (user) {
-      const baseError = new BaseError(
-        "BadRequest",
-        httpStatusCodes.BAD_REQUEST,
-        "User already exist",
-        true
-      );
-
+    if (existing) {
       throw new BaseError(
         "BadRequest",
         httpStatusCodes.BAD_REQUEST,
-        "User already exist",
+        "User already exists",
         true,
         {
           errorView: "auth/signup",
-          renderData: { title: "Sign Up", values: req.body },
-        }
+          renderData: {
+            title: "Sign Up",
+            values: req.body,
+          },
+        },
       );
     }
 
-    await UserModel.create(newUser);
+    await UserModel.create({
+      name: nameFromEmail || "User",
+      email: normalizedEmail,
+      password,
+      authProviders: ["local"],
+    });
 
     next();
   } catch (error) {
@@ -143,7 +148,7 @@ export const postSignUp = async (req, res, next) => {
 
 export const getLocalAuthCallback = (req, res) => {
   try {
-    res.redirect("/dashboard");
+    res.redirect("/");
   } catch (error) {
     req.flash("flashdata", {
       type: "danger",
