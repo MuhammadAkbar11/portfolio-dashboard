@@ -5,13 +5,15 @@ import {
   putSkill,
 } from "../controllers/skill.controller.js";
 import { ensureAuth } from "../middleware/auth.js";
+import { validateRequest } from "../middleware/validate.middleware.js";
+import { skillSchema } from "../validators/index.js";
 
 function SkillRoutes(app) {
   app
     .route("/skills")
     .get(ensureAuth, getSkills)
-    .post(ensureAuth, postSkill)
-    .put(ensureAuth, putSkill)
+    .post(ensureAuth, validateRequest(skillSchema), postSkill)
+    .put(ensureAuth, validateRequest(skillSchema), putSkill)
     .delete(ensureAuth, deleteSkill);
 }
 

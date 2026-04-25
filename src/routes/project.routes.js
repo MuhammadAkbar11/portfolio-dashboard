@@ -8,6 +8,8 @@ import {
 } from "../controllers/project.controller.js";
 import { ensureAuth } from "../middleware/auth.js";
 import { uploadProjectImage } from "../middleware/upload.js";
+import { validateRequest } from "../middleware/validate.middleware.js";
+import { projectSchema } from "../validators/index.js";
 
 function ProjectRoutes(app) {
   app.route("/projects/:id/edit").get(ensureAuth, getEditProject);
@@ -15,7 +17,7 @@ function ProjectRoutes(app) {
   app
     .route("/projects/:id")
     .get(ensureAuth, getProjectDetails)
-    .put(ensureAuth, uploadProjectImage, putProject)
+    .put(ensureAuth, uploadProjectImage, validateRequest(projectSchema), putProject)
     .delete(ensureAuth, deleteProject);
   app
     .route("/projects")

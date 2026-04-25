@@ -1,5 +1,4 @@
-import { validationResult } from "express-validator";
-import BaseError, { ValidationError } from "../helpers/baseError.helper.js";
+import BaseError from "../helpers/baseError.helper.js";
 import TaskModel from "../models/Task.model.js";
 import ProjectModel from "../models/Project.model.js";
 
@@ -19,22 +18,7 @@ export const postProjectTask = async (req, res) => {
   const redirect =
     req.query.redirect || `/projects/${projectId}#tasks-container`;
 
-  try {
-    const validate = validationResult(req);
-
-    if (!validate.isEmpty()) {
-      const errValidate = new ValidationError(validate.array(), _render, {
-        title: "Error",
-        values: req.body,
-        taskActionError: true,
-      });
-
-      req.flash("errors", errValidate);
-      res.redirect(`${redirect}?task_action_error=true`);
-      return;
-    }
-
-    const project = await ProjectModel.findOne({ _id: projectId, user: req.user._id });
+  try {    const project = await ProjectModel.findOne({ _id: projectId, user: req.user._id });
 
     if (!project) {
       throw new BaseError("Unauthorized", 401, "You don't have permission to add tasks to this project", true, {
@@ -69,21 +53,7 @@ export const putProjectTask = async (req, res) => {
   const redirect =
     req.query.redirect || `/projects/${projectId}#tasks-container`;
 
-  try {
-    const validate = validationResult(req);
-
-    if (!validate.isEmpty()) {
-      const errValidate = new ValidationError(validate.array(), _render, {
-        values: req.body,
-        taskActionError: true,
-      });
-
-      req.flash("errors", errValidate);
-      res.redirect(`${redirect}?task_action_error=true`);
-      return;
-    }
-
-    const task = await TaskModel.findOne({ _id: id, user: req.user._id });
+  try {    const task = await TaskModel.findOne({ _id: id, user: req.user._id });
 
     if (!task) {
       throw new BaseError("Not Found", 400, "Task Not Found", true, {});

@@ -5,8 +5,9 @@ import {
   postUpdateProfile,
   postUpdateProfileImage,
 } from "../controllers/user.controller.js";
-import { userValidate } from "../helpers/validation.helper.js";
 import { ensureAuth } from "../middleware/auth.js";
+import { validateRequest } from "../middleware/validate.middleware.js";
+import { changePasswordSchema } from "../validators/index.js";
 import { uploadProfileImage } from "../middleware/upload.js";
 
 function UserRoutes(app) {
@@ -14,15 +15,15 @@ function UserRoutes(app) {
   app.post(
     "/profile/change-password",
     ensureAuth,
-    userValidate("change-pw"),
-    postChangePassword
+    validateRequest(changePasswordSchema),
+    postChangePassword,
   );
   app.post("/profile/update", ensureAuth, postUpdateProfile);
   app.post(
     "/profile/update-image",
     ensureAuth,
     uploadProfileImage,
-    postUpdateProfileImage
+    postUpdateProfileImage,
   );
 
   app.route("/profile").get(ensureAuth, getProfile);

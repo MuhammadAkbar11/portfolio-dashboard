@@ -16,4 +16,10 @@ const deleteFile = filePath => {
   }
 };
 
+export const getProfileImage = user => {
+  if (!user || !user.image) return "/profile/default.png";
+  if (user.image.startsWith("http")) return user.image;
+  return `/${user.image}`;
+};
+
 export default deleteFile;

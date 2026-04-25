@@ -6,7 +6,8 @@ import {
   postLogout,
   postSignUp,
 } from "../controllers/auth.controller.js";
-import { userValidate } from "../helpers/validation.helper.js";
+import { validateRequest } from "../middleware/validate.middleware.js";
+import { signInSchema, signUpSchema } from "../validators/index.js";
 import { ensureGuest } from "../middleware/auth.js";
 import {
   passportAuthGoogle,
@@ -20,7 +21,7 @@ function AuthRoutes(app) {
     .route("/auth")
     .get(ensureGuest, getSignIn)
     .post(
-      userValidate("signin"),
+      validateRequest(signInSchema),
       postSignIn,
       passportAuthSignIn,
       getLocalAuthCallback,
@@ -55,7 +56,7 @@ function AuthRoutes(app) {
     .route("/auth/signup")
     .get(ensureGuest, getSignUp)
     .post(
-      userValidate("signup"),
+      validateRequest(signUpSchema),
       postSignUp,
       passportAuthSignIn,
       getLocalAuthCallback,

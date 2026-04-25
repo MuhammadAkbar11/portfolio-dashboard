@@ -3,7 +3,6 @@ import BaseError, {
   TransfromError,
   ValidationError,
 } from "../helpers/baseError.helper.js";
-import { validationResult } from "express-validator";
 import httpStatusCodes from "../utils/httpStatusCode.js";
 
 export const getSignIn = async (req, res, next) => {
@@ -23,23 +22,7 @@ export const getSignIn = async (req, res, next) => {
 export const postSignIn = async (req, res, next) => {
   const { email, password } = req.body;
 
-  try {
-    const validate = validationResult(req);
-
-    if (!validate.isEmpty()) {
-      const errValidate = new ValidationError(
-        validate.array(),
-        "auth/sign-in",
-        {
-          title: "SignIn",
-          values: req.body,
-        },
-      );
-
-      throw errValidate;
-    }
-
-    const user = await UserModel.findOne({
+  try {    const user = await UserModel.findOne({
       email: String(email).toLowerCase().trim(),
     });
 
@@ -99,17 +82,7 @@ export const getSignUp = async (req, res, next) => {
 
 export const postSignUp = async (req, res, next) => {
   const { email, password } = req.body;
-  try {
-    const validate = validationResult(req);
-
-    if (!validate.isEmpty()) {
-      throw new ValidationError(validate.array(), "auth/signup", {
-        title: "Sign Up",
-        values: req.body,
-      });
-    }
-
-    const normalizedEmail = String(email).toLowerCase().trim();
+  try {    const normalizedEmail = String(email).toLowerCase().trim();
     const nameFromEmail = normalizedEmail.includes("@")
       ? normalizedEmail.split("@")[0]
       : "User";

@@ -115,9 +115,9 @@ export const putProject = async (req, res, next) => {
     }
     project.title = title;
     project.status = status;
-    project.isSelected = isSelected === "true" ? true : false;
-    project.isHidden = isHidden !== "true" ? true : false;
-    project.stacks = stacks.split(",");
+    project.isSelected = isSelected || false;
+    project.isHidden = isHidden !== undefined ? isHidden : false;
+    project.stacks = stacks || [];
     project.demo = demo;
     project.github = github;
     project.description = description;

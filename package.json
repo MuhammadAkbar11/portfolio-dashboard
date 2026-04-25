@@ -77,7 +77,6 @@
     "ejs": "^3.1.6",
     "express": "^4.17.2",
     "express-session": "^1.17.2",
-    "express-validator": "^6.14.0",
     "feather-icons": "4.28.0",
     "flatpickr": "4.6.9",
     "googleapis": "^92.0.0",
@@ -95,6 +94,7 @@
     "simplebar": "5.3.6",
     "socket.io": "^4.4.1",
     "socket.io-client": "^4.4.1",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "zod": "^4.3.6"
   }
 }

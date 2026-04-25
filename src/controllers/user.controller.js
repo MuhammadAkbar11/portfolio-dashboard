@@ -8,7 +8,6 @@ import BaseError, {
 } from "../helpers/baseError.helper.js";
 import UserModel from "../models/User.model.js";
 import mongoose from "mongoose";
-import { validationResult } from "express-validator";
 import httpStatusCodes from "../utils/httpStatusCode.js";
 import { sendEmail } from "../helpers/email.helper.js";
 import { EMAIL } from "../config/env.config.js";
@@ -115,17 +114,6 @@ export const getProfile = async (req, res) => {
 
 export const postChangePassword = async (req, res, next) => {
   try {
-    const validate = validationResult(req);
-
-    if (!validate.isEmpty()) {
-      const errValidate = new ValidationError(validate.array(), "profile", {
-        title: "Profile",
-        path: "/profile",
-      });
-
-      throw errValidate;
-    }
-
     const user = await UserModel.findById(req.user._id);
 
     const passwordMatch = await user.matchPassword(req.body.oldPassword);
