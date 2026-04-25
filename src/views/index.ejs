@@ -3,7 +3,7 @@
 <main class="content">
   <div class="container-fluid p-0">
 
-    <h1 class="h3 mb-3"><strong>Analytics</strong> Dashboard</h1>
+    <h1 class="h3 mb-3">Dashboard</h1>
 
     <div class="row">
       <div class="col-xl-6 col-xxl-5 d-flex">
@@ -117,7 +117,13 @@
                           </div>
                         </td>
                         <td class="d-none d-xl-table-cell">
-                          <span class="badge bg-<%= project.status === 'DONE' ? 'success' : (project.status === 'PROGRESS' ? 'warning' : 'secondary') %>">
+                          <%
+                            let badgeClass = 'bg-secondary';
+                            if (project.status === 'FINISHED') badgeClass = 'bg-success';
+                            else if (project.status === 'PROGRESS') badgeClass = 'bg-warning';
+                            else if (project.status === 'ON_HOLD') badgeClass = 'bg-danger';
+                          %>
+                          <span class="badge <%= badgeClass %>">
                             <%= project.status %>
                           </span>
                         </td>
@@ -183,7 +189,7 @@
                  <div class="text-muted small">No pending tasks. Great job!</div>
                <% } %>
              </div>
-             
+
              <hr>
 
              <div class="mt-4">
@@ -217,7 +223,7 @@
             <% if (skills && skills.length > 0) { %>
               <div class="d-flex flex-wrap gap-2">
                 <% skills.forEach(skill => { %>
-                  <span class="badge bg-primary-light text-primary px-3 py-2 rounded-pill">
+                  <span class="badge bg-dark text-white px-3 py-2 rounded-pill">
                     <%= skill.name %>
                   </span>
                 <% }) %>

@@ -6,10 +6,7 @@ import UserModel from "../models/User.model.js";
 const FALLBACK_API_KEY = "fallback_api_key";
 
 const findDeveloper = async (apiKey = "") => {
-  const developers = await UserModel.find({});
-  return developers
-    .filter(dev => dev.apiKey && dev)
-    .find(dev => apiKey.trim() === dev.apiKey);
+  return await UserModel.findOne({ apiKey: apiKey.trim() });
 };
 
 export default async (req, res, next) => {
@@ -17,9 +14,7 @@ export default async (req, res, next) => {
     let apiKey = req.headers["X-API-Key"] || req.headers["x-api-key"];
 
     if (!apiKey && MODE === "development") {
-      if (!apiKey) {
-        apiKey = FALLBACK_API_KEY;
-      }
+      apiKey = FALLBACK_API_KEY;
     }
 
     if (!apiKey) {
@@ -27,6 +22,10 @@ export default async (req, res, next) => {
     }
 
     if (apiKey === FALLBACK_API_KEY && MODE !== "production") {
+      // In dev mode with fallback key, we might not have a user
+      // but we need one for filtering. We'll pick the first user for convenience in dev.
+      const firstUser = await UserModel.findOne({});
+      if (firstUser) req.user = firstUser;
       return next();
     }
 
@@ -39,6 +38,7 @@ export default async (req, res, next) => {
     const developer = await findDeveloper(apiKey);
 
     if (developer) {
+      req.user = developer;
       return next();
     }
 

@@ -28,7 +28,7 @@ class Notification {
       return await NotificationModel.create(this);
     } catch (error) {
       const trError = new TransfromError(error);
-      throw new trError();
+      throw trError;
     }
   }
 }

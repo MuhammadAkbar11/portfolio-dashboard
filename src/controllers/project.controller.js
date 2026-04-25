@@ -7,7 +7,7 @@ import { UPLOADS_NAME } from "../utils/constants.js";
 
 export const getProjects = async (req, res, next) => {
   try {
-    const getProjects = await ProjectModel.find({});
+    const getProjects = await ProjectModel.find({ user: req.user._id });
 
     const listProjects = await Promise.all(
       getProjects.map(async pro => {
@@ -45,6 +45,7 @@ export const postProjects = async (req, res, next) => {
     isHidden: false,
     stacks: ["stack1", "stack2", "stack3"],
     image: "/img/photos/unsplash-1.jpg",
+    user: req.user._id,
   };
   try {
     const project = await ProjectModel.create(newProject);
@@ -65,6 +66,7 @@ export const postProjects = async (req, res, next) => {
       color: "success",
       content: `Created a new project`,
       url: "/projects/" + project._id,
+      user: req.user._id,
     });
     res.redirect("/projects/" + project._id + "/edit");
   } catch (error) {
@@ -89,7 +91,7 @@ export const putProject = async (req, res, next) => {
   } = req.body;
   const id = req.params.id;
   try {
-    const project = await ProjectModel.findById(id);
+    const project = await ProjectModel.findOne({ _id: id, user: req.user._id });
 
     if (!project) {
       req.flash("flashdata", {
@@ -126,6 +128,7 @@ export const putProject = async (req, res, next) => {
       color: "primary",
       content: `Updated <b>${project.title}</b> project`,
       url: "/projects",
+      user: req.user._id,
     });
 
     req.flash("flashdata", {
@@ -147,7 +150,7 @@ export const deleteProject = async (req, res, next) => {
   const id = req.params.id;
 
   try {
-    const project = await ProjectModel.findById(id);
+    const project = await ProjectModel.findOne({ _id: id, user: req.user._id });
 
     if (!project) {
       throw new BaseError("Not Found", 404, "Project not found", true, {
@@ -178,6 +181,7 @@ export const deleteProject = async (req, res, next) => {
       color: "danger",
       content: `Deleted <b>${project.title}</b> project`,
       url: "/projects",
+      user: req.user._id,
     });
   } catch (error) {
     req.flash("flashdata", {
@@ -192,7 +196,7 @@ export const getEditProject = async (req, res, next) => {
   const id = req.params.id;
   try {
     const flashdata = req.flash("flashdata");
-    const project = await ProjectModel.findById(id);
+    const project = await ProjectModel.findOne({ _id: id, user: req.user._id });
 
     res.render("project/form-project", {
       title: "Edit Project",
@@ -218,7 +222,7 @@ export const getProjectDetails = async (req, res, next) => {
   try {
     const flashdata = req.flash("flashdata");
     const flashError = req.flash("errors");
-    const project = await ProjectModel.findById(id);
+    const project = await ProjectModel.findOne({ _id: id, user: req.user._id });
 
     if (!project) {
       throw new BaseError("Not Found", 404, "Project not found", true, {

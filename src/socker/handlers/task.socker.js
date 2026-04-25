@@ -6,13 +6,14 @@ import TaskModel from "../../models/Task.model.js";
 function RegisterTaskHandlers(io, socket) {
   socket.on("project-tasks", async ({ projectId }, cb) => {
     try {
-      const project = await ProjectModel.findById(projectId);
+      const userId = socket.handshake.auth.userId;
+      const project = await ProjectModel.findOne({ _id: projectId, user: userId });
 
       if (project) {
         const projectTasks = await project.getTasks();
         cb(null, projectTasks.tasks);
       } else {
-        throw new BaseError("Not Found", 404, "Project not found");
+        throw new BaseError("Not Found", 404, "Project not found or unauthorized");
       }
     } catch (error) {
       cb && cb(error);
@@ -21,18 +22,26 @@ function RegisterTaskHandlers(io, socket) {
 
   socket.on("create-project-task", async (data, cb) => {
     try {
+      const userId = socket.handshake.auth.userId;
+      const project = await ProjectModel.findOne({ _id: data.projectId, user: userId });
+
+      if (!project) {
+        throw new BaseError("Unauthorized", 401, "Unauthorized access to project");
+      }
+
       const newTask = {
         note: data.note,
         status: data.status,
         project: data.projectId,
+        user: userId,
       };
 
       const createdTask = await TaskModel.create(newTask);
-      const project = await ProjectModel.findById(data.projectId);
 
       const totalTaskByStatus = await TaskModel.find({
         project: data.projectId,
         status: data.status,
+        user: userId,
       }).countDocuments();
 
       cb && cb(null, { message: "success create task" });
@@ -55,9 +64,10 @@ function RegisterTaskHandlers(io, socket) {
         color: "success",
         content: `Add <b>${createdTask.note}</b> task in <b>${project.title}</b> project tasks`,
         url: `/projects/${project._id}#tasks-container`,
+        user: userId,
       });
 
-      io.emit("new-notif");
+      io.to(`user:${userId}`).emit("new-notif");
     } catch (error) {
       console.log(error);
       cb && cb(error, null);
@@ -66,21 +76,22 @@ function RegisterTaskHandlers(io, socket) {
 
   socket.on("delete-project-task", async ({ projectId, taskId }, cb) => {
     try {
-      const project = await ProjectModel.findById(projectId);
+      const userId = socket.handshake.auth.userId;
+      const project = await ProjectModel.findOne({ _id: projectId, user: userId });
+      const task = await TaskModel.findOne({ _id: taskId, user: userId });
 
-      const task = await TaskModel.findById(taskId);
-      const taskStatus = task.status;
-
-      if (!task) {
-        throw new BaseError("Not Found", 400, "Task Not Found", true, {
+      if (!project || !task) {
+        throw new BaseError("Not Found", 404, "Project or Task not found or unauthorized", true, {
           responseType: "json",
         });
       }
+      const taskStatus = task.status;
       await task.remove();
 
       const totalTaskByStatus = await TaskModel.find({
         project: projectId,
         status: taskStatus,
+        user: userId,
       }).countDocuments();
 
       io.to(`project:${projectId}`.trim()).emit("update-project-task-count", {
@@ -95,8 +106,9 @@ function RegisterTaskHandlers(io, socket) {
         color: "danger",
         content: `Deleted ${task.note} task on <b>${project.title}</b> project tasks`,
         url: `/projects/${project._id}#tasks-container`,
+        user: userId,
       });
-      io.emit("new-notif");
+      io.to(`user:${userId}`).emit("new-notif");
       cb(null, { message: "Delete Task" });
     } catch (error) {
       console.log(error);
@@ -107,8 +119,15 @@ function RegisterTaskHandlers(io, socket) {
   socket.on("edit-project-task", async (request, cb) => {
     const { note, status, projectId, room, taskId } = request;
     try {
-      const project = await ProjectModel.findById(projectId);
-      const task = await TaskModel.findById(taskId);
+      const userId = socket.handshake.auth.userId;
+      const project = await ProjectModel.findOne({ _id: projectId, user: userId });
+      const task = await TaskModel.findOne({ _id: taskId, user: userId });
+
+      if (!project || !task) {
+        throw new BaseError("Not Found", 404, "Project or Task not found or unauthorized", true, {
+          responseType: "json",
+        });
+      }
       const oldStatus = task.status;
 
       if (!task) {
@@ -131,11 +150,13 @@ function RegisterTaskHandlers(io, socket) {
         const tasksByTaskOldStatus = await TaskModel.find({
           project: projectId,
           status: oldStatus,
+          user: userId,
         });
 
         const tasksByTaskNewStatus = await TaskModel.find({
           project: projectId,
           status: updateTask.status,
+          user: userId,
         });
 
         const updatedTaskIndex = tasksByTaskNewStatus.findIndex(
@@ -178,8 +199,9 @@ function RegisterTaskHandlers(io, socket) {
             project.title
           }</b> project tasks`,
           url: `/projects/${project._id}#tasks-container`,
+          user: userId,
         });
-        io.emit("new-notif");
+        io.to(`user:${userId}`).emit("new-notif");
       }
 
       cb(null, { message: "Update Task", isMoved: false });

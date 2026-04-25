@@ -5,7 +5,7 @@ export const getSkills = async (req, res, next) => {
   try {
     const flashdata = req.flash("flashdata");
     const errors = req.flash("errors");
-    const skills = await SkillModel.find({}).sort([["order", 1]]);
+    const skills = await SkillModel.find({ user: req.user._id }).sort([["order", 1]]);
 
     res.render("skill", {
       title: "Skills ",
@@ -25,11 +25,12 @@ export const getSkills = async (req, res, next) => {
 export const postSkill = async (req, res) => {
   const { skillName } = req.body;
   try {
-    const skillsLength = await SkillModel.countDocuments();
+    const skillsLength = await SkillModel.countDocuments({ user: req.user._id });
 
     await SkillModel.create({
       name: skillName,
       order: Number(skillsLength + 1),
+      user: req.user._id,
     });
 
     req.flash("flashdata", {
@@ -49,7 +50,7 @@ export const postSkill = async (req, res) => {
 export const deleteSkill = async (req, res, next) => {
   const { skillId } = req.body;
   try {
-    const skill = await SkillModel.findById(skillId);
+    const skill = await SkillModel.findOne({ _id: skillId, user: req.user._id });
 
     if (!skill) {
       throw new BaseError(
@@ -63,6 +64,7 @@ export const deleteSkill = async (req, res, next) => {
 
     await SkillModel.updateMany(
       {
+        user: req.user._id,
         order: {
           $gt: skill.order,
         },
@@ -90,7 +92,7 @@ export const putSkill = async (req, res, next) => {
   const { skillName, order, skillId } = req.body;
 
   try {
-    const skill = await SkillModel.findById(skillId);
+    const skill = await SkillModel.findOne({ _id: skillId, user: req.user._id });
 
     if (!skill) {
       throw new BaseError(
@@ -106,7 +108,7 @@ export const putSkill = async (req, res, next) => {
     const oldOrder = skill.order;
 
     if (skill.order !== order) {
-      const getSkillByOrder = await SkillModel.findOne({ order: order });
+      const getSkillByOrder = await SkillModel.findOne({ order: order, user: req.user._id });
       getSkillByOrder.order = oldOrder;
       await getSkillByOrder.save();
       skill.order = newOrder;

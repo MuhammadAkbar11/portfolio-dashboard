@@ -8,6 +8,11 @@ const skillSchema = mongoose.Schema(
     order: {
       type: Number,
     },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "UserModel",
+      required: true,
+    },
   },
   {
     timestamps: true,

@@ -3,15 +3,21 @@ import NotificationModel from "../../models/Notification.model.js";
 function RegisterNotificationHandlers(io, socket) {
   socket.on("load-count-new-notif", async ({ limit = null }, cb) => {
     try {
+      const userId = socket.handshake.auth.userId;
+      if (!userId) return cb && cb("User ID not found in socket handshake");
+
       const countNotif = await NotificationModel.find({
+        user: userId,
         isRead: false,
       }).countDocuments();
-      const listNotif = await NotificationModel.find({})
+
+      const listNotif = await NotificationModel.find({ user: userId })
         .sort({
           createdAt: -1,
         })
         .limit(limit || 5);
-      io.emit("count-notif", {
+
+      socket.emit("count-notif", {
         count: countNotif,
         listNotif: listNotif,
       });
@@ -23,7 +29,10 @@ function RegisterNotificationHandlers(io, socket) {
 
   socket.on("reset-unread-notif", async cb => {
     try {
-      await NotificationModel.updateMany({ isRead: false }, { isRead: true });
+      const userId = socket.handshake.auth.userId;
+      if (!userId) return cb && cb("User ID not found in socket handshake");
+
+      await NotificationModel.updateMany({ user: userId, isRead: false }, { isRead: true });
       cb(null);
     } catch (error) {
       cb && cb(error);

@@ -28,6 +28,7 @@ const notificationSchema = mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "UserModel",
+      required: true,
     },
     content: {
       type: String,

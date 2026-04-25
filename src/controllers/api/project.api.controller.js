@@ -3,7 +3,12 @@ import ProjectModel from "../../models/Project.model.js";
 
 export const getProjectsApi = async (req, res, next) => {
   try {
-    const getProjects = await ProjectModel.find({ isHidden: false }).select(
+    const filter = { isHidden: false };
+    if (!req.isUsingMainKey && req.user) {
+      filter.user = req.user._id;
+    }
+
+    const getProjects = await ProjectModel.find(filter).select(
       "-isHidden"
     );
 

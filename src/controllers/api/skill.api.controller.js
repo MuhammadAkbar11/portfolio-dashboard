@@ -4,7 +4,12 @@ import SkillModel from "../../models/Skill.model.js";
 
 export const getSkillsApi = async (req, res, next) => {
   try {
-    const listSkill = await SkillModel.find({})
+    const filter = {};
+    if (!req.isUsingMainKey && req.user) {
+      filter.user = req.user._id;
+    }
+
+    const listSkill = await SkillModel.find(filter)
       .select("-__v -createdAt -updatedAt")
       .sort([["order", 1]]);
 
