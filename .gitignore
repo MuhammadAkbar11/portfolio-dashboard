@@ -111,3 +111,4 @@ test/
 
 # Uploads
 .dev/
+build/

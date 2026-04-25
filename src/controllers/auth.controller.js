@@ -148,7 +148,7 @@ export const postSignUp = async (req, res, next) => {
 
 export const getLocalAuthCallback = (req, res) => {
   try {
-    res.redirect("/");
+    res.redirect("/dashboard");
   } catch (error) {
     req.flash("flashdata", {
       type: "danger",

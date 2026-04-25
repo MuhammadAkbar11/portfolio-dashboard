@@ -23,6 +23,10 @@ import socketServer from "./src/config/socket.config.js";
 
 import consoleLog from "./src/utils/consoleLog.js";
 import { STATIC_FOLDER, UPLOADS_FOLDER } from "./src/utils/constants.js";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime.js";
+
+dayjs.extend(relativeTime);
 
 envConfigs.dotenvConfig;
 
@@ -89,6 +93,7 @@ app.use(passport.session({}));
 app.use((req, res, next) => {
   res.locals.userAuth = req.user || null;
   res.locals.flashdata = req.flash("flashdata") || [];
+  res.locals.dayjs = dayjs;
   res.locals.getProfileImage = user => {
     if (!user || !user.image) return "/uploads/profile/default.png";
     if (user.image.startsWith("http")) return user.image;
