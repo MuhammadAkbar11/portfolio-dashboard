@@ -1,0 +1,50 @@
+[
+  {
+    "title": "Portfolio Dashboard",
+    "description": "A full-stack project management dashboard built with Node.js, Express, and MongoDB. Supports multi-user authentication and real-time notifications.",
+    "stacks": ["Node.js", "Express", "MongoDB", "Socket.io", "EJS"],
+    "status": "PROGRESS",
+    "year": "2024",
+    "demo": "https://demo.example.com",
+    "github": "https://github.com/example/portfolio-dashboard",
+    "image": "/img/photos/unsplash-1.jpg",
+    "isSelected": true,
+    "isHidden": false
+  },
+  {
+    "title": "E-Commerce Platform",
+    "description": "A modern e-commerce web application featuring product listings, cart management, payment integration, and an admin panel.",
+    "stacks": ["React", "Node.js", "PostgreSQL", "Stripe"],
+    "status": "FINISHED",
+    "year": "2023",
+    "demo": "https://shop.example.com",
+    "github": "https://github.com/example/ecommerce",
+    "image": "/img/photos/unsplash-2.jpg",
+    "isSelected": false,
+    "isHidden": false
+  },
+  {
+    "title": "Task Manager CLI",
+    "description": "A command-line task management tool built with Go, allowing users to track todos, set priorities, and export reports.",
+    "stacks": ["Go", "SQLite"],
+    "status": "FINISHED",
+    "year": "2022",
+    "demo": "",
+    "github": "https://github.com/example/task-cli",
+    "image": "/img/photos/unsplash-3.jpg",
+    "isSelected": false,
+    "isHidden": false
+  },
+  {
+    "title": "Weather App",
+    "description": "A responsive weather forecast app consuming a public weather API, with location search and 7-day forecast display.",
+    "stacks": ["Vue.js", "Tailwind CSS", "OpenWeatherMap API"],
+    "status": "TODO",
+    "year": "2025",
+    "demo": "",
+    "github": "https://github.com/example/weather-app",
+    "image": "/img/photos/unsplash-1.jpg",
+    "isSelected": false,
+    "isHidden": false
+  }
+]

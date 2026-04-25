@@ -12,7 +12,9 @@
         <img src="<%= project.image %>" class=" w-100 h-auto" alt="">
       </div>
       <div class="col-md-6 ms-auto ps-md-5 ">
-        <h1 class=" text-uppercase  mb-0"><%= project.title %> <a class="btn mt-0 mb-3 btn-link p-0 shadow-none "
+        <h1 class=" text-uppercase  mb-0"><%= project.title %>
+          <span class="text-muted" style="font-size: 0.5em;">(<%= project.year || 'N/A' %>)</span>
+          <a class="btn mt-0 mb-3 btn-link p-0 shadow-none "
             href="/projects/<%= project._id %>/edit "><i data-feather="edit"></i></a>
         </h1>
         <div class="d-flex mb-3 align-items-center" style="font-size: 16px;">

@@ -8,7 +8,7 @@
   "license": "MIT",
   "type": "module",
   "engines": {
-    "node": "16.x"
+    "node": ">=16.x"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon app.js",
@@ -17,6 +17,7 @@
     "build": "webpack --config webpack.config.cjs --progress",
     "seed": "cross-env NODE_ENV=development node src/seeds/index.js seed=import",
     "seed:destroy": "cross-env NODE_ENV=development node src/seeds/index.js seed=destroy",
+    "migrate": "cross-env NODE_ENV=development node src/migrations/index.js up",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build"
   },
   "browserslist": [

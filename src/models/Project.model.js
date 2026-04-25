@@ -12,6 +12,9 @@ const projectSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    year: {
+      type: String,
+    },
     stacks: {
       type: Array,
     },

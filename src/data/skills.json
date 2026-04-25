@@ -1,0 +1,12 @@
+[
+  { "name": "JavaScript", "order": 1 },
+  { "name": "TypeScript", "order": 2 },
+  { "name": "Node.js", "order": 3 },
+  { "name": "Express.js", "order": 4 },
+  { "name": "React", "order": 5 },
+  { "name": "Vue.js", "order": 6 },
+  { "name": "MongoDB", "order": 7 },
+  { "name": "PostgreSQL", "order": 8 },
+  { "name": "Docker", "order": 9 },
+  { "name": "Git", "order": 10 }
+]

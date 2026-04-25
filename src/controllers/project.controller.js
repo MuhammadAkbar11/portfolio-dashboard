@@ -45,6 +45,7 @@ export const postProjects = async (req, res, next) => {
     isHidden: false,
     stacks: ["stack1", "stack2", "stack3"],
     image: "/img/photos/unsplash-1.jpg",
+    year: new Date().getFullYear().toString(),
     user: req.user._id,
   };
   try {
@@ -88,6 +89,7 @@ export const putProject = async (req, res, next) => {
     isSelected,
     isHidden,
     stacks,
+    year,
   } = req.body;
   const id = req.params.id;
   try {
@@ -119,6 +121,7 @@ export const putProject = async (req, res, next) => {
     project.demo = demo;
     project.github = github;
     project.description = description;
+    project.year = year;
 
     await project.save();
 

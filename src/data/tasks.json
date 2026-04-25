@@ -1,0 +1,52 @@
+[
+  {
+    "note": "Set up authentication system",
+    "status": "DONE",
+    "projectRef": 0
+  },
+  {
+    "note": "Design database schema",
+    "status": "DONE",
+    "projectRef": 0
+  },
+  {
+    "note": "Implement real-time notifications with Socket.io",
+    "status": "PROGRESS",
+    "projectRef": 0
+  },
+  {
+    "note": "Write API documentation",
+    "status": "TODO",
+    "projectRef": 0
+  },
+  {
+    "note": "Set up Stripe payment integration",
+    "status": "DONE",
+    "projectRef": 1
+  },
+  {
+    "note": "Build admin product management panel",
+    "status": "DONE",
+    "projectRef": 1
+  },
+  {
+    "note": "Research Go SQLite libraries",
+    "status": "DONE",
+    "projectRef": 2
+  },
+  {
+    "note": "Implement priority sorting",
+    "status": "DONE",
+    "projectRef": 2
+  },
+  {
+    "note": "Design wireframes for weather app",
+    "status": "TODO",
+    "projectRef": 3
+  },
+  {
+    "note": "Integrate OpenWeatherMap API",
+    "status": "TODO",
+    "projectRef": 3
+  }
+]

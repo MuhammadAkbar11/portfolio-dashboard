@@ -40,7 +40,9 @@
                 </div>
               </div>
             </div>
-            <h5 class="card-title mb-0 text-capitalize "> <%= project.title %> </h5>
+            <h5 class="card-title mb-0 text-capitalize "> <%= project.title %>
+              <small class="text-muted" style="font-size: 0.7em;">(<%= project.year || 'N/A' %>)</small>
+            </h5>
             <div class="d-flex">
               <%
                 const statusBadge = {
@@ -77,10 +79,10 @@
           <ul class="list-group list-group-flush">
             <li class="list-group-item px-4 pb-4">
               <p class="mb-2 font-weight-bold">Progress <span
-                  class="float-end"><%= project.progress?.percentage %>%</span></p>
+                  class="float-end"><%= project?.status === 'FINISHED' ? 100 : project.progress?.percentage %>%</span></p>
               <div class="progress progress-sm">
                 <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
-                  style="width: <%= project.progress?.percentage %>%;">
+                  style="width: <%= project?.status === 'FINISHED' ? 100 : project.progress?.percentage %>%;">
                 </div>
               </div>
             </li>
