@@ -1,6 +1,7 @@
 import BaseError, { TransfromError } from "../helpers/baseError.helper.js";
 import Notification from "../helpers/notification.helper.js";
 import ProjectModel from "../models/Project.model.js";
+import TaskModel from "../models/Task.model.js";
 import deleteFile from "../utils/index.js";
 import { UPLOADS_NAME } from "../utils/constants.js";
 
@@ -147,6 +148,21 @@ export const deleteProject = async (req, res, next) => {
 
   try {
     const project = await ProjectModel.findById(id);
+
+    if (!project) {
+      throw new BaseError("Not Found", 404, "Project not found", true, {
+        errorView: "errors/404",
+        renderData: { title: 404 },
+      });
+    }
+
+    // Cascade delete tasks
+    await TaskModel.deleteMany({ project: id });
+
+    // Delete project image if exists and not default
+    if (project.image && !project.image.includes("unsplash")) {
+      deleteFile(project.image);
+    }
 
     await project.remove();
 
