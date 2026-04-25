@@ -15,8 +15,11 @@ async function runMigrations() {
     await connectDB();
     console.log("Database connected for migrations.");
 
-    const files = fs.readdirSync(MIGRATIONS_DIR).filter(f => f.endsWith(".js")).sort();
-    
+    const files = fs
+      .readdirSync(MIGRATIONS_DIR)
+      .filter(f => f.endsWith(".js"))
+      .sort();
+
     for (const file of files) {
       const alreadyRun = await MigrationModel.findOne({ name: file });
       if (alreadyRun) {
@@ -26,7 +29,7 @@ async function runMigrations() {
 
       console.log(`Running migration: ${file}`);
       const migration = await import(`./scripts/${file}`);
-      
+
       if (migration.up) {
         await migration.up();
         await MigrationModel.create({ name: file });

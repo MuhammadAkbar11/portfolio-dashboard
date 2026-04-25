@@ -5,92 +5,112 @@
 
     <h1 class="h3 mb-3">Dashboard</h1>
 
+    <!-- Row 1: Summary Cards -->
     <div class="row">
-      <div class="col-xl-6 col-xxl-5 d-flex">
-        <div class="w-100">
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="card">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col mt-0">
-                      <h5 class="card-title">Total Projects</h5>
-                    </div>
-                    <div class="col-auto">
-                      <div class="stat text-primary">
-                        <i class="align-middle" data-feather="briefcase"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <h1 class="mt-1 mb-3"><%= stats.totalProjects %></h1>
-                  <div class="mb-0">
-                    <span class="text-muted">Manage your portfolio</span>
-                  </div>
-                </div>
+      <div class="col-sm-6 col-xl-3 d-flex">
+        <div class="card flex-fill">
+          <div class="card-body">
+            <div class="row">
+              <div class="col mt-0">
+                <h5 class="card-title">Total Projects</h5>
               </div>
-              <div class="card">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col mt-0">
-                      <h5 class="card-title">Completed Tasks</h5>
-                    </div>
-                    <div class="col-auto">
-                      <div class="stat text-primary">
-                        <i class="align-middle" data-feather="check-square"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <h1 class="mt-1 mb-3"><%= stats.completedTasks %></h1>
-                  <div class="mb-0">
-                    <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> <%= stats.totalTasks > 0 ? Math.round((stats.completedTasks / stats.totalTasks) * 100) : 0 %>% </span>
-                    <span class="text-muted">Completion rate</span>
-                  </div>
+              <div class="col-auto">
+                <div class="stat text-primary">
+                  <i class="align-middle" data-feather="briefcase"></i>
                 </div>
               </div>
             </div>
-            <div class="col-sm-6">
-              <div class="card">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col mt-0">
-                      <h5 class="card-title">Total Tasks</h5>
-                    </div>
-                    <div class="col-auto">
-                      <div class="stat text-primary">
-                        <i class="align-middle" data-feather="list"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <h1 class="mt-1 mb-3"><%= stats.totalTasks %></h1>
-                  <div class="mb-0">
-                    <span class="text-muted">Active and completed</span>
-                  </div>
+            <h1 class="mt-1 mb-3"><%= stats.totalProjects %></h1>
+            <div class="mb-0">
+              <span class="text-muted">Manage your portfolio</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-xl-3 d-flex">
+        <div class="card flex-fill">
+          <div class="card-body">
+            <div class="row">
+              <div class="col mt-0">
+                <h5 class="card-title">Completed Tasks</h5>
+              </div>
+              <div class="col-auto">
+                <div class="stat text-success">
+                  <i class="align-middle" data-feather="check-square"></i>
                 </div>
               </div>
-              <div class="card">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col mt-0">
-                      <h5 class="card-title">Total Skills</h5>
-                    </div>
-                    <div class="col-auto">
-                      <div class="stat text-primary">
-                        <i class="align-middle" data-feather="award"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <h1 class="mt-1 mb-3"><%= stats.totalSkills %></h1>
-                  <div class="mb-0">
-                    <span class="text-muted">Technical expertise</span>
-                  </div>
+            </div>
+            <h1 class="mt-1 mb-3"><%= stats.completedTasks %></h1>
+            <div class="mb-0">
+              <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> <%= stats.completionRate %>% </span>
+              <span class="text-muted">Completion rate</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-xl-3 d-flex">
+        <div class="card flex-fill">
+          <div class="card-body">
+            <div class="row">
+              <div class="col mt-0">
+                <h5 class="card-title">Total Tasks</h5>
+              </div>
+              <div class="col-auto">
+                <div class="stat text-warning">
+                  <i class="align-middle" data-feather="list"></i>
                 </div>
+              </div>
+            </div>
+            <h1 class="mt-1 mb-3"><%= stats.totalTasks %></h1>
+            <div class="mb-0">
+              <span class="text-muted">Active and completed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-xl-3 d-flex">
+        <div class="card flex-fill">
+          <div class="card-body">
+            <div class="row">
+              <div class="col mt-0">
+                <h5 class="card-title">Total Skills</h5>
+              </div>
+              <div class="col-auto">
+                <div class="stat text-info">
+                  <i class="align-middle" data-feather="award"></i>
+                </div>
+              </div>
+            </div>
+            <h1 class="mt-1 mb-3"><%= stats.totalSkills %></h1>
+            <div class="mb-0">
+              <span class="text-muted">Technical expertise</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2: Project Overview & Recent Projects -->
+    <div class="row">
+      <div class="col-12 col-lg-4 col-xxl-3 d-flex">
+        <div class="card flex-fill w-100">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Calendar</h5>
+          </div>
+          <div class="card-body d-flex">
+            <div class="align-self-center w-100">
+              <div class="chart">
+                <div id="datetimepicker-dashboard"></div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="col-xl-6 col-xxl-7">
+      <div class="col-12 col-lg-8 col-xxl-9 d-flex">
         <div class="card flex-fill w-100">
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">Recent Projects</h5>
@@ -101,9 +121,9 @@
               <table class="table table-hover my-0">
                 <thead>
                   <tr>
-                    <th>Title</th>
+                    <th>Project</th>
+                    <th class="d-none d-md-table-cell">Tech Stack</th>
                     <th class="d-none d-xl-table-cell">Status</th>
-                    <th class="d-none d-md-table-cell">Last Updated</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -112,9 +132,26 @@
                       <tr>
                         <td>
                           <div class="d-flex align-items-center">
-                            <img src="<%= project.image || '/img/photos/unsplash-1.jpg' %>" class="rounded me-2" width="32" height="32" style="object-fit: cover;">
-                            <a href="/projects/<%= project._id %>/edit" class="text-dark"><%= project.title %></a>
+                            <img src="<%= project.image || '/img/photos/unsplash-1.jpg' %>" class="rounded me-3" width="40" height="40" style="object-fit: cover;">
+                            <div>
+                              <a href="/projects/<%= project._id %>/edit" class="text-dark fw-bold text-decoration-none"><%= project.title %></a>
+                              <div class="text-muted small"><%= dayjs(project.updatedAt).fromNow() %></div>
+                            </div>
                           </div>
+                        </td>
+                        <td class="d-none d-md-table-cell">
+                          <% if (project.stacks && project.stacks.length > 0) { %>
+                            <div class="d-flex flex-wrap gap-1">
+                              <% project.stacks.slice(0, 3).forEach(stack => { %>
+                                <span class="badge bg-light text-dark border"><%= stack %></span>
+                              <% }) %>
+                              <% if (project.stacks.length > 3) { %>
+                                <span class="badge bg-light text-dark border">+<%= project.stacks.length - 3 %></span>
+                              <% } %>
+                            </div>
+                          <% } else { %>
+                            <span class="text-muted small">No stack</span>
+                          <% } %>
                         </td>
                         <td class="d-none d-xl-table-cell">
                           <%
@@ -126,9 +163,6 @@
                           <span class="badge <%= badgeClass %>">
                             <%= project.status %>
                           </span>
-                        </td>
-                        <td class="d-none d-md-table-cell text-muted">
-                          <%= dayjs(project.updatedAt).fromNow() %>
                         </td>
                       </tr>
                     <% }) %>
@@ -150,22 +184,9 @@
       </div>
     </div>
 
+    <!-- Row 3: Upcoming Tasks & Skills -->
     <div class="row">
-      <div class="col-12 col-md-6 col-xxl-3 d-flex order-2 order-xxl-3">
-        <div class="card flex-fill w-100">
-          <div class="card-header">
-            <h5 class="card-title mb-0">Calendar</h5>
-          </div>
-          <div class="card-body d-flex">
-            <div class="align-self-center w-100">
-              <div class="chart">
-                <div id="datetimepicker-dashboard"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-12 col-xxl-6 d-flex order-3 order-xxl-2">
+      <div class="col-12 col-lg-8 col-xxl-9 d-flex">
         <div class="card flex-fill w-100">
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">Tasks Overview</h5>
@@ -176,12 +197,18 @@
                <% if (pendingTasks && pendingTasks.length > 0) { %>
                  <ul class="list-group list-group-flush">
                    <% pendingTasks.forEach(task => { %>
-                     <li class="list-group-item px-0 border-0 d-flex justify-content-between align-items-start mb-2">
+                     <li class="list-group-item px-0 border-0 d-flex justify-content-between align-items-center mb-2">
                        <div class="me-auto">
                          <div class="fw-bold"><%= task.note %></div>
                          <small class="text-muted"><%= task.project ? task.project.title : 'No Project' %></small>
                        </div>
-                       <span class="badge bg-light text-dark rounded-pill"><%= dayjs(task.updatedAt).fromNow() %></span>
+                       <div class="text-end" style="min-width: 60px;">
+                         <div class="text-muted small mb-1 text-center"><%= task.projectProgress %>%</div>
+
+                         <div class="progress progress-sm">
+                           <div class="progress-bar bg-primary" role="progressbar" style="width: <%= task.projectProgress %>%;" aria-valuenow="<%= task.projectProgress %>" aria-valuemin="0" aria-valuemax="100"></div>
+                         </div>
+                       </div>
                      </li>
                    <% }) %>
                  </ul>
@@ -197,7 +224,7 @@
                <% if (doneTasks && doneTasks.length > 0) { %>
                  <ul class="list-group list-group-flush">
                    <% doneTasks.forEach(task => { %>
-                     <li class="list-group-item px-0 border-0 d-flex justify-content-between align-items-start mb-1 opacity-75">
+                     <li class="list-group-item px-0 border-0 d-flex justify-content-between align-items-center mb-1 opacity-75">
                        <div class="me-auto">
                          <div class="text-decoration-line-through"><%= task.note %></div>
                          <small class="text-muted"><%= task.project ? task.project.title : 'No Project' %></small>
@@ -213,8 +240,9 @@
           </div>
         </div>
       </div>
-      <div class="col-12 col-md-6 col-xxl-3 d-flex order-1 order-xxl-1">
-        <div class="card flex-fill">
+
+      <div class="col-12 col-lg-4 col-xxl-3">
+        <div class="card w-100">
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">Skills Snapshot</h5>
             <a href="/skills" class="btn btn-sm btn-link text-primary p-0">Manage</a>
@@ -223,7 +251,7 @@
             <% if (skills && skills.length > 0) { %>
               <div class="d-flex flex-wrap gap-2">
                 <% skills.forEach(skill => { %>
-                  <span class="badge bg-dark text-white px-3 py-2 rounded-pill">
+                  <span class="badge bg-light text-dark border px-3 py-2 rounded-pill">
                     <%= skill.name %>
                   </span>
                 <% }) %>

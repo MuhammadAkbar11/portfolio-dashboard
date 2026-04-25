@@ -21,10 +21,25 @@ export const getIndex = async (req, res, next) => {
       .sort({ updatedAt: -1 })
       .limit(5);
 
-    const pendingTasks = await TaskModel.find({ user: req.user._id, status: { $ne: TASK_STATUS_ENUM.DONE } })
+    const pendingTasksRaw = await TaskModel.find({ user: req.user._id, status: { $ne: TASK_STATUS_ENUM.DONE } })
       .populate("project")
       .sort({ updatedAt: -1 })
       .limit(5);
+
+    const pendingTasks = await Promise.all(
+      pendingTasksRaw.map(async (task) => {
+        let progress = 0;
+        if (task.project && typeof task.project.getTasks === 'function') {
+          const projectTasks = await task.project.getTasks();
+          progress = projectTasks.progress.percentage || 0;
+        }
+        return {
+          ...task._doc,
+          project: task.project ? task.project._doc : null,
+          projectProgress: progress
+        };
+      })
+    );
 
     const doneTasks = await TaskModel.find({ user: req.user._id, status: TASK_STATUS_ENUM.DONE })
       .populate("project")
@@ -41,6 +56,7 @@ export const getIndex = async (req, res, next) => {
         totalSkills,
         totalTasks,
         completedTasks,
+        completionRate: totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0
       },
       recentProjects,
       pendingTasks,
