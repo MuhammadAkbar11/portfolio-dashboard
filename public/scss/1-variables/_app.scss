@@ -1,7 +1,18 @@
 // Fonts
-$font-family-sans-serif: "Inter", "Helvetica Neue", Arial, -apple-system,
-  BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", sans-serif,
-  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
+$font-family-sans-serif:
+  "Inter",
+  "Helvetica Neue",
+  Arial,
+  -apple-system,
+  BlinkMacSystemFont,
+  "Segoe UI",
+  Roboto,
+  "Noto Sans",
+  sans-serif,
+  "Apple Color Emoji",
+  "Segoe UI Emoji",
+  "Segoe UI Symbol",
+  "Noto Color Emoji" !default;
 $font-weight-light: 300 !default;
 $font-weight-normal: 400 !default;
 $font-weight-bold: 600 !default;
@@ -103,11 +114,29 @@ $dark: $gray-900 !default;
 
 $theme-colors: (
   "primary": $primary,
+  "primary-light": mix($white, $primary, 30%),
+  "primary-dark": mix($black, $primary, 30%),
+  "primary-slate": mix($gray-700, $primary, 30%),
   "secondary": $secondary,
+  "secondary-light": mix($white, $secondary, 30%),
+  "secondary-dark": mix($black, $secondary, 30%),
+  "secondary-slate": mix($gray-700, $secondary, 30%),
   "success": $success,
+  "success-light": mix($white, $success, 30%),
+  "success-dark": mix($black, $success, 30%),
+  "success-slate": mix($gray-700, $success, 30%),
   "info": $info,
+  "info-light": mix($white, $info, 30%),
+  "info-dark": mix($black, $info, 30%),
+  "info-slate": mix($gray-700, $info, 30%),
   "warning": $warning,
+  "warning-light": mix($white, $warning, 30%),
+  "warning-dark": mix($black, $warning, 30%),
+  "warning-slate": mix($gray-700, $warning, 30%),
   "danger": $danger,
+  "danger-light": mix($white, $danger, 30%),
+  "danger-dark": mix($black, $danger, 30%),
+  "danger-slate": mix($gray-700, $danger, 30%),
   "light": $light,
   "dark": $dark,
   "gray": $gray-700,
@@ -251,8 +280,11 @@ $table-hover-bg: rgba($black, 0.0375) !default;
 
 // Sidebar general
 $sidebar-width: 260px !default;
-$sidebar-transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out,
-  margin-right 0.35s ease-in-out, right 0.35s ease-in-out !default;
+$sidebar-transition:
+  margin-left 0.35s ease-in-out,
+  left 0.35s ease-in-out,
+  margin-right 0.35s ease-in-out,
+  right 0.35s ease-in-out !default;
 $sidebar-bg: #222e3c !default;
 
 // Sidebar brand
@@ -302,9 +334,15 @@ $sidebar-cta-margin: $spacer * 1.75 !default;
 $sidebar-cta-border-radius: $border-radius-lg !default;
 
 // Transitions
-$transition-appearance: background 0.4s ease-in-out, color 0.4s ease-in-out !default;
-$transition-appearance-slow: background 0.6s ease-in-out, color 0.6s ease-in-out !default;
-$transition-appearance-fast: background 0.1s ease-in-out, color 0.1s ease-in-out !default;
+$transition-appearance:
+  background 0.4s ease-in-out,
+  color 0.4s ease-in-out !default;
+$transition-appearance-slow:
+  background 0.6s ease-in-out,
+  color 0.6s ease-in-out !default;
+$transition-appearance-fast:
+  background 0.1s ease-in-out,
+  color 0.1s ease-in-out !default;
 
 // Modals
 $modal-content-border-width: 0 !default;
