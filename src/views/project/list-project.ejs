@@ -38,7 +38,7 @@
       <div class="col-12 col-md-6 col-lg-4 mb-4">
         <div class="card h-100 shadow-sm border-0 project-card hover-shadow transition-all">
           <div class="position-relative">
-            <img src="<%= project.image || '/img/photos/unsplash-1.jpg' %>" class="card-img-top" alt="<%= project.title %>" style="height: 180px; object-fit: cover;">
+            <img src="<%= project.image || '/img/photos/project-0.png' %>" onerror="this.src='/img/photos/project-0.png'" class="card-img-top" alt="<%= project.title %>" style="height: 180px; object-fit: cover;">
             <div class="position-absolute top-0 end-0 p-2">
               <% if(project.isSelected) { %>
               <span class="badge bg-primary shadow-sm">

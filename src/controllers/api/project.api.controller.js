@@ -9,7 +9,7 @@ export const getProjectsApi = async (req, res, next) => {
     }
 
     const getProjects = await ProjectModel.find(filter).select(
-      "title description stacks demo github image year isSelected"
+      "title description stacks demo github image year isSelected",
     );
 
     const listProjects = await Promise.all(
@@ -17,15 +17,15 @@ export const getProjectsApi = async (req, res, next) => {
         const projectObj = pro.toObject();
         const { progress } = await pro.getTasks();
         projectObj.progress = progress;
-        
+
         // Ensure image URL is absolute
-        if (projectObj.image && !projectObj.image.startsWith('http')) {
+        if (projectObj.image && !projectObj.image.startsWith("http")) {
           const baseUrl = `${req.protocol}://${req.headers.host}`;
-          projectObj.image = `${baseUrl}/${projectObj.image.replace(/^\/+/, '')}`;
+          projectObj.image = `${baseUrl}/${projectObj.image.replace(/^\/+/, "")}`;
         }
-        
+
         return projectObj;
-      })
+      }),
     );
 
     res.json({

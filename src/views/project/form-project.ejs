@@ -66,7 +66,7 @@
                   </div>
                   <div class="form-check mb-3">
                     <input class="form-check-input check-input" type="checkbox" id="isHidden"
-                      <%= project.isHidden !== true && "checked"%>>
+                      <%= project.isHidden !== true ? "checked" : ''%>>
                     <input class="form-check-input check-input-default" name="isHidden" type="hidden" id="isHidden"
                       value="false">
                     <label class="form-check-label" for="isHidden">

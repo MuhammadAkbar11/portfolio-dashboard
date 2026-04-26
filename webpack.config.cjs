@@ -42,7 +42,7 @@ const opts = {
           new FileManagerPlugin({
             events: {
               onEnd: {
-                copy: [{ source: "./build/", destination: "./src/dist" }],
+                copy: [{ source: "./build/", destination: "./dist" }],
               },
             },
           }),

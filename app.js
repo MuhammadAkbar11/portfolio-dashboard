@@ -95,7 +95,6 @@ app.use((req, res, next) => {
   res.locals.userAuth = req.user || null;
   res.locals.flashdata = req.flash("flashdata") || [];
   res.locals.dayjs = dayjs;
-  console.log(getProfileImage(req.user));
   res.locals.getProfileImage = getProfileImage;
 
   next();
