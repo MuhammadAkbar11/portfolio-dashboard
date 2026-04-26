@@ -38,11 +38,11 @@ const opts = {
               { from: "public/img", to: "img" },
             ],
           }),
-          // Copy build folder to static
+          // Copy build folder to dist
           new FileManagerPlugin({
             events: {
               onEnd: {
-                copy: [{ source: "./build/", destination: "./src/static" }],
+                copy: [{ source: "./build/", destination: "./src/dist" }],
               },
             },
           }),
