@@ -10,12 +10,13 @@ export const getSkillsApi = async (req, res, next) => {
     }
 
     const listSkill = await SkillModel.find(filter)
-      .select("-__v -createdAt -updatedAt")
+      .select("name level order")
       .sort([["order", 1]]);
 
     res.json({
-      message: "Success to get your skills list",
-      skills: listSkill,
+      success: true,
+      message: "Skills retrieved successfully",
+      data: listSkill,
       total: listSkill.length,
     });
   } catch (error) {

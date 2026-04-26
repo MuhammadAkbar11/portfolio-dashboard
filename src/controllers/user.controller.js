@@ -2,15 +2,13 @@ import path from "path";
 import fs from "fs";
 import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid";
-import BaseError, {
-  TransfromError,
-  ValidationError,
-} from "../helpers/baseError.helper.js";
+import BaseError, { TransfromError } from "../helpers/baseError.helper.js";
 import UserModel from "../models/User.model.js";
-import mongoose from "mongoose";
 import httpStatusCodes from "../utils/httpStatusCode.js";
+import deleteFile from "../utils/index.js";
 import { sendEmail } from "../helpers/email.helper.js";
 import { EMAIL } from "../config/env.config.js";
+import { UPLOADS_NAME } from "../utils/constants.js";
 
 const generateApiKey = uuidv4;
 
@@ -123,7 +121,7 @@ export const postChangePassword = async (req, res, next) => {
         "BadRequest",
         httpStatusCodes.BAD_REQUEST,
         "Current Password is wrong",
-        true
+        true,
       );
     }
 
@@ -162,15 +160,14 @@ export const postRequestApiKey = async (req, res, next) => {
     }
 
     const apiKey = generateApiKey();
-    const hashedApiKey = await user.hashApiKey(apiKey);
-    user.apiKey = hashedApiKey;
+    user.apiKey = apiKey;
     await user.save();
 
     await sendEmail({
       from: EMAIL,
       to: req.user.email,
-      subject: "Akbar Portfolio Dashboard - Request ApiKey",
-      text: `Hello ${req.user.name} <br> Here is your ApiKey : ${hashedApiKey}`,
+      subject: "Portfolio Dashboard - Your API Key",
+      text: `Hello ${req.user.name},<br><br>You have successfully generated a new API Key for your portfolio dashboard.<br><br><strong>Your API Key:</strong> ${apiKey}<br><br>Use this key in the <code>X-API-Key</code> header to access your data via our API.`,
     });
 
     req.flash("flashdata", {
@@ -210,9 +207,6 @@ export const postUpdateProfile = async (req, res, next) => {
     next(baseError);
   }
 };
-
-import deleteFile from "../utils/index.js";
-import { UPLOADS_NAME } from "../utils/constants.js";
 
 export const postUpdateProfileImage = async (req, res, next) => {
   try {

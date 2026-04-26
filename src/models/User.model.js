@@ -34,6 +34,9 @@ const userSchema = mongoose.Schema(
     },
     apiKey: {
       type: String,
+      unique: true,
+      sparse: true,
+      index: true,
     },
   },
   {
@@ -46,9 +49,7 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-userSchema.methods.hashApiKey = async function (apikey) {
-  return await bcrypt.hash(apikey, 12);
-};
+
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
