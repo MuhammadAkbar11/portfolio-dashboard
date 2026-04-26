@@ -1,11 +1,11 @@
 import fs from "fs";
 import path from "path";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import connectDB from "../config/db.config.js";
 import MigrationModel from "../models/Migration.model.js";
+import * as envConfigs from "../config/env.config.js";
 
-dotenv.config();
+envConfigs.dotenvConfig;
 
 const __dirname = path.resolve();
 const MIGRATIONS_DIR = path.join(__dirname, "src/migrations/scripts");

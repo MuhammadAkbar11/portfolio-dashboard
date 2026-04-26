@@ -7,7 +7,7 @@
     "year": "2024",
     "demo": "https://demo.example.com",
     "github": "https://github.com/example/portfolio-dashboard",
-    "image": "/img/photos/unsplash-1.jpg",
+    "image": "/img/photos/project-1.png",
     "isSelected": true,
     "isHidden": false
   },
@@ -19,7 +19,7 @@
     "year": "2023",
     "demo": "https://shop.example.com",
     "github": "https://github.com/example/ecommerce",
-    "image": "/img/photos/unsplash-2.jpg",
+    "image": "/img/photos/project-2.png",
     "isSelected": false,
     "isHidden": false
   },
@@ -31,7 +31,7 @@
     "year": "2022",
     "demo": "",
     "github": "https://github.com/example/task-cli",
-    "image": "/img/photos/unsplash-3.jpg",
+    "image": "/img/photos/project-3.png",
     "isSelected": false,
     "isHidden": false
   },
@@ -43,7 +43,7 @@
     "year": "2025",
     "demo": "",
     "github": "https://github.com/example/weather-app",
-    "image": "/img/photos/unsplash-1.jpg",
+    "image": "/img/photos/project-4.png",
     "isSelected": false,
     "isHidden": false
   }

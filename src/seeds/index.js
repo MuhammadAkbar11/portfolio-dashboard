@@ -16,7 +16,9 @@ envConfigs.dotenvConfig;
 connectDB();
 
 function readJson(filename) {
-  return JSON.parse(fs.readFileSync(path.resolve(`src/data/${filename}`), "utf-8"));
+  return JSON.parse(
+    fs.readFileSync(path.resolve(`src/data/${filename}`), "utf-8"),
+  );
 }
 
 async function importData() {
@@ -50,11 +52,23 @@ async function importData() {
 
     const createdUsers = await UserModel.insertMany(users);
     const defaultUser = createdUsers[0];
-    consoleLog.info(`Created ${createdUsers.length} user(s). Default user: ${defaultUser.email}`);
+    consoleLog.info(
+      `Created ${createdUsers.length} user(s). Default user: ${defaultUser.email}`,
+    );
 
+    // ── Skills ──────────────────────────────────────────────────────────
+    const skillsRaw = readJson("skills.json");
+    const skillDocs = skillsRaw.map(s => ({ ...s, user: defaultUser._id }));
+    const createdSkills = await SkillModel.insertMany(skillDocs);
+    consoleLog.info(`Created ${createdSkills.length} skill(s).`);
+
+    // if (process.env.NODE_ENV === "development") {
     // ── Projects ────────────────────────────────────────────────────────
     const projectsRaw = readJson("projects.json");
-    const projectDocs = projectsRaw.map(p => ({ ...p, user: defaultUser._id }));
+    const projectDocs = projectsRaw.map(p => ({
+      ...p,
+      user: defaultUser._id,
+    }));
     const createdProjects = await ProjectModel.insertMany(projectDocs);
     consoleLog.info(`Created ${createdProjects.length} project(s).`);
 
@@ -68,12 +82,11 @@ async function importData() {
     }));
     const createdTasks = await TaskModel.insertMany(taskDocs);
     consoleLog.info(`Created ${createdTasks.length} task(s).`);
-
-    // ── Skills ──────────────────────────────────────────────────────────
-    const skillsRaw = readJson("skills.json");
-    const skillDocs = skillsRaw.map(s => ({ ...s, user: defaultUser._id }));
-    const createdSkills = await SkillModel.insertMany(skillDocs);
-    consoleLog.info(`Created ${createdSkills.length} skill(s).`);
+    // } else {
+    //   consoleLog.info(
+    //     "Production environment detected. Skipping sample projects and tasks.",
+    //   );
+    // }
 
     consoleLog.info("Import completed successfully!");
     process.exit();
