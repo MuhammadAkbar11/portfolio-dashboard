@@ -2,223 +2,293 @@
 <main class="content">
   <div class="container-fluid p-0">
 
-    <div class="mb-4 d-flex justify-content-between ">
-      <!-- <h1 class="h3 my-0"><%= project.title %> </h1> -->
-      <a href="/projects" class="btn light">Back To Projects</a>
-    </div>
-
-    <div class="row d-flex  align-items-stretch">
-      <div class="col-md-6 pr-md-4 mb-3">
-        <img src="<%= project.image %>" class=" w-100 h-auto" alt="">
-      </div>
-      <div class="col-md-6 ms-auto ps-md-5 ">
-        <h1 class=" text-uppercase  mb-0"><%= project.title %>
-          <span class="text-muted" style="font-size: 0.5em;">(<%= project.year || 'N/A' %>)</span>
-          <a class="btn mt-0 mb-3 btn-link p-0 shadow-none "
-            href="/projects/<%= project._id %>/edit "><i data-feather="edit"></i></a>
-        </h1>
-        <div class="d-flex mb-3 align-items-center" style="font-size: 16px;">
-          <%
-            const statusBadge = {
-              TODO: `<div class="badge bg-info my-2"><i style="width: 14px;"  class="my-0 mx-0 "
-                  data-feather="clipboard"></i> Todo</div>`,
-              PROGRESS: `<div class="badge bg-warning my-2"><i style="width: 14px;"  class="my-0 mx-0 "
-                  data-feather="activity"></i> In Progress</div>`,
-              ON_HOLD: `<div class="badge bg-danger my-2"><i style="width: 14px;"  class="my-0 mx-0 "
-                  data-feather="pause-circle"></i> On Hold</div>`,
-              FINISHED: `<div class="badge bg-success my-2"><i style="width: 14px;"  class="my-0 mx-0 "
-                  data-feather="check-square"></i> Finished</div>`,
-            }
-          %>
-          <% if(project.progress?.percentage >= 100) { %>
-          <%- statusBadge["FINISHED"] %>
-          <% } else { %>
-          <%- statusBadge[project.status] %>
-          <% } %>
-
-          <% if(project.isSelected) { %>
-          <span class="badge bg-primary ms-2 my-2"> <i class="my-0 mx-0 " style="width: 14px;"
-              data-feather="bookmark"></i>
-            Selected
-          </span>
-          <% } %>
-        </div>
-        <p class="mb-3"><%= project.description %> </p>
-
-        <div class="mb-3 d-flex align-items-center gap-1 flex-wrap">
-
-          <% project.stacks.map(item => { %>
-          <span class=" badge  bg-primary "><%= item %> </span>
-          <% }) %>
-
-        </div>
-
-        <ul class="list-group bg-transparent list-group-flush mb-2">
-          <li class="list-group-item bg-transparent px-0 pb-4">
-            <p class="mb-2 font-weight-bold">Progress <span
-                class="float-end"><%= project.progress?.percentage %>%</span></p>
-            <div class="progress progress-sm">
-              <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
-                style="width: <%= project.progress?.percentage %>%;">
-              </div>
-            </div>
-          </li>
-        </ul>
-        <div class=" d-flex gap-2 ">
-          <a href="<%= project.demo %>" class="btn btn-facebook" target="_blank">
-            <i data-feather="external-link"></i>
-            Demo
-          </a>
-          <a href="<%= project.github %>" class="btn btn-github" target="_blank">
-            <i data-feather="github"></i>
-            Github
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="mt-5 mb-5">
-    <hr>
-  </div>
-
-
-  <%- include('../includes/alert.ejs') %>
-
-  <div class="container-fluid " id="tasks-container" data-projectId="<%= project._id %>">
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary float-end mt-n1" data-bs-toggle="modal"
-      data-bs-target="#formTaskModal">
-      <i data-feather="plus"></i> New task
-    </button>
-    <div class="mb-3">
-      <h1 class="h3 d-inline align-middle">Project Tasks</h1>
+    <div class="mb-4 d-flex justify-content-between align-items-center">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item"><a href="/projects">Projects</a></li>
+          <li class="breadcrumb-item active" aria-current="page"><%= project.title %></li>
+        </ol>
+      </nav>
+      <a href="/projects" class="btn btn-outline-primary btn-sm">
+        <i class="align-middle me-1" data-feather="arrow-left"></i> Back to List
       </a>
     </div>
+
+    <%- include('../includes/alert.ejs') %>
+
     <div class="row">
-      <!-- TODO -->
-      <div class="col-12 col-md-6 col-lg-6 col-xl-4">
-        <div class="card card-project-task" id="todo">
-          <div class="card-header pb-2">
-
-            <h5 class="card-title" id="board-title">
-              <span class="badge bg-primary h-auto me-1 rounded-circle">0
-              </span> Todo
-            </h5>
+      <!-- Left Column: Project Info -->
+      <div class="col-12 col-xl-8">
+        <div class="card shadow-sm border-0 mb-4">
+          <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+            <div>
+              <h1 class="h2 mb-1 fw-bold"><%= project.title %></h1>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-light text-dark border">
+                  <i class="align-middle me-1" data-feather="calendar" style="width: 14px;"></i> <%= project.year || 'N/A' %>
+                </span>
+                <%
+                  const statusConfig = {
+                    TODO: { class: 'bg-info', label: 'Todo' },
+                    PROGRESS: { class: 'bg-warning', label: 'In Progress' },
+                    ON_HOLD: { class: 'bg-danger', label: 'On Hold' },
+                    FINISHED: { class: 'bg-success', label: 'Finished' },
+                  }
+                  const status = project.progress?.percentage >= 100 ? 'FINISHED' : project.status;
+                  const config = statusConfig[status] || statusConfig.TODO;
+                %>
+                <span class="badge <%= config.class %>"><%= config.label %></span>
+                <% if(project.isSelected) { %>
+                <span class="badge bg-primary">Featured</span>
+                <% } %>
+              </div>
+            </div>
+            <div class="btn-group">
+              <a href="/projects/<%= project._id %>/edit" class="btn btn-primary btn-sm">
+                <i class="align-middle" data-feather="edit-2"></i> Edit
+              </a>
+              <button type="button" class="btn btn-danger btn-sm ms-1" data-bs-toggle="modal" data-bs-target="#modalDeleteProject">
+                <i class="align-middle" data-feather="trash-2"></i>
+              </button>
+            </div>
           </div>
-          <div class="card-body card-project-task-body  px-2 " id="board-body">
 
+          <div class="card-body p-4">
+            <div class="project-image-container mb-4 overflow-hidden rounded shadow-sm">
+              <img src="<%= project.image || '/img/photos/unsplash-1.jpg' %>" class="img-fluid w-100" alt="<%= project.title %>" style="max-height: 400px; object-fit: cover;">
+            </div>
 
+            <div class="mb-4">
+              <h5 class="fw-bold mb-3">About this project</h5>
+              <div class="text-muted" style="line-height: 1.6; white-space: pre-line;">
+                <%= project.description %>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <h5 class="fw-bold mb-3">Technologies used</h5>
+              <div class="d-flex flex-wrap gap-2">
+                <% if(project.stacks && project.stacks.length > 0) { %>
+                  <% project.stacks.forEach(stack => { %>
+                  <span class="badge bg-light text-dark border px-3 py-2 rounded-pill"><%= stack %></span>
+                  <% }) %>
+                <% } else { %>
+                  <span class="text-muted small italic">No technologies listed.</span>
+                <% } %>
+              </div>
+            </div>
+
+            <div class="d-flex gap-3 pt-3 border-top">
+              <% if(project.demo) { %>
+              <a href="<%= project.demo %>" target="_blank" class="btn btn-primary px-4 shadow-sm">
+                <i class="align-middle me-2" data-feather="external-link"></i> Live Demo
+              </a>
+              <% } %>
+              <% if(project.github) { %>
+              <a href="<%= project.github %>" target="_blank" class="btn btn-dark px-4 shadow-sm">
+                <i class="align-middle me-2" data-feather="github"></i> View Source
+              </a>
+              <% } %>
+            </div>
           </div>
         </div>
       </div>
-      <!-- End OF TODO -->
-      <!-- PROGRESS -->
-      <div class="col-12 col-md-6 col-lg-6 col-xl-4">
-        <div class="card card-project-task" id="progress">
-          <div class="card-header pb-2">
-            <h5 class="card-title" id="board-title">
-              <span class="badge bg-warning h-auto me-1 rounded-circle">0</span>
-              In
-              Progress
-            </h5>
-          </div>
-          <div class="card-body card-project-task-body  px-2 " id="board-body">
 
+      <!-- Right Column: Stats -->
+      <div class="col-12 col-xl-4">
+        <!-- Progress Summary -->
+        <div class="card shadow-sm border-0 mb-4">
+          <div class="card-header bg-white border-bottom py-3">
+            <h5 class="card-title mb-0 fw-bold">Project Progress</h5>
+          </div>
+          <div class="card-body p-4 text-center">
+            <div class="mb-3">
+              <span class="display-4 fw-bold text-primary"><%= status === 'FINISHED' ? 100 : project.progress?.percentage || 0 %>%</span>
+            </div>
+            <div class="progress mb-4" style="height: 10px;">
+              <div class="progress-bar bg-primary" role="progressbar" style="width: <%= status === 'FINISHED' ? 100 : project.progress?.percentage || 0 %>%;" aria-valuenow="<%= project.progress?.percentage || 0 %>" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="row text-center small text-muted mt-2">
+              <div class="col-4 border-end">
+                <div class="fw-bold text-dark"><%= project.progress?.todo || 0 %></div>
+                <div>Todo</div>
+              </div>
+              <div class="col-4 border-end">
+                <div class="fw-bold text-dark"><%= project.progress?.inProggress || 0 %></div>
+                <div>Doing</div>
+              </div>
+              <div class="col-4">
+                <div class="fw-bold text-dark text-success"><%= project.progress?.done || 0 %></div>
+                <div>Done</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <!-- End of PROGRESS -->
-      <!-- DONE  -->
-      <div class="col-12 col-md-6 col-lg-6 col-xl-4">
-        <div class="card card-project-task" id="done">
-          <div class="card-header pb-2">
+    </div>
 
-            <h5 class="card-title " id="board-title"><span class="badge bg-success me-1 rounded-circle">0 </span> Done
-            </h5>
+    <!-- Realtime Tasks Section -->
+    <div class="mt-4" id="tasks-container" data-projectId="<%= project._id %>">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold mb-0">Project Tasks </h3>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#formTaskModal">
+          <i class="align-middle me-1" data-feather="plus"></i> New Task
+        </button>
+      </div>
+
+      <div class="row">
+        <!-- TODO BOARD -->
+        <div class="col-12 col-md-6 col-lg-4 mb-4">
+          <div class="card card-project-task h-100 shadow-sm border-0" id="todo">
+            <div class="card-header bg-white border-bottom py-3">
+              <h5 class="card-title mb-0 fw-bold d-flex align-items-center" id="board-title">
+                <span class="badge board-badge bg-primary text-center me-2 rounded-circle">0</span> Todo
+              </h5>
+            </div>
+            <div class="card-body card-project-task-body p-3" id="board-body" style="min-height: 200px; max-height: 600px; overflow-y: auto;">
+              <!-- Tasks populated by taskBoards.mjs -->
+            </div>
           </div>
-          <div class="card-body card-project-task-body  px-2 " id="board-body">
+        </div>
 
+        <!-- PROGRESS BOARD -->
+        <div class="col-12 col-md-6 col-lg-4 mb-4">
+          <div class="card card-project-task h-100 shadow-sm border-0" id="progress">
+            <div class="card-header bg-white border-bottom py-3">
+              <h5 class="card-title mb-0 fw-bold d-flex align-items-center" id="board-title">
+                <span class="badge board-badge bg-warning text-center me-2 rounded-circle">0</span> In Progress
+              </h5>
+            </div>
+            <div class="card-body card-project-task-body p-3" id="board-body" style="min-height: 200px; max-height: 600px; overflow-y: auto;">
+              <!-- Tasks populated by taskBoards.mjs -->
+            </div>
+          </div>
+        </div>
 
+        <!-- DONE BOARD -->
+        <div class="col-12 col-md-6 col-lg-4 mb-4">
+          <div class="card card-project-task h-100 shadow-sm border-0" id="done">
+            <div class="card-header bg-white border-bottom py-3">
+              <h5 class="card-title mb-0 fw-bold d-flex align-items-center" id="board-title">
+                <span class="badge board-badge bg-success text-center me-2 rounded-circle">0</span> Done
+              </h5>
+            </div>
+            <div class="card-body card-project-task-body p-3" id="board-body" style="min-height: 200px; max-height: 600px; overflow-y: auto;">
+              <!-- Tasks populated by taskBoards.mjs -->
+            </div>
           </div>
         </div>
       </div>
-      <!-- End of Done -->
     </div>
   </div>
 </main>
 
-
-<% const validationErr = flashError.find(x => x.name == "Validation")  %>
-<!-- Modal -->
-<div class="modal fade" data-bs-backdrop="static" data-error="<%= validationErr ? true : false %>" id="formTaskModal"
-  tabindex="-1" aria-labelledby="formTaskModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-sm">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="formTaskModalLabel">Create Modal</h5>
+<!-- Modals -->
+<!-- Delete Project Modal -->
+<div class="modal fade" id="modalDeleteProject" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold">Delete Project</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body text-center py-4">
+        <div class="mb-3 text-danger">
+          <i data-feather="alert-triangle" style="width: 48px; height: 48px;"></i>
+        </div>
+        <h4 class="mb-2">Are you sure?</h4>
+        <p class="text-muted">You are about to delete <strong><%= project.title %></strong>. This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer border-0 d-flex justify-content-center pb-4">
+        <form action="/projects/<%= project._id %>" method="post">
+          <input type="hidden" name="_method" value="DELETE">
+          <button type="button" class="btn btn-light px-4 me-2" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger px-4">Yes, Delete Project</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
-
+<!-- Task Modal (Create/Edit) -->
+<div class="modal fade" id="formTaskModal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content border-0">
+      <div class="modal-header bg-primary text-white border-0">
+        <h5 class="modal-title fw-bold text-white" id="formTaskModalLabel">Task Details</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
         <form action="/tasks" id="project-task-form" method="post">
           <input type="hidden" name="projectId" value="<%= project._id %>">
           <input type="hidden" name="_method" value="POST">
           <input type="hidden" name="taskId" value="">
+
           <div class="mb-3">
-            <label for="note" class="form-label">Note</label>
-            <textarea class="form-control" id="note" name="note" rows="3"></textarea>
+            <label for="note" class="form-label fw-bold small">Task Note</label>
+            <textarea class="form-control border-0 bg-light" id="note" name="note" rows="3" placeholder="What needs to be done?" required></textarea>
           </div>
-          <div class="mb-3">
-            <select class="form-select" name="status" aria-label="status">
+
+          <div class="mb-4">
+            <label for="status" class="form-label fw-bold small">Status</label>
+            <select class="form-select border-0 bg-light" name="status" id="status">
               <option value="TODO">Todo</option>
-              <option value="PROGRESS">In Proggress</option>
+              <option value="PROGRESS">In Progress</option>
               <option value="DONE">Done</option>
             </select>
           </div>
-          <div class="mb-3">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Save changes</button>
-          </div>
 
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary shadow-sm" id="btn-save-task">Save Task</button>
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+          </div>
         </form>
       </div>
     </div>
   </div>
 </div>
 
-
-<div class="modal fade" id="modalDeleteTask" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="modalDeleteTaskLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalDeleteTaskLabel">Delete project</h5>
+<!-- Delete Task Modal -->
+<div class="modal fade" id="modalDeleteTask" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold">Delete Task</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body text-center">
-        <p>Are your sure want to delete this story? <br> you can't undo this action </p>
+      <div class="modal-body text-center py-4">
+        <div class="mb-3 text-danger">
+          <i data-feather="trash-2" style="width: 32px; height: 32px;"></i>
+        </div>
+        <p class="text-muted mb-0 small">Delete this task?</p>
+        <p class="fw-bold mb-0" id="delete-task-note"></p>
       </div>
-
-      <div class="modal-footer border-0 d-flex justify-content-center bg-transparent  pt-0">
-        <form action="/projects" id="modalDeleteTaskForm" method="post">
+      <div class="modal-footer border-0 d-flex justify-content-center pb-4 pt-0">
+        <form action="" id="modalDeleteTaskForm" method="post">
           <input type="hidden" name="projectId" value="<%= project._id %>">
           <input type="hidden" name="_method" value="DELETE">
-          <input type="hidden" name="taskId" value="">
-
-          <div class="d-flex w-100 justify-content-center gap-2">
-            <button type="button" class="btn btn-animation btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-animation btn-danger">Yes, Delete it</button>
-          </div>
-
+          <button type="button" class="btn btn-light btn-sm px-3 me-2" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger btn-sm px-3" id="btn-delete-task">Delete</button>
         </form>
       </div>
-
-
     </div>
   </div>
 </div>
+
+<style>
+  .card-project-task-body::-webkit-scrollbar {
+    width: 6px;
+  }
+  .card-project-task-body::-webkit-scrollbar-thumb {
+    background: #e9ecef;
+    border-radius: 10px;
+  }
+  .card-project-task-body::-webkit-scrollbar-thumb:hover {
+    background: #dee2e6;
+  }
+  .cursor-grab {
+    cursor: grab;
+  }
+</style>
 
 <%- include('../layouts/end.ejs') %>

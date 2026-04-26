@@ -233,7 +233,7 @@ export const getProjectDetails = async (req, res, next) => {
       });
     }
 
-    const { progress } = await project.getTasks();
+    const { tasks, progress } = await project.getTasks();
 
     res.render("project/details", {
       title: project.title,
@@ -241,6 +241,7 @@ export const getProjectDetails = async (req, res, next) => {
       flashdata: flashdata,
       project: {
         ...project._doc,
+        tasks,
         progress,
       },
       taskActionError: Boolean(req.query.task_action_error),
